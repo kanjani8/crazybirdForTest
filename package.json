@@ -1,0 +1,22 @@
+{
+  "name": "crazybird",
+  "version": "1.0.0",
+  "description": "crazy bird for test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kanjani8/crazybirdForTest.git"
+  },
+  "author": "Minji Park, Chaeyoung Hong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kanjani8/crazybirdForTest/issues"
+  },
+  "homepage": "https://github.com/kanjani8/crazybirdForTest#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
