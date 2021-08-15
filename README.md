@@ -1,1 +1,22 @@
-hello hello 2222929929
+Crazy bird for test
+Using Node Js
+
+global router:
+/ - main page
+/login
+/enroll
+/map
+/chatbot
+
+subject router:
+/subject/:id - can see community and test button
+/subject/search
+/subject/:id/test/
+/subject/:id/test/setting - prepare test. for example, choose test number
+/subject/:id/test/register
+/subject/:id/community
+
+user router:
+/user/:id
+/user/logout
+/user/setting
