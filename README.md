@@ -6,6 +6,7 @@ global router:
 /login
 /enroll
 /map
+/timetable (callender)
 /chatbot
 
 subject router:
@@ -18,5 +19,5 @@ subject router:
 
 user router:
 /user/:id
+/user/:id/setting - change password school, dday setting
 /user/logout
-/user/setting
