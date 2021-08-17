@@ -1,1 +1,1 @@
-export const testbirdmain = (req, res) => res.send("mainPage!");
+export const testbirdmain = (req, res) => res.render("home", {pageTitle: "main"});
