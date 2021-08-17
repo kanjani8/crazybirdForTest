@@ -20,5 +20,5 @@ subject router:
 
 user router:
 /user/:id
-/user/:id/setting - change password school, dday setting setting update하는 페이지들 추가하기
+/user/:id/edit - change password school, dday setting setting update하는 페이지들 추가하기
 /user/logout
