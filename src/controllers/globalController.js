@@ -1,0 +1,1 @@
+export const testbirdmain = (req, res) => res.send("mainPage!");

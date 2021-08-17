@@ -1,7 +1,9 @@
-import express from "express"
+import express from "express";
+import {testbirdmain} from "../controllers/globalController";
+//import {login, enroll} from "../controllers/userController";
 
 const globalRouter = express.Router();
 
-global.get("",);
+globalRouter.get("/",testbirdmain);
 
 export default globalRouter;

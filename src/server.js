@@ -1,18 +1,18 @@
 import express from "express";
 import morgan from "morgan";
+import globalRouter from "./routers/globalRouter";
 
 const PORT = 4000;
 const app = express();
 const logger = morgan("dev");
 
-const home = (req, res) => {
-    return res.send("hello");
-};
 
 app.use(logger);
-app.get("/", home);
+app.use("/", globalRouter);
+
+
 
 const handleListening = () =>
-    console.log(`Server listening - port:${PORT}🧭🏝`);
+    console.log(`Server listening - port: http://localhost:${PORT}🧭🏝`);
 
 app.listen(PORT, handleListening);
