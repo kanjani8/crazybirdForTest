@@ -2,7 +2,7 @@
   "name": "crazybird",
   "version": "1.0.0",
   "description": "Crazy bird for test",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "dev": "nodemon -L --exec babel-node src/server.js"
   },
