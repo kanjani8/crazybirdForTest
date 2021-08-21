@@ -6,6 +6,6 @@ export const community = (req, res) => res.send("subject communityPage!");
 export const setting = (req, res) => res.send("subject settingPage!");
 export const register = (req, res) => res.send("subject registerPage!");
 export const test = (req, res) => {
-    Test.find({}, (error, videos) => {});
-    return res.render("test", { pageTitle: "Test" });
+  const tests = await Test.find({});
+    return res.render("test", { pageTitle: "Test", tests });
   };
