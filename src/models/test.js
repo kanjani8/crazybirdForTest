@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const testSchema = new mongoose.Schema({
-  subjectId: Number, 
+  subjectId: Number,
+  userId: String, 
   testNum: Number,
   question: String,
   answer: String,
