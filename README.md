@@ -1,5 +1,5 @@
-Crazy bird for test
-Using Node Js
+Crazy bird for test in University
+Using NodeJS, express, MongoDB, AWS
 
 global router:
 / - main page
@@ -19,7 +19,7 @@ subject router:
 /subject/:id/test/:testId/update - 문제 내용 수정하기
 
 /subject/:id/test/setting - prepare test. for example, choose test number 문제 수랑 권위 설정하기
-/subject/:id/test/(solving??) - 문제 푸는 페이지
+/subject/:id/test/solve - 문제 푸는 페이지
 /subject/:id/test/result - 문제 채점 결과 - 메인으로 가는 버튼이랑 test/setting으로 이동 하는 버튼
 
 문제 내용 삭제하기 - 나중에 페이지 따로 만들지, 바로 윗 단위에서 할지 생각

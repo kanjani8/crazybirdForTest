@@ -18,7 +18,8 @@
   "homepage": "https://github.com/kanjani8/crazybirdForTest#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "mongoose": "^5.13.7",
+    "fs": "0.0.1-security",
+    "mongoose": "^5.13.8",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.12",
     "pug": "^3.0.2"

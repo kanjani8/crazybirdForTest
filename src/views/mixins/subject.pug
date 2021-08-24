@@ -2,6 +2,5 @@ mixin subject(subject)
     div
         h4
             a(href=`/subject/${subject.id}`)=subject.name
-        p=subject.describe
-        small=subject.professor
+            small=subject.professor
         hr
