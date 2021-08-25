@@ -1,0 +1,16 @@
+extends base.pug
+
+block content
+    if errorMessage
+        span=errorMessage
+    form(method="POST")
+        input( type="radio", required, name="multiple") 
+        // 객관식용 라디오버튼 
+        input( type="radio", required, name="short")
+        //주관식용 라디오버튼
+
+        label(for="Question") 질문:
+        input(placeholder="Question", required, type="text",id="Question", name="Question")
+         label(for="Answer") 정답:
+        input(placeholder="Answer", required, type="text", id="Answer",name="Answer")
+        input(type="submit", value="Upload Test")

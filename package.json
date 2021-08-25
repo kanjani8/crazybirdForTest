@@ -4,7 +4,8 @@
   "description": "Crazy bird for test",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon -L --exec babel-node src/init.js"
+    "dev": "nodemon -L --exec babel-node src/init.js",
+    "mongo": "sudo service mongodb start"
   },
   "repository": {
     "type": "git",

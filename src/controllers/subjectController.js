@@ -1,5 +1,5 @@
-import Test from "../models/test";
 import Subject from "../models/subject";
+import Test from "../models/test";
 
 
 
@@ -22,7 +22,21 @@ export const see =  async (req, res) => {
 
 
 
-export const list = (req, res) => res.send("test listPage!");
+export const list = (req, res) => async (req, res) => {
+  const { id } = req.params;
+  const subject = await Subject.findById(id);
+  const test = Test.findBysubjectId(id);
+  if (!subject) {
+    return res.render("404", { pageTitle: "Subject not found." });
+  }
+
+  return res.render("testList", { pageTitle: subject.name, subject, test });
+};
+
+
+
+
+
 export const register = (req, res) => res.send("test registerPage!");
 export const update = (req, res) => res.send("test UpdatePage!");
 
