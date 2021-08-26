@@ -25,16 +25,18 @@ export const see =  async (req, res) => {
 export const list = async (req, res) => {
   const { id } = req.params;
   const subject = await Subject.findById(id);
-  const test = await Test.find({ subjectId: { id } });
+  try {
+    const test = await Test.findOne().populate(“”) /*오류부분*/
+  } catch (error) {
+    console.log(error);
+    return res.render("404", { pageTitle: "Test not found." });
+  }
   if (!subject) {
     return res.render("404", { pageTitle: "Subject not found." });
   }
-  else if (!test) {
-    return res.render("404", { pageTitle: "Test not found." });
-  }
+
   return res.render("testList", { pageTitle: subject.name, subject, test });
 };
-
 
 
 

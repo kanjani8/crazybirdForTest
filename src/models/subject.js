@@ -10,7 +10,6 @@ const subjectSchema = new mongoose.Schema({
 subjectSchema.set('collection', 'Subject');
 const Subject = mongoose.model("Subject", subjectSchema);
 
-/*Subject.collection.insertMany(subjectData);
-*/
+/*Subject.collection.insertMany(subjectData);*/
 
 export default Subject;
