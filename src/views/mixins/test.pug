@@ -1,6 +1,6 @@
 mixin test(test)
     div
         h4
-            a(href=`/subject/${subject.id}`)=test.question
+            a(href=`/subject/${subject.id}/test/${test.id}/update`)=test.question
             small=test.answer
         hr

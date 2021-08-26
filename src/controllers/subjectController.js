@@ -22,14 +22,13 @@ export const see =  async (req, res) => {
 
 
 
-export const list = (req, res) => async (req, res) => {
+export const list = async (req, res) => {
   const { id } = req.params;
   const subject = await Subject.findById(id);
-  const test = Test.findBysubjectId(id);
+  const test = Test.find({ subjectId: { id } });
   if (!subject) {
     return res.render("404", { pageTitle: "Subject not found." });
   }
-
   return res.render("testList", { pageTitle: subject.name, subject, test });
 };
 
