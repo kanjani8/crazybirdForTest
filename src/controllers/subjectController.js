@@ -25,23 +25,29 @@ export const see =  async (req, res) => {
 export const list = async (req, res) => {
   const { id } = req.params;
   const subject = await Subject.findById(id);
-  try {
-    const test = await Test.findOne().populate(“”) /*오류부분*/
-  } catch (error) {
-    console.log(error);
-    return res.render("404", { pageTitle: "Test not found." });
-  }
-  if (!subject) {
+  if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
+  const tests = await Test.find().populate('subject');
+  if(!tests){
+    return res.render("404", { pageTitle: "Test not found." });
+  }
 
-  return res.render("testList", { pageTitle: subject.name, subject, test });
+  return res.render("testList", { pageTitle: subject.name, subject, tests });
 };
 
 
 
 
-export const register = (req, res) => res.send("test registerPage!");
+export const register = async (req, res) => {
+  const { id } = req.params;
+  const subject = await Subject.findById(id);
+  if (!subject){
+    return res.render("404", { pageTitle: "Subject not found." });
+  }
+  return res.render("uploadTest", { pageTitle: subject.name, subject});
+};
+
 export const update = (req, res) => res.send("test UpdatePage!");
 
 export const setting = (req, res) => res.send("subject settingPage!");

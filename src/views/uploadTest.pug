@@ -4,7 +4,8 @@ block script
     script
         function chooseForm(radioName) {
         var radios = document.getElementsByName(radioName);
-        for (var i = 0, length = radios.length; i < length; i++) {
+        var length = radios.length;
+        for(var i = 0; i < length; i++) {
             document.getElementById('form_' + radios[i].value).style.display = 'none';
             if (radios[i].checked) {
             document.getElementById('form_' + radios[i].value).style.display = 'block';
