@@ -15,7 +15,7 @@ subject router:
 /subject/:id - can see community and test buttons - 여기서 게시판이랑 문제 풀기, 문제 리스트 등 버튼들
 
 /subject/:id/test/list - 내가 등록한 문제들 보이는 페이지
-/subject/:id/test/register - 문제 만들기
+/subject/:id/test/upload - 문제 만들기
 /subject/:id/test/:testId/update - 문제 내용 수정하기
 
 /subject/:id/test/setting - prepare test. for example, choose test number 문제 수랑 권위 설정하기

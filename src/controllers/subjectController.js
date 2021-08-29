@@ -52,7 +52,15 @@ export const list = async (req, res) => {
 
 
 
-export const register = async (req, res) => {
+export const getUploadTest = async (req, res) => {
+  const { id } = req.params;
+  const subject = await Subject.findById(id);
+  if (!subject){
+    return res.render("404", { pageTitle: "Subject not found." });
+  }
+  return res.render("uploadTest", { pageTitle: subject.name, subject});
+};
+export const postUploadTest = async (req, res) => {
   const { id } = req.params;
   const subject = await Subject.findById(id);
   if (!subject){
@@ -61,7 +69,10 @@ export const register = async (req, res) => {
   return res.render("uploadTest", { pageTitle: subject.name, subject});
 };
 
-export const update = (req, res) => res.send("test UpdatePage!");
+export const getEditTest = (req, res) => res.send("test UpdatePage!");
+export const postEditTest = (req, res) => res.send("test UpdatePage!");
+
+
 
 export const setting = (req, res) => res.send("subject settingPage!");
 export const solve = (req, res) => res.send("subject solvePage!");
