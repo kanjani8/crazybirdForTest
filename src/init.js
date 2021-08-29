@@ -1,6 +1,7 @@
 import "./db";
 import "./models/test";
 import "./models/subject";
+import "./models/user"
 import app from "./server";
 
 const PORT = 4000;
