@@ -4,9 +4,22 @@ import Test from "../models/test";
 
 
 export const search = async (req, res) => {
-  const subjects = await Subject.find({});
-  console.log(subjects);
-  return res.render("search", { pageTitle: "Subject Search", subjects });
+  const { keyword } = req.query;
+  let subjects = [];
+  if (keyword) {
+    subjects = await Subject.find({
+       $or : 
+       [ 
+         {name: {
+      $regex: new RegExp(keyword, "i"),
+    }}, {professor: {
+      $regex: new RegExp(keyword, "i"),
+    }}]});
+  } else {
+    subjects = await Subject.find({});
+    console.log(subjects);
+  }
+  return res.render("search", { pageTitle: "Search", subjects });
 };
 
 

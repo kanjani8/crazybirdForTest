@@ -2,6 +2,9 @@ extends base.pug
 include mixins/subject
 
 block content
+    form(method="GET")
+        input(placeholder="Search by lecture or professor",name="keyword", type="text")
+        input(type="submit", value="Search")
     each subject in subjects
         +subject(subject)
     else
