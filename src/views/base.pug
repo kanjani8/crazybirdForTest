@@ -6,8 +6,15 @@ html(lang="ko")
         block script
     body
         header 
-            a(href="/login") login
-            #{pageTitle}
+            h1=pageTitle
+            nav
+                ul 
+                    li
+                        a(href="/") 메인 페이지
+                    li
+                        a(href="/enroll") 회원가입
+                    li
+                        a(href="/login") 로그인
         main
             block content
     include partials/footer.pug
