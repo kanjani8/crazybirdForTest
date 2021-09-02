@@ -6,6 +6,6 @@ const rootRouter = express.Router();
 
 rootRouter.get("/",testbirdmain);
 rootRouter.route("/enroll").get(getEnroll).post(postEnroll);
-rootRouter.get("/login").get(getLogin).post(postLogin);
+rootRouter.route("/login").get(getLogin).post(postLogin);
 
 export default rootRouter;

@@ -1,16 +1,18 @@
 import User from "../models/user";
+import bcrypt from "bcrypt";
 
 export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"enroll"});
-export const postEnroll = async(req, res) => {
-    const {name, email, username, password, password2} = req.body;
-    const pageTitle = join;
+export const postEnroll = async (req, res) => {
+    console.log(req.body);
+    const { name, email, username, password, password2} = req.body;
+    const pageTitle = "Join";
     if(password !== password2){
         return res.status(400).render("join", {
             pageTitle,
-            errorMessage:"비밀번호가 맞지 않습니다.",
+            errorMessage: "비밀번호가 맞지 않습니다.",
         });
     }
-    const exists = await User.exists({ $or: [username, email]});
+    const exists = await User.exists({ $or: [{username}, {email}]  });
     if(exists){
         return res.status(400).render("join", {
             pageTitle,
@@ -24,10 +26,10 @@ export const postEnroll = async(req, res) => {
             username,
             password
         });
-         return res.redirect("login");
+         return res.redirect("/login");
     } catch(error) {
         return res.status(400).render("join", {
-            pageTitle,
+            pageTitle: "Enroll error",
             errorMessage: error._message,
         });
     }
