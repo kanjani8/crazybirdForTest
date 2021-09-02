@@ -1,7 +1,7 @@
 doctype html
 html(lang="ko")
     head
-        title #{pageTitle} | Crazy Bird 🐦
+        title #{pageTitle} | #{siteName}
         link(rel="stylesheet" href="https://unpkg.com/mvp.css")
         block script
     body
@@ -11,10 +11,16 @@ html(lang="ko")
                 ul 
                     li
                         a(href="/") 메인 페이지
-                    li
-                        a(href="/enroll") 회원가입
-                    li
-                        a(href="/login") 로그인
+                    if loggedIn
+                        li 
+                            a(href="/logout") 로그아웃
+                        li
+                            a(href=`/user/${loggedInUser.username}`) #{loggedInUser.name}의 마이페이지
+                    else
+                        li
+                            a(href="/enroll") 회원가입
+                        li
+                            a(href="/login") 로그인
         main
             block content
     include partials/footer.pug
