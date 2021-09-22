@@ -11,3 +11,24 @@ block content
     hr
     div
         a(href="/join") 회원가입 하기 &rarr;
+    hr
+    script(src="http://developers.kakao.com/sdk/js/kakao.js")
+    div
+        a(href="javascript:kakaoLogin();")
+            img(src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="222")
+     script
+        -window.Kakao.init(b169c21eaa77d6cdaca38772a3182193);
+        -function kakaoLogin(){
+           -window.Kakao.Auth.login({
+                scope:'profile, account_email',
+                success: function(authObj){
+                    window.Kakao.API.request({
+                        url:'/v2/user/me',
+                        success: res=> {
+                            const kakao_account = res.kakao_account;
+                            console.log(kakao_account);
+                        }
+                    });
+                }
+            });
+        }

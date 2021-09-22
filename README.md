@@ -28,7 +28,8 @@ subject router:
 
 user router:
 /user/:id
-/user/:id/edit - change password school, dday setting setting update하는 페이지들 추가하기
+/user/edit - change password school, dday setting setting update하는 페이지들 추가하기
 /user/logout
+/user/remove
 
 여러 대학에 서비스한다면 대학용 model 필요

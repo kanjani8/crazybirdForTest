@@ -59,8 +59,16 @@ export const postLogin = async (req, res) => {
 };
 
 
+export const startKakaoLogin = async(req, res) =>{
+   
+};
+export const finishKakaoLogin = async(req, res) =>{
+
+};
+
 export const logout = (req, res) => res.send("user logoutPage!");
 export const user = (req, res) => res.send("userPage!");
 export const edit = (req, res) => res.send("user editPage!");
+export const remove = (req, res) => res.send("user removePage!");
 
 
