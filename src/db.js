@@ -5,6 +5,7 @@ mongoose.connect("mongodb://127.0.0.1:27017/crazyBird", {
   useUnifiedTopology: true,
   useFindAndModify: false,
   useCreateIndex: true,
+  serverSelectionTimeoutMS: 50000,
 });
 
 const db = mongoose.connection;

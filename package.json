@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon -L --exec babel-node src/init.js",
-    "mongo": "sudo service mongodb start"
+    "mongo": "sudo service mongodb start",
+    "mongostop": "sudo service mongodb stop"
   },
   "repository": {
     "type": "git",
