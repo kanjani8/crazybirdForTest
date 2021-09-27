@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "name": "crazybird",
   "version": "1.0.0",
@@ -35,3 +36,42 @@
     "nodemon": "^2.0.12"
   }
 }
+=======
+{
+  "name": "crazybird",
+  "version": "1.0.0",
+  "description": "Crazy bird for test",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon -L --exec babel-node src/init.js",
+    "mongo": "sudo service mongodb start",
+    "mongostop": "sudo service mongodb stop"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kanjani8/crazybirdForTest.git"
+  },
+  "author": "Minji Park, Chaeyoung Hong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kanjani8/crazybirdForTest/issues"
+  },
+  "homepage": "https://github.com/kanjani8/crazybirdForTest#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "connect-mongo": "^4.5.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "mongoose": "^5.13.8",
+    "morgan": "^1.10.0",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/node": "^7.14.9",
+    "@babel/preset-env": "^7.15.0",
+    "nodemon": "^2.0.12"
+  }
+}
+>>>>>>> acd6223937d2f2a7e5448ad9e593c1eac3203387
