@@ -1,9 +1,10 @@
 import User from "../models/user";
 import bcrypt from "bcrypt";
+import passport from "passport";
+const KakaoStrategy = require('passport-kakao').Strategy;
 
 export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"enroll"});
 export const postEnroll = async (req, res) => {
-    console.log(req.body);
     const { name, email, username, password, password2} = req.body;
     const pageTitle = "Join";
     if(password !== password2){
@@ -60,15 +61,30 @@ export const postLogin = async (req, res) => {
 
 
 export const startKakaoLogin = async(req, res) =>{
-   
+   await passport.use('kakao', new KakaoStrategy({
+       clientID: process.env.KAKAO_KEY,
+       callbackURL: process.env.REDIRECT_URL,
+   }, async(accessToken, refreshToken, profile, done) => {
+    console.log(profile);
+    console.log(accessToken);
+    console.log(refreshToken);
+   }));
+   passport.authenticate('kakao');
 };
+
 export const finishKakaoLogin = async(req, res) =>{
-
+    passport.authenticate('kakao', {
+        failureRedirect: '/',
+      }), (res, req) => {
+        res.redirect('/auth');
+      }
 };
 
-export const logout = (req, res) => res.send("user logoutPage!");
+export const logout = (req, res) => {
+    req.session.destroy();
+    return res.redirect("/");
+};
 export const user = (req, res) => res.send("userPage!");
 export const edit = (req, res) => res.send("user editPage!");
-export const remove = (req, res) => res.send("user removePage!");
 
 
