@@ -59,26 +59,34 @@ export const postLogin = async (req, res) => {
     return res.redirect("/");
 };
 
-
 export const startKakaoLogin = async(req, res) =>{
-   await passport.use('kakao', new KakaoStrategy({
-       clientID: process.env.KAKAO_KEY,
-       callbackURL: process.env.REDIRECT_URL,
-   }, async(accessToken, refreshToken, profile, done) => {
-    console.log(profile);
-    console.log(accessToken);
-    console.log(refreshToken);
-   }));
-   passport.authenticate('kakao');
-};
+    
+ };
+ 
+ export const finishKakaoLogin = async(req, res) =>{
+     
+ };
 
-export const finishKakaoLogin = async(req, res) =>{
-    passport.authenticate('kakao', {
-        failureRedirect: '/',
-      }), (res, req) => {
-        res.redirect('/auth');
-      }
-};
+// export const startKakaoLogin = async(req, res) =>{
+//    await passport.use('kakao', new KakaoStrategy({
+//        clientID: process.env.KAKAO_KEY,
+//        callbackURL: process.env.REDIRECT_URL,
+//    }, async(accessToken, refreshToken, profile, done) => {
+//     console.log(profile);
+//     console.log(accessToken);
+//     console.log(refreshToken);
+//    }));
+//    passport.authenticate('kakao');
+// };
+
+// export const finishKakaoLogin = async(req, res) =>{
+//     passport.authenticate('kakao', {
+//         failureRedirect: '/',
+//       }), (res, req) => {
+//         res.redirect('/');
+//         console.log("login success");
+//       }
+// };
 
 export const logout = (req, res) => {
     req.session.destroy();

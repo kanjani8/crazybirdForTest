@@ -13,5 +13,9 @@ block content
         a(href="/join") 회원가입 하기 &rarr;
     hr
     div
-        a(href="user/kakao/start")
+        a(id="kakaoLogin")
             img(src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="222")
+
+block scripts
+    script(src="https://developers.kakao.com/sdk/js/kakao.js")
+    script(src="/frontJS/kakaoLogin.js")
