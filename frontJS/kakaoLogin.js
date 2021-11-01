@@ -3,8 +3,8 @@ console.log(link);
 link.href = "javascript:kakaoLogin();";
 document.body.appendChild(link);
 
-console.log(process.env.KAKAO_KEY);
-window.Kakao.init(process.env.KAKAO_KEY);
+
+window.Kakao.init("b169c21eaa77d6cdaca38772a3182193");
 function kakaoLogin(){
     window.Kakao.Auth.login({
         scope: 'profile, account_email',

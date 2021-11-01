@@ -1,5 +1,5 @@
 import express from "express";
-import {user, edit, logout, startKakaoLogin, finishKakaoLogin} from "../controllers/userController";
+import {user, getEdit, postEdit, logout, startKakaoLogin, finishKakaoLogin} from "../controllers/userController";
 // import passport from "passport";
 // const KakaoStrategy = require('passport-kakao').Strategy;
 const userRouter = express.Router();
@@ -13,7 +13,7 @@ const userRouter = express.Router();
 //  console.log(refreshToken);
 // }));
 
-userRouter.get("/edit", edit);
+userRouter.route("/edit").get(getEdit).post(postEdit);
 userRouter.get("/logout", logout);
 userRouter.get("/kakao/start", startKakaoLogin);
 userRouter.get("/kakao/finish",finishKakaoLogin);

@@ -13,6 +13,8 @@ html(lang="ko")
                         a(href="/") 메인 페이지
                     if loggedIn
                         li 
+                            a(href="/user/edit") 프로필 설정
+                        li 
                             a(href="/user/logout") 로그아웃
                         li
                             a(href=`/user/${loggedInUser.username}`) #{loggedInUser.name}의 마이페이지
