@@ -3,8 +3,8 @@ import Subject from "./subject";
 var Schema = mongoose.Schema;
 const testSchema = new mongoose.Schema({
   userId: String, 
-  question: String,
-  answer: String,
+  question: { type: String, required: true, trim: true},
+  answer: { type: String, required: true, trim: true},
   subject: { type: Schema.Types.ObjectId, ref: 'Subject' }
 });
 const Test = mongoose.model("Test", testSchema);

@@ -4,7 +4,7 @@ import subjectData from "./subjectData";
 
 const subjectSchema = new mongoose.Schema({
   name:{type: String, required: true, trim: true}, 
-  professor: String,
+  professor: {type: String, trim:true},
 });
 
 subjectSchema.set('collection', 'Subject');

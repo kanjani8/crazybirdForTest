@@ -1,8 +1,6 @@
 import Subject from "../models/subject";
 import Test from "../models/test";
 
-
-
 export const search = async (req, res) => {
   const { keyword } = req.query;
   let subjects = [];
@@ -66,12 +64,12 @@ export const postUploadTest = async (req, res) => {
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
-  return res.render("uploadTest", { pageTitle: subject.name, subject});
+  return res.redirect("testList", { pageTitle: subject.name, subject});
 };
+
 
 export const getEditTest = (req, res) => res.send("test UpdatePage!");
 export const postEditTest = (req, res) => res.send("test UpdatePage!");
-
 
 
 export const setting = (req, res) => res.send("subject settingPage!");
