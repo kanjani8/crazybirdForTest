@@ -1,0 +1,8 @@
+extends base
+
+block content
+    form(method="POST")
+        input(placeholder="이름",id="name", name="name", type="text", required, value=loggedInUser.name)
+        input(placeholder="email", name="email", type="email", required, value=loggedInUser.email)
+        input(placeholder="id", name="username", type="text", required, value=loggedInUser.username)
+        input(type="submit", value="수정하기")

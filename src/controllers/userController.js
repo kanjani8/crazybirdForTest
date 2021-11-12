@@ -96,7 +96,8 @@ export const logout = (req, res) => {
 
 
 export const getEdit = (req, res) => {
-    return res.render("edit-profile", {pageTitle:"Edit Profile"});
+    
+    return res.render("edit-profile", {pageTitle:"프로필 수정"});
 };
 export const postEdit = (req, res) => {
     return res.render("edit-profile");
