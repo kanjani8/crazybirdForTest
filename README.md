@@ -16,7 +16,8 @@ subject router:
 
 /subject/:id/test/list - 내가 등록한 문제들 보이는 페이지
 /subject/:id/test/upload - 문제 만들기 - 문제 타입별로 밀어넣는 백엔드 구현 필요, 사용자 아이디 넣기 기능 필요, 신고 기능 필요(쓰레기 문제)
-/subject/:id/test/:testId/update - 문제 내용 수정하기
+/subject/:id/test/:testId/edit - 문제 내용 수정하기
+/subject/:id/test/:testId/delete - 문제 내용 delete
 
 /subject/:id/test/setting - prepare test. for example, choose test number 문제 수랑 권위 설정하기
 /subject/:id/test/solve - 문제 푸는 페이지

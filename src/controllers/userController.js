@@ -95,11 +95,18 @@ export const logout = (req, res) => {
 
 
 
-export const getEdit = (req, res) => {
-    
+export const getEdit = (req, res) => {  
     return res.render("edit-profile", {pageTitle:"프로필 수정"});
 };
-export const postEdit = (req, res) => {
+
+export const postEdit = async(req, res) => {
+    const {
+        session: {
+            user: {_id},
+        },
+        body: {name, email, username},
+    } = req;
+    await User.findByIdAndUpdate(id, {name, email, username});
     return res.render("edit-profile");
 };
 

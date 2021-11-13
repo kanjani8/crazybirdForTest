@@ -1,4 +1,5 @@
 import express from "express";
+import { protectorMiddleware, publicOnlyMiddleware } from "../middlewares";
 import {user, getEdit, postEdit, logout, startKakaoLogin, finishKakaoLogin} from "../controllers/userController";
 // import passport from "passport";
 // const KakaoStrategy = require('passport-kakao').Strategy;
@@ -9,14 +10,14 @@ const userRouter = express.Router();
 //     callbackURL: process.env.REDIRECT_URL,
 // }, async(accessToken, refreshToken, profile, done) => {
 //  console.log(profile);
-//  console.log(accessToken);
+//  console.log(accessToken); 
 //  console.log(refreshToken);
 // }));
 
-userRouter.route("/edit").get(getEdit).post(postEdit);
-userRouter.get("/logout", logout);
-userRouter.get("/kakao/start", startKakaoLogin);
-userRouter.get("/kakao/finish",finishKakaoLogin);
+userRouter.route("/edit").all(protectorMiddleware).get(getEdit).post(postEdit);
+userRouter.get("/logout",protectorMiddleware, logout);
+userRouter.get("/kakao/start", publicOnlyMiddleware, startKakaoLogin);
+userRouter.get("/kakao/finish",publicOnlyMiddleware, finishKakaoLogin);
 // userRouter.get("/kakao/start", passport.authenticate('kakao'));
 // userRouter.get("/kakao/finish", passport.authenticate(
 //         'kakao', { failureRedirect: '/', }), (req, res) => 

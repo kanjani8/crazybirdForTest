@@ -71,6 +71,7 @@ export const postUploadTest = async (req, res) => {
 export const getEditTest = (req, res) => res.send("test UpdatePage!");
 export const postEditTest = (req, res) => res.send("test UpdatePage!");
 
+export const deleteTest = (req, res) => res.send("test deletePage!");
 
 export const setting = (req, res) => res.send("subject settingPage!");
 export const solve = (req, res) => res.send("subject solvePage!");
