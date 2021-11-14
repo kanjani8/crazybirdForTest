@@ -58,13 +58,30 @@ export const getUploadTest = async (req, res) => {
   }
   return res.render("uploadTest", { pageTitle: subject.name, subject});
 };
+
 export const postUploadTest = async (req, res) => {
+  const {question, answer, } = req.body;
   const { id } = req.params;
   const subject = await Subject.findById(id);
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
-  return res.redirect("testList", { pageTitle: subject.name, subject});
+
+  try{
+    await Test.create({
+      userId:req.session.user.id,
+      question, 
+      answer,
+      subjectId:id,
+      subjectName:subject.name
+    })
+    return res.redirect("testList", { pageTitle: subject.name, subject});
+  }catch(error){
+    return res.status(400).render("upload", {
+      pageTitle: "문제 업로드 에러",
+      errorMessage: error._message,
+    });
+  }
 };
 
 

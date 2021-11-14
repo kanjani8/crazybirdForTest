@@ -2,10 +2,11 @@ import mongoose from "mongoose";
 import Subject from "./subject";
 var Schema = mongoose.Schema;
 const testSchema = new mongoose.Schema({
-  userId: String, 
+  userId: {type: String, required: true}, 
   question: { type: String, required: true, trim: true},
   answer: { type: String, required: true, trim: true},
-  subject: { type: Schema.Types.ObjectId, ref: 'Subject' }
+  subjectID: { type: Schema.Types.ObjectId, ref: 'Subject'},
+  subject:{ type: String, required: true}
 });
 const Test = mongoose.model("Test", testSchema);
 /*Test.collection.remove({}); 잘못넣어둔 쓰레기 데이터들 한번에 삭제*/

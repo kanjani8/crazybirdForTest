@@ -11,23 +11,24 @@ block content
         br
         br
         div(id="form_1")
-            label(for="Question") 질문:
-            input(placeholder="Question", required, type="text",id="Question", name="Question")
+            label(for="question") 질문:
+            input(placeholder="질문", type="text",id="Question", name="Question")
             label(for="Answer") 정답:
-            input(placeholder="Answer", required, type="text", id="Answer",name="Answer")
+            input(placeholder="정답", type="text", id="Answer",name="Answer")
             input(type="submit", value="Upload Test")
 
         div(id="form_2" style="display: none;")
-            label(for="Question") 질문:
-            input(placeholder="Question", required, type="text",id="Question", name="Question")
+            span **틀린 선택지 3개를 전부 입력해주세요
+            label(for="question") 질문:
+            input(placeholder="질문", type="text",id="question", name="question")
             label(for="Answer") 정답:
-            input(placeholder="Answer", required, type="text", id="Answer",name="Answer")
-            label(for="WrongAnswer") 틀린 선택지1:
-            input(placeholder="WrongAnswer", required, type="text", class="WrongAnswer",name="WrongAnswer")
-            label(for="WrongAnswer") 틀린 선택지2:
-            input(placeholder="WrongAnswer", required, type="text", class="WrongAnswer",name="WrongAnswer")
-            label(for="WrongAnswer") 틀린 선택지3:
-            input(placeholder="WrongAnswer", required, type="text", class="WrongAnswer",name="WrongAnswer")
+            input(placeholder="정답", type="text", id="Answer",name="Answer")
+            label(for="WrongAnswer1") 틀린 선택지1:
+            input(placeholder="WrongAnswer",type="text", id="WrongAnswer1",name="WrongAnswer1")
+            label(for="WrongAnswer2") 틀린 선택지2:
+            input(placeholder="WrongAnswer",type="text", id="WrongAnswer2",name="WrongAnswer2")
+            label(for="WrongAnswer3") 틀린 선택지3:
+            input(placeholder="WrongAnswer", type="text", id="WrongAnswer3",name="WrongAnswer3")
             input(type="submit", value="Upload Test")
 
 block script 
