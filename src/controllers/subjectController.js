@@ -39,7 +39,7 @@ export const list = async (req, res) => {
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
-  const tests = await Test.find().populate('subject');
+  const tests = await Test.find({subjectId: id, userId: req.session.user._id});
   if(!tests){
     return res.render("404", { pageTitle: "Test not found." });
   }
@@ -56,32 +56,61 @@ export const getUploadTest = async (req, res) => {
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
-  return res.render("uploadTest", { pageTitle: subject.name, subject});
+  return res.render("uploadTest", { pageTitle: subject.name});
 };
 
 export const postUploadTest = async (req, res) => {
-  const {question, answer, } = req.body;
   const { id } = req.params;
   const subject = await Subject.findById(id);
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
+  const {formType} = req.body;
 
-  try{
-    await Test.create({
-      userId:req.session.user.id,
-      question, 
-      answer,
-      subjectId:id,
-      subjectName:subject.name
-    })
-    return res.redirect("testList", { pageTitle: subject.name, subject});
-  }catch(error){
-    return res.status(400).render("upload", {
-      pageTitle: "문제 업로드 에러",
-      errorMessage: error._message,
-    });
+  // 객관식일 경우
+  if(formType === 2){ // 객관식일 경우
+    const question = req.body.question[1];
+    const answer = req.body.answer[1];
+    const {wrongAnswer1, wrongAnswer2, wrongAnswer3} = req.body;
+    try{
+      const createdTest = await Test.create({
+        question, 
+        answer,
+        userId:req.session.user._id,
+        subjectId:id,
+        subjectName:subject.name,
+        wrongAnswer1,
+        wrongAnswer2,
+        wrongAnswer3
+      });
+    return res.redirect(`/subject/${id}/test/list`);
+    }catch(error){
+      return res.status(400).render("404", {
+        pageTitle: "문제 업로드 에러",
+        errorMessage: error._message,
+      });
+    }
   }
+  else{// 단답형일 경우
+    const question = req.body.question[0];
+    const answer = req.body.answer[0];
+    try{
+      const createdTest = await Test.create({
+        question, 
+        answer,
+        userId:req.session.user._id,
+        subjectId:id,
+        subjectName:subject.name
+      });
+      return res.redirect(`/subject/${id}/test/list`);
+    }catch(error){
+      return res.status(400).render("404", {
+        pageTitle: "문제 업로드 에러",
+            errorMessage: error._message,
+        });
+      }
+   }    
+
 };
 
 

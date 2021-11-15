@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true, trim: true},
     password: { type: String, required: true},
 })
+//학교 추가하기
+
 
 userSchema.pre("save", async function(){
     this.password = await bcrypt.hash(this.password, 5);
