@@ -1,0 +1,37 @@
+extends base.pug
+block content
+    if errorMessage
+        span=errorMessage
+
+    form(method="POST")
+        input( type="radio", required, id="open", name="opened", value=1, checked=test.opened)
+        label( for="open") 공개(+ 50 point)
+        input( type="radio", required, id="close", name="opened", value=0, checked=!test.opened)
+        label( for="close") 비공개
+        br
+        br
+        if(test.formType==="1")
+            label(for="question") 질문:
+            input(placeholder=test.question, type="text",id="question", name="question")
+            label(for="answer") 정답:
+            input(placeholder=test.answer, type="text", id="answer",name="answer")
+            input(type="submit", value="문제 수정하기")
+        else if(test.formType==="2")
+            span **틀린 선택지 3개를 전부 입력해주세요
+            label(for="question") 질문:
+            input(placeholder=test.question, type="text",id="question", name="question")
+            label(for="answer") 정답:
+            input(placeholder=test.answer, type="text", id="answer",name="answer")
+            label(for="wrongAnswer1") 틀린 선택지1:
+            input(placeholder=test.wrongAnswer1,type="text", id="wrongAnswer1",name="wrongAnswer1")
+            label(for="wrongAnswer2") 틀린 선택지2:
+            input(placeholder=test.wrongAnswer2,type="text", id="wrongAnswer2",name="wrongAnswer2")
+            label(for="wrongAnswer3") 틀린 선택지3:
+            input(placeholder=test.wrongAnswer3, type="text", id="wrongAnswer3",name="wrongAnswer3")
+            input(type="submit", value="문제 수정하기")
+        button(style="background: #EEEEEE;")
+            a(href=`/subject/${subject.id}/test/${test.id}/delete`, style="color: black;") 문제 삭제하기
+
+block script 
+    script(src="/frontJS/chooseQuestionType.js")
+        

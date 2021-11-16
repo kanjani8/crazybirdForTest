@@ -65,15 +65,16 @@ export const postUploadTest = async (req, res) => {
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
-  const {formType} = req.body;
-
+  const {formType, opened} = req.body;
+  console.log(req.body);
   // 객관식일 경우
-  if(formType === 2){ // 객관식일 경우
+  if(formType === "2"){ // 객관식일 경우
+    console.log("객관식에 들어는옴");
     const question = req.body.question[1];
     const answer = req.body.answer[1];
     const {wrongAnswer1, wrongAnswer2, wrongAnswer3} = req.body;
     try{
-      const createdTest = await Test.create({
+      await Test.create({
         question, 
         answer,
         userId:req.session.user._id,
@@ -81,9 +82,11 @@ export const postUploadTest = async (req, res) => {
         subjectName:subject.name,
         wrongAnswer1,
         wrongAnswer2,
-        wrongAnswer3
+        wrongAnswer3,
+        opened,
+        formType
       });
-    return res.redirect(`/subject/${id}/test/list`);
+      return res.redirect(`/subject/${id}/test/list`);
     }catch(error){
       return res.status(400).render("404", {
         pageTitle: "문제 업로드 에러",
@@ -92,15 +95,17 @@ export const postUploadTest = async (req, res) => {
     }
   }
   else{// 단답형일 경우
+    console.log("단답형으로 넘어옴");
     const question = req.body.question[0];
     const answer = req.body.answer[0];
     try{
-      const createdTest = await Test.create({
+        await Test.create({
         question, 
         answer,
         userId:req.session.user._id,
         subjectId:id,
-        subjectName:subject.name
+        subjectName:subject.name,
+        opened
       });
       return res.redirect(`/subject/${id}/test/list`);
     }catch(error){
@@ -114,10 +119,32 @@ export const postUploadTest = async (req, res) => {
 };
 
 
-export const getEditTest = (req, res) => res.send("test UpdatePage!");
+export const getEditTest = async (req, res) => {
+  const { id, testId  } = req.params;
+  const subject = await Subject.findById(id);
+  const test = await Test.findById(testId);
+  if (!subject){
+    return res.render("404", { pageTitle: "해당 과목을 찾을 수 없습니다." });
+  }
+  else if(!test){
+    return res.render("404", { pageTitle: "해당 문제를 찾을 수 없습니다" });
+  }
+  return res.render("editTest", { pageTitle: subject.name, subject, test});
+};
+
+
 export const postEditTest = (req, res) => res.send("test UpdatePage!");
 
-export const deleteTest = (req, res) => res.send("test deletePage!");
+
+
+
+
+
+export const deleteTest = async (req, res) => {
+  const { id, testId } = req.params;
+  await Test.findByIdAndDelete(testId);
+  return res.redirect(`/subject/${id}/test/list`);
+};
 
 export const setting = (req, res) => res.send("subject settingPage!");
 export const solve = (req, res) => res.send("subject solvePage!");

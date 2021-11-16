@@ -6,8 +6,10 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true, trim: true},
     username: { type: String, required: true, unique: true, trim: true},
     password: { type: String, required: true},
+    schoolCode: {type: Number},
+    point: {type: Number, default: 0},
 })
-//학교 추가하기
+//학교와 포인트 추가하기
 
 
 userSchema.pre("save", async function(){
