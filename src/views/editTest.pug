@@ -9,6 +9,13 @@ block content
         input( type="radio", required, id="close", name="opened", value=0, checked=!test.opened)
         label( for="close") 비공개
         br
+        input( type="radio", required, id="middleTest", name="forWhen", value="middle", checked=(test.forWhen==="middle"))
+        label( for="middleTest") 중간고사용
+        input( type="radio", required, id="finalTest", name="forWhen", value="final",checked=(test.forWhen==="final"))
+        label( for="finalTest") 기말고사용
+        input( type="radio", required, id="exactraTest", name="forWhen", value="exactra", checked=(test.forWhen==="exactra"))
+        label( for="exactraTest") 그 외
+        br
         br
         if(test.formType==="1")
             label(for="question") 질문:

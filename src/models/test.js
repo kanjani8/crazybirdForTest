@@ -13,6 +13,7 @@ const testSchema = new mongoose.Schema({
   wrongAnswer3: {type:String, trim: true},
   opened: {type: Boolean, required: true, default: false},
   formType: {type: String, required: true, default: "1"},
+  forWhen: {type: String, default:"middle"},
 });
 
 // 중간고사문제인지 기말고사 문제인지 체크할 수 있게하기

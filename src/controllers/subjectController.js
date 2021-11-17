@@ -65,11 +65,33 @@ export const postUploadTest = async (req, res) => {
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
-  const {formType, opened} = req.body;
-  console.log(req.body);
-  // 객관식일 경우
-  if(formType === "2"){ // 객관식일 경우
-    console.log("객관식에 들어는옴");
+  const {formType, opened, forWhen} = req.body;
+ 
+  if(formType === "1"){ // 단답형일 경우
+    const question = req.body.question[0];
+    const answer = req.body.answer[0];
+    try{
+        const testCreated = await Test.create({
+        question, 
+        answer,
+        userId:req.session.user._id,
+        subjectId:id,
+        subjectName:subject.name,
+        opened,
+        formType,
+        forWhen
+       });
+       console.log(testCreated);
+      //opened가 true이면 user의 포인트를 + 50하기
+      return res.redirect(`/subject/${id}/test/list`);
+    }catch(error){
+      return res.status(400).render("404", {
+        pageTitle: "문제 업로드 에러",
+            errorMessage: error._message,
+      });
+    }
+  }    
+  else{// 객관식일 경우
     const question = req.body.question[1];
     const answer = req.body.answer[1];
     const {wrongAnswer1, wrongAnswer2, wrongAnswer3} = req.body;
@@ -84,8 +106,10 @@ export const postUploadTest = async (req, res) => {
         wrongAnswer2,
         wrongAnswer3,
         opened,
-        formType
+        formType,
+        forWhen
       });
+      //opened가 true이면 user의 포인트를 + 50하기
       return res.redirect(`/subject/${id}/test/list`);
     }catch(error){
       return res.status(400).render("404", {
@@ -93,29 +117,8 @@ export const postUploadTest = async (req, res) => {
         errorMessage: error._message,
       });
     }
+    
   }
-  else{// 단답형일 경우
-    console.log("단답형으로 넘어옴");
-    const question = req.body.question[0];
-    const answer = req.body.answer[0];
-    try{
-        await Test.create({
-        question, 
-        answer,
-        userId:req.session.user._id,
-        subjectId:id,
-        subjectName:subject.name,
-        opened
-      });
-      return res.redirect(`/subject/${id}/test/list`);
-    }catch(error){
-      return res.status(400).render("404", {
-        pageTitle: "문제 업로드 에러",
-            errorMessage: error._message,
-        });
-      }
-   }    
-
 };
 
 
@@ -133,10 +136,37 @@ export const getEditTest = async (req, res) => {
 };
 
 
-export const postEditTest = (req, res) => res.send("test UpdatePage!");
+export const postEditTest = async (req, res) => {
+  const { id, testId } = req.params;
+  const subject = await Subject.findById(id);
+  const test = await Test.findById(testId);
+  const {question, answer, opened} = req.body;
+  if (!subject){
+    return res.render("404", { pageTitle: "해당 과목을 찾을 수 없습니다." });
+  }
+  else if(!test){
+    return res.render("404", { pageTitle: "해당 문제를 찾을 수 없습니다" });
+  }
+  
+  // 문제 형식에 따라
+  if(test.formType === "1"){ //문제가 단답형일 경우
+    await Test.findByIdAndUpdate(id, {
+
+    })
+  }
+  else{ // 문제가 객관식인 경우
+    const {
+      wrongAnswer1,
+      wrongAnswer2,
+      wrongAnswer3,
+    } = req.body;
+  }
+
+  return res.render("editTest", { pageTitle: subject.name, subject, test});
 
 
-
+  //opened값이 바뀌었으면  user의 포인트를 +- 50하기
+};
 
 
 

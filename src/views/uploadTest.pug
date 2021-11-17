@@ -14,6 +14,13 @@ block content
         input( type="radio", required, id="close", name="opened", value=0)
         label( for="close") 비공개
         br
+        input( type="radio", required, id="middleTest", name="forWhen", value="middle", checked="checked")
+        label( for="middleTest") 중간고사용
+        input( type="radio", required, id="finalTest", name="forWhen", value="final")
+        label( for="finalTest") 기말고사용
+        input( type="radio", required, id="exactraTest", name="forWhen", value="exactra")
+        label( for="exactraTest") 그 외
+        br
         br
         div(id="form_1")
             label(for="question") 질문:
