@@ -163,10 +163,6 @@ export const postEditTest = async (req, res) => {
   const subject = await Subject.findById(id);
   const test = await Test.findById(testId);
   const {question, answer, opened, forWhen} = req.body;
-  //공개 비공개가 바꼈는지 체크
-  let change = false;
-  if(test.opened != opened)
-    change = true;
   
   if (!subject){
     return res.render("404", { pageTitle: "해당 과목을 찾을 수 없습니다." });
@@ -184,7 +180,6 @@ export const postEditTest = async (req, res) => {
           opened,
           forWhen,
         });
-        console.log("updating test", testUpdating);
       }
       else{ // 문제가 객관식인 경우
         const {wrongAnswer1, wrongAnswer2, wrongAnswer3,} = req.body;
@@ -198,31 +193,27 @@ export const postEditTest = async (req, res) => {
           forWhen,
         });
       }
-    const updatedTest = await Test.findById(testId);
-  //opened값이 바뀌었으면  user의 포인트를 +- 50하기
-  if(change == true)
-  {
-    let point;
-    if(opened == true)
-     point = req.session.user.point+50;
-    else
-     point = req.session.user.point-50;
-    const plusUser = await User.findByIdAndUpdate(req.session.user._id, {
-     point},
-     {new: true}
-  );
-    req.session.user = plusUser;
-    console.log(plusUser);
-  }
-    return res.render("editTest", { pageTitle: subject.name, subject, test: updatedTest});
+
+      //opened값이 바뀌었으면  user의 포인트를 +- 50하기
+      if(test.opened != opened) // 오픈 여부가 바뀌었음
+      { 
+        const point = (opened==1 ? req.session.user.point+50 : req.session.user.point-50);
+        const pointUpdatedUser = await User.findByIdAndUpdate(req.session.user._id, {
+          point},
+          {new: true}
+          );
+          req.session.user = pointUpdatedUser;
+        }
+        const updatedTest = await Test.findById(testId);
+        return res.render("editTest", { pageTitle: subject.name, subject, test: updatedTest});
   }catch(error){
-    console.log(error);
-    return res.status(400).render("editTest", {
-      pageTitle: subject.name,
-      subject,
-      test,
-      errorMessage: error._message,
-    });
+        console.log(error);
+        return res.status(400).render("editTest", {
+          pageTitle: subject.name,
+          subject,
+          test,
+          errorMessage: error._message,
+        });
 
   }
 };
@@ -232,6 +223,13 @@ export const postEditTest = async (req, res) => {
 export const deleteTest = async (req, res) => {
   const { id, testId } = req.params;
   await Test.findByIdAndDelete(testId);
+
+  const point =  req.session.user.point-50;
+  const pointUpdatedUser = await User.findByIdAndUpdate(req.session.user._id, {
+          point},
+          {new: true}
+          );
+  req.session.user = pointUpdatedUser;
   return res.redirect(`/subject/${id}/test/list`);
 };
 

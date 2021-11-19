@@ -18,6 +18,8 @@ html(lang="ko")
                             a(href="/user/logout") 로그아웃
                         li
                             a(href=`/user/${loggedInUser.username}`) #{loggedInUser.name}의 마이페이지
+                        li
+                            h4 포인트: #{loggedInUser.point}
                     else
                         li
                             a(href="/enroll") 회원가입

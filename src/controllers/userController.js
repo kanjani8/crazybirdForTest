@@ -6,16 +6,16 @@ const KakaoStrategy = require('passport-kakao').Strategy;
 export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"enroll"});
 export const postEnroll = async (req, res) => {
     const { name, email, username, password, password2} = req.body;
-    const pageTitle = "Join";
+    const pageTitle = "회원가입";
     if(password !== password2){
-        return res.status(400).render("join", {
+        return res.status(400).render("enroll", {
             pageTitle,
             errorMessage: "비밀번호가 맞지 않습니다.",
         });
     }
     const exists = await User.exists({ $or: [{username}, {email}]  });
     if(exists){
-        return res.status(400).render("join", {
+        return res.status(400).render("enroll", {
             pageTitle,
             errorMessage:"아이디 혹은 이메일이 이미 사용중입니다."
         })
@@ -29,7 +29,7 @@ export const postEnroll = async (req, res) => {
         });
          return res.redirect("/login");
     } catch(error) {
-        return res.status(400).render("join", {
+        return res.status(400).render("enroll", {
             pageTitle: "Enroll error",
             errorMessage: error._message,
         });
