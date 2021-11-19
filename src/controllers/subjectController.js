@@ -1,5 +1,6 @@
 import Subject from "../models/subject";
 import Test from "../models/test";
+import User from "../models/user";
 
 export const search = async (req, res) => {
   const { keyword } = req.query;
@@ -83,6 +84,16 @@ export const postUploadTest = async (req, res) => {
        });
        console.log(testCreated);
       //opened가 true이면 user의 포인트를 + 50하기
+      const point = req.session.user.point+50;
+      if(opened == true)
+      {
+        const plusUser = await User.findByIdAndUpdate(req.session.user._id, {
+          point},
+          {new: true}
+        );
+        req.session.user = plusUser;
+        console.log(plusUser);
+      }
       return res.redirect(`/subject/${id}/test/list`);
     }catch(error){
       return res.status(400).render("404", {
@@ -110,6 +121,17 @@ export const postUploadTest = async (req, res) => {
         forWhen
       });
       //opened가 true이면 user의 포인트를 + 50하기
+      const point = req.session.user.point+50;
+      if(opened == true)
+      {
+        const plusUser = await User.findByIdAndUpdate(req.session.user._id, {
+          point},
+          {new: true}
+        );
+        req.session.user = plusUser;
+        console.log(plusUser);
+      }
+      
       return res.redirect(`/subject/${id}/test/list`);
     }catch(error){
       return res.status(400).render("404", {
@@ -141,6 +163,11 @@ export const postEditTest = async (req, res) => {
   const subject = await Subject.findById(id);
   const test = await Test.findById(testId);
   const {question, answer, opened, forWhen} = req.body;
+  //공개 비공개가 바꼈는지 체크
+  let change = false;
+  if(test.opened != opened)
+    change = true;
+  
   if (!subject){
     return res.render("404", { pageTitle: "해당 과목을 찾을 수 없습니다." });
   }
@@ -172,8 +199,22 @@ export const postEditTest = async (req, res) => {
         });
       }
     const updatedTest = await Test.findById(testId);
+  //opened값이 바뀌었으면  user의 포인트를 +- 50하기
+  if(change == true)
+  {
+    let point;
+    if(opened == true)
+     point = req.session.user.point+50;
+    else
+     point = req.session.user.point-50;
+    const plusUser = await User.findByIdAndUpdate(req.session.user._id, {
+     point},
+     {new: true}
+  );
+    req.session.user = plusUser;
+    console.log(plusUser);
+  }
     return res.render("editTest", { pageTitle: subject.name, subject, test: updatedTest});
-    //opened값이 바뀌었으면  user의 포인트를 +- 50하기
   }catch(error){
     console.log(error);
     return res.status(400).render("editTest", {
