@@ -38,7 +38,8 @@ block content
             input(type="submit", value="문제 수정하기")
         button(style="background: #EEEEEE;")
             a(href=`/subject/${subject.id}/test/${test.id}/delete`, style="color: black;") 문제 삭제하기
+        br
+        hr
+        a(href=`/subject/${subject.id}/test/list`, style="color: black;") #{subject.name}의 문제 리스트로 돌아가기
 
-block script 
-    script(src="/frontJS/chooseQuestionType.js")
         

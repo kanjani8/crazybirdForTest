@@ -140,32 +140,50 @@ export const postEditTest = async (req, res) => {
   const { id, testId } = req.params;
   const subject = await Subject.findById(id);
   const test = await Test.findById(testId);
-  const {question, answer, opened} = req.body;
+  const {question, answer, opened, forWhen} = req.body;
   if (!subject){
     return res.render("404", { pageTitle: "해당 과목을 찾을 수 없습니다." });
   }
   else if(!test){
     return res.render("404", { pageTitle: "해당 문제를 찾을 수 없습니다" });
   }
-  
-  // 문제 형식에 따라
-  if(test.formType === "1"){ //문제가 단답형일 경우
-    await Test.findByIdAndUpdate(id, {
 
-    })
+  try{
+      // 문제 형식에 따라
+      if(test.formType === "1"){ //문제가 단답형일 경우
+        const testUpdating = await Test.findByIdAndUpdate(testId, {
+          question,
+          answer,
+          opened,
+          forWhen,
+        });
+        console.log("updating test", testUpdating);
+      }
+      else{ // 문제가 객관식인 경우
+        const {wrongAnswer1, wrongAnswer2, wrongAnswer3,} = req.body;
+        await Test.findByIdAndUpdate(testId, {
+          question,
+          answer,
+          wrongAnswer1,
+          wrongAnswer2,
+          wrongAnswer3,
+          opened,
+          forWhen,
+        });
+      }
+    const updatedTest = await Test.findById(testId);
+    return res.render("editTest", { pageTitle: subject.name, subject, test: updatedTest});
+    //opened값이 바뀌었으면  user의 포인트를 +- 50하기
+  }catch(error){
+    console.log(error);
+    return res.status(400).render("editTest", {
+      pageTitle: subject.name,
+      subject,
+      test,
+      errorMessage: error._message,
+    });
+
   }
-  else{ // 문제가 객관식인 경우
-    const {
-      wrongAnswer1,
-      wrongAnswer2,
-      wrongAnswer3,
-    } = req.body;
-  }
-
-  return res.render("editTest", { pageTitle: subject.name, subject, test});
-
-
-  //opened값이 바뀌었으면  user의 포인트를 +- 50하기
 };
 
 
