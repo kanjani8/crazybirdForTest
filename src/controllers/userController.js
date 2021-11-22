@@ -13,12 +13,25 @@ export const postEnroll = async (req, res) => {
             errorMessage: "비밀번호가 맞지 않습니다.",
         });
     }
-    const exists = await User.exists({ $or: [{username}, {email}]  });
-    if(exists){
+    const idExists = await User.exists({username});
+    const emailExists = await User.exists({email});
+    if(idExists && emailExists){
         return res.status(400).render("enroll", {
             pageTitle,
-            errorMessage:"아이디 혹은 이메일이 이미 사용중입니다."
-        })
+            errorMessage:"아이디 " + username + "와(과) 이메일 " + email + "이 모두 사용중입니다.",
+        });
+    }
+    else if(idExists){
+        return res.status(400).render("enroll", {
+            pageTitle,
+            errorMessage:"아이디 " + username +  "가 사용중입니다.",
+        });
+    }
+    else if(emailExists){
+        return res.status(400).render("enroll", {
+            pageTitle,
+            errorMessage:"이메일 " + email + "이 사용중입니다.",
+        });
     }
     try{
         await User.create({
@@ -106,10 +119,59 @@ export const postEdit = async(req, res) => {
         },
         body: {name, email, username},
     } = req;
-    await User.findByIdAndUpdate(_id, {name, email, username});
-    
-    return res.render("edit-profile");
+
+    let idExists = false;
+    let emailExists = false;
+    //email과 username(id)만 다른 사람과 안겹치게 처리하자. 이름은 겹칠수도 있으니 ㅇㅇ..
+    if(username != req.session.username)
+        idExists = await User.exists({username});
+    if(email != req.session.email)
+        emailExists = await User.exists({email});
+
+    if(idExists && emailExists){
+        return res.status(400).render("edit-profile", {
+            pageTitle:"프로필 업데이트 에러",
+            errorMessage:"아이디 " + username + "와(과) 이메일 " + email + "이 모두 사용중입니다.",
+        });
+    }
+    else if(idExists){
+        return res.status(400).render("edit-profile", {
+            pageTitle:"프로필 업데이트 에러",
+            errorMessage:"아이디 " + username +  "가 사용중입니다.",
+        });
+    }
+    else if(emailExists){
+        return res.status(400).render("edit-profile", {
+            pageTitle:"프로필 업데이트 에러",
+            errorMessage:"이메일 " + email + "이 사용중입니다.",
+        });
+    }
+
+
+    try{
+        const updatedUser = await User.findByIdAndUpdate(_id, {name, email, username}, {new: true});
+        console.log("updtated user: ", updatedUser);
+        req.session.user = updatedUser;
+        return res.render("edit-profile");
+    }catch(error){
+        return res.status(400).render("404", {pageTitle:"프로필 업데이트 에러", errorMessage:error._message,});   
+    }
 };
 
+export const leave = async(req, res) => {
+        const _id = req.session.user._id;
+    try{
+        console.log(_id);
+        const deletedUser = await User.findByIdAndDelete(_id);
+        const users = await User.find();
+        console.log("deletedUser: ", deletedUser);
+        console.log("leftedUser: ", users);
+        req.session.destroy();
+        return res.redirect("/");
+    }catch(error){
+        console.log(error);
+        return res.status(400).render("404", {pageTitle:"회원탈퇴 에러", errorMessage:error._message});
+    }
+};
 export const user = (req, res) => res.send("userPage!");
 
