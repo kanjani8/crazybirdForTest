@@ -115,12 +115,11 @@ export const getEdit = (req, res) => {
 export const postEdit = async(req, res) => {
     const {
         session: {
-            user: {_id},
+            user: { _id, avatarUrl },
         },
         body: {name, email, username},
         file,
     } = req;
-    console.log(file);
 
     let idExists = false;
     let emailExists = false;
@@ -150,7 +149,16 @@ export const postEdit = async(req, res) => {
 
 
     try{
-        const updatedUser = await User.findByIdAndUpdate(_id, {name, email, username}, {new: true});
+        const updatedUser = await User.findByIdAndUpdate(
+            _id,
+            {
+                avatarUrl: file ? file.path : avatarUrl,
+                name,
+                email,
+                username
+            },
+                {new: true}
+        );
         req.session.user = updatedUser;
         res.locals.loggedInUser = req.session.user;
         return res.render("users/edit-profile");
