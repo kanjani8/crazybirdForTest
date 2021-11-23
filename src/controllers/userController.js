@@ -118,7 +118,9 @@ export const postEdit = async(req, res) => {
             user: {_id},
         },
         body: {name, email, username},
+        file,
     } = req;
+    console.log(file);
 
     let idExists = false;
     let emailExists = false;
