@@ -16,11 +16,9 @@ export const search = async (req, res) => {
     }}]});
   } else {
     subjects = await Subject.find({});
-    console.log(subjects);
   }
   return res.render("search", { pageTitle: "Search", subjects });
 };
-
 
 export const see =  async (req, res) => {
   const { id } = req.params;
@@ -30,9 +28,6 @@ export const see =  async (req, res) => {
   }
   return res.render("seeSubject", { pageTitle: subject.name, subject });
 };
-
-
-
 
 export const list = async (req, res) => {
   const { id } = req.params;
@@ -45,7 +40,7 @@ export const list = async (req, res) => {
     return res.render("404", { pageTitle: "Test not found." });
   }
 
-  return res.render("testList", { pageTitle: subject.name, subject, tests });
+  return res.render("tests/testList", { pageTitle: subject.name, subject, tests });
 };
 
 
@@ -57,14 +52,14 @@ export const getUploadTest = async (req, res) => {
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
-  return res.render("uploadTest", { pageTitle: subject.name});
+  return res.render("tests/uploadTest", { pageTitle: subject.name});
 };
 
 export const postUploadTest = async (req, res) => {
   const { id } = req.params;
   const subject = await Subject.findById(id);
   if (!subject){
-    return res.render("404", { pageTitle: "Subject not found." });
+    return res.status(400).render("404", { pageTitle: "해당 과목을 찾을 수 없습니다" });
   }
   const {formType, opened, forWhen} = req.body;
  
@@ -82,7 +77,6 @@ export const postUploadTest = async (req, res) => {
         formType,
         forWhen
        });
-       console.log(testCreated);
       //opened가 true이면 user의 포인트를 + 50하기
       const point = req.session.user.point+50;
       if(opened == true)
@@ -92,13 +86,12 @@ export const postUploadTest = async (req, res) => {
           {new: true}
         );
         req.session.user = plusUser;
-        console.log(plusUser);
       }
       return res.redirect(`/subject/${id}/test/list`);
     }catch(error){
       return res.status(400).render("404", {
         pageTitle: "문제 업로드 에러",
-            errorMessage: error._message,
+        errorMessage: error._message,
       });
     }
   }    
@@ -129,7 +122,6 @@ export const postUploadTest = async (req, res) => {
           {new: true}
         );
         req.session.user = plusUser;
-        console.log(plusUser);
       }
       
       return res.redirect(`/subject/${id}/test/list`);
@@ -154,7 +146,7 @@ export const getEditTest = async (req, res) => {
   else if(!test){
     return res.render("404", { pageTitle: "해당 문제를 찾을 수 없습니다" });
   }
-  return res.render("editTest", { pageTitle: subject.name, subject, test});
+  return res.render("tests/editTest", { pageTitle: subject.name, subject, test});
 };
 
 
@@ -174,7 +166,7 @@ export const postEditTest = async (req, res) => {
   try{
       // 문제 형식에 따라
       if(test.formType === "1"){ //문제가 단답형일 경우
-        const testUpdating = await Test.findByIdAndUpdate(testId, {
+        await Test.findByIdAndUpdate(testId, {
           question,
           answer,
           opened,
@@ -205,10 +197,10 @@ export const postEditTest = async (req, res) => {
           req.session.user = pointUpdatedUser;
         }
         const updatedTest = await Test.findById(testId);
-        return res.render("editTest", { pageTitle: subject.name, subject, test: updatedTest});
+        return res.render("tests/editTest", { pageTitle: subject.name, subject, test: updatedTest});
   }catch(error){
         console.log(error);
-        return res.status(400).render("editTest", {
+        return res.status(400).render("tests/editTest", {
           pageTitle: subject.name,
           subject,
           test,
@@ -222,15 +214,16 @@ export const postEditTest = async (req, res) => {
 
 export const deleteTest = async (req, res) => {
   const { id, testId } = req.params;
-  await Test.findByIdAndDelete(testId);
+  try{
+    await Test.findByIdAndDelete(testId);
 
-  const point =  req.session.user.point-50;
-  const pointUpdatedUser = await User.findByIdAndUpdate(req.session.user._id, {
-          point},
-          {new: true}
-          );
-  req.session.user = pointUpdatedUser;
-  return res.redirect(`/subject/${id}/test/list`);
+    const point =  req.session.user.point-50;
+    const pointUpdatedUser = await User.findByIdAndUpdate(req.session.user._id, {point}, {new: true});
+    req.session.user = pointUpdatedUser;
+    return res.redirect(`/subject/${id}/test/list`);
+  }catch(error){
+    return res.status(400).render("404", {pageTitle:"시험문제 삭제 에러", errorMessage: error._message});
+  }
 };
 
 export const setting = (req, res) => res.send("subject settingPage!");
