@@ -19,8 +19,7 @@ export const search = async (req, res) => {
   });
   } else {
     try{
-      subjects = await Subject.find({schoolName:"성신여자대학교"});
-      console.log("과목들:", subjects);
+      subjects = await Subject.find({schoolName});
     }catch(error){
       console.log(error);
     }
