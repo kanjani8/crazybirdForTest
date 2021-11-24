@@ -1,9 +1,11 @@
 import Subject from "../models/subject";
 import Test from "../models/test";
 import User from "../models/user";
+import School from "../models/school";
 
 export const search = async (req, res) => {
   const { keyword } = req.query;
+  const schoolName = req.session.user.schoolName;
   let subjects = [];
   if (keyword) {
     subjects = await Subject.find({
@@ -13,10 +15,18 @@ export const search = async (req, res) => {
       $regex: new RegExp(keyword, "i"),
     }}, {professor: {
       $regex: new RegExp(keyword, "i"),
-    }}]});
+    }}], schoolName,
+  });
   } else {
-    subjects = await Subject.find({});
+    try{
+      subjects = await Subject.find({schoolName:"성신여자대학교"});
+      console.log("과목들:", subjects);
+    }catch(error){
+      console.log(error);
+    }
+
   }
+ 
   return res.render("search", { pageTitle: "Search", subjects });
 };
 

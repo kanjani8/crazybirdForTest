@@ -1,11 +1,12 @@
 import User from "../models/user";
+import School from "../models/school";
 import bcrypt from "bcrypt";
 //import passport from "passport";
 //const KakaoStrategy = require('passport-kakao').Strategy;
 
 export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"enroll"});
 export const postEnroll = async (req, res) => {
-    const { name, email, username, password, password2} = req.body;
+    const { name, email, username, password, password2, schoolName} = req.body;
     const pageTitle = "회원가입";
     if(password !== password2){
         return res.status(400).render("enroll", {
@@ -38,7 +39,8 @@ export const postEnroll = async (req, res) => {
             name,
             email,
             username,
-            password
+            password,
+            schoolName
         });
          return res.redirect("/login");
     } catch(error) {
@@ -108,8 +110,9 @@ export const logout = (req, res) => {
 
 
 
-export const getEdit = (req, res) => {  
-    return res.render("users/edit-profile", {pageTitle:"프로필 수정"});
+export const getEdit = async(req, res) => {  
+    const school = await School.find({schoolCode: req.session.user.schoolCode});
+    return res.render("users/edit-profile", {pageTitle:"프로필 수정", school});
 };
 
 export const postEdit = async(req, res) => {

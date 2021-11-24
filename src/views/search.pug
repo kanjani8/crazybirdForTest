@@ -2,10 +2,13 @@ extends base.pug
 include mixins/subject
 
 block content
-    form(method="GET")
-        input(placeholder="Search by lecture or professor",name="keyword", type="text")
-        input(type="submit", value="Search")
-    each subject in subjects
-        +subject(subject)
+    if loggedIn
+        form(method="GET")
+            input(placeholder="Search by lecture or professor",name="keyword", type="text")
+            input(type="submit", value="Search")
+        each subject in subjects
+            +subject(subject)
+        else
+            li Sorry nothing found.
     else
-        li Sorry nothing found.
+        a(href="/login") 문제와 게시판을 보려면 먼저 로그인 하기 &rarr;
