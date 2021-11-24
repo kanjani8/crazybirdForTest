@@ -37,6 +37,7 @@ app.use("/assets", express.static("assets"));
 app.use("/frontJS", express.static("frontJS"));
 
 app.use("/", rootRouter);
+app.use("/uploads", express.static("uploads"));
 app.use("/subject", subjectRouter);
 app.use("/user",userRouter);
 

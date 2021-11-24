@@ -2,3 +2,4 @@
 /src/modesl/subjectData
 .env
 /uploads 
+.DS_Store
