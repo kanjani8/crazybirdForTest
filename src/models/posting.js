@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 const postingSchema = new mongoose.Schema({
   title:{type: String, required: true, trim: true, maxLength: 80}, 
   imageUrl: String,
+  videoUrl: String,
   script: { type: String, required: true, trim: true, minLength: 3 },
   createdAt: { type: Date, required: true, default: Date.now },
   meta: {

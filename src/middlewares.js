@@ -30,18 +30,12 @@ export const avatarUpload = multer({
       fileSize: 3000000,
     },
   });
-  //사진 용량 제한
-export const imageUpload = multer({
-  dest: "uploads/images/",
+  //커뮤니티 용량 제한
+export const communityUpload = multer({
+  dest: "uploads/community/",
   limits: {
-    fileSize: 3000000,
+    fileSize: 10000000,
   },
 });
-  //비디오 용량 제한
-  export const videoUpload = multer({
-    dest: "uploads/videos/",
-    limits: {
-      fileSize: 10000000,
-    },
-  });
+
 //export const uploadFiles = multer({ dest: "uploads/" });

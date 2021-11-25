@@ -296,13 +296,15 @@ export const postUploadPosting = async(req, res) =>{
   const {id} = req.params;
   const subject = Subject.findById(id);
   const {title, script} = req.body;
-  const file = req.file;
+  const file =req.files['image'] ?req.files['image'][0]: null;
+  const file2 = req.files['video'] ? req.files['video'][0] : null;
   const imageUrl = file ? file.path : null;
+  const videoUrl = file2 ? file2.path : null;
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
   try{
-    const createdPost = await Posting.create({title,imageUrl, script, subjectId:id, userId:req.session.user._id});
+    const createdPost = await Posting.create({title,imageUrl,videoUrl, script, subjectId:id, userId:req.session.user._id});
     console.log(createdPost);
 
     const point = req.session.user.point+5; // 글 쓸 경우 5점 플러스
@@ -334,7 +336,7 @@ export const postEditPosting = async (req, res) => {
   const { id, postingId  } = req.params;
   const subject = await Subject.findById(id);
   const posting = await Posting.findById(postingId);
-  const file = req.file;
+  const file = req.files['image'][0];
   const imageUrl = posting.imageUrl ? posting.imageUrl : null;
   const {title, script} = req.body;
   
