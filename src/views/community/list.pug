@@ -1,0 +1,15 @@
+extends ../base.pug
+include ../mixins/posting
+
+block content
+    if loggedIn
+        form(method="GET")
+            input(placeholder="글 검색하기",name="keyword", type="text")
+            input(type="submit", value="검색")
+        each posting in postings
+            +posting(posting)
+        else
+            li Sorry nothing found.
+        a(href="community/upload") 글쓰기
+    else
+        a(href="/login") 게시판을 보려면 먼저 로그인 하기 &rarr;

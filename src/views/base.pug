@@ -20,6 +20,9 @@ html(lang="ko")
                             a(href=`/user/${loggedInUser.username}`) #{loggedInUser.name}의 마이페이지
                         li
                             h4 포인트: #{loggedInUser.point}
+                        if subject
+                            li 
+                            a(href=`/subject/${subject.id}`) #{subject.name}로 이동
                     else
                         li
                             a(href="/enroll") 회원가입

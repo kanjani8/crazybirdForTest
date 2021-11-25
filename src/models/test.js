@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import Subject from "./subject";
 import User from "./user";
-var Schema = mongoose.Schema;
+
+const Schema = mongoose.Schema;
 const testSchema = new mongoose.Schema({
   question: { type: String, required: true, trim: true},
   answer: { type: String, required: true, trim: true},

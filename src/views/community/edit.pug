@@ -1,0 +1,16 @@
+extends ../base.pug
+block content
+    if errorMessage
+        span=errorMessage
+
+    form(method="POST")
+        label(for="title") 제목:
+        input(placeholder="제목", type="text",id="title", name="title", maxlength=80, value=posting.title)
+        label(for="script") 내용:
+        input(placeholder="내용", type="text", id="script",name="script", minlength=3, value=posting.script,
+            style="width:500px; height:100px;")
+        input(type="submit", value="수정하기")
+        hr
+        a(href=`/subject/${subject.id}/community`, style="color: black;") 게시판으로 돌아가기
+
+        

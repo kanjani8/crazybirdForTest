@@ -1,0 +1,23 @@
+extends ../base.pug
+
+block content
+    if loggedIn
+        h2=posting.title 
+        h5
+            span 조회수: #{posting.meta.views}
+            span 추천: #{posting.meta.rating}
+        h4=posting.script 
+        h5=posting.createdAt
+        if(loggedInUser.id === posting.userId)
+            h4
+                a(href=`${posting.id}/edit`) 수정하기
+            h4
+                a(href=`${posting.id}/delete`) 삭제하기
+        h4
+            a(href=`${posting.id}/recommend`) 추천하기💖  (나중에 구현)
+        h4
+            a(href=`${posting.id}/report`) 신고하기⛔  (나중에 구현)
+        h4
+            a(href="upload") 글쓰기
+    else
+        a(href="/login") 게시판을 보려면 먼저 로그인 하기 &rarr;

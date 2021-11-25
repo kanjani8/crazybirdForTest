@@ -2,8 +2,9 @@ import "dotenv/config";
 import "./db";
 import "./models/subject";
 import "./models/test";
-import "./models/user"
-import "./models/school"
+import "./models/user";
+import "./models/school";
+import "./models/posting";
 import app from "./server";
 
 const PORT = 4000;

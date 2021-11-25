@@ -1,5 +1,9 @@
 import express from "express";
-import { search, see, list, getUploadTest, postUploadTest,  getEditTest, postEditTest, deleteTest, setting, solve, result, community} from "../controllers/subjectController";
+import { search, see, list, getUploadTest, postUploadTest,  
+    getEditTest, postEditTest, deleteTest, 
+    setting, solve, result, 
+    community, getUploadPosting, postUploadPosting,
+    watchPosting, getEditPosting, postEditPosting, deletePosting } from "../controllers/subjectController";
 import { protectorMiddleware } from "../middlewares";
 
 const subjectRouter = express.Router();
@@ -12,10 +16,14 @@ subjectRouter.route("/:id([0-9a-f]{24})/test/upload").all(protectorMiddleware).g
 subjectRouter.route("/:id([0-9a-f]{24})/test/:testId([0-9a-f]{24})/edit").all(protectorMiddleware).get(getEditTest).post(postEditTest);
 subjectRouter.route("/:id([0-9a-f]{24})/test/:testId([0-9a-f]{24})/delete").all(protectorMiddleware).get(deleteTest);
 
-subjectRouter.get("/:id/test/setting", protectorMiddleware, setting);
-subjectRouter.get("/:id/test/solve", protectorMiddleware, solve);
-subjectRouter.get("/:id/test/result", protectorMiddleware, result);
+subjectRouter.get("/:id([0-9a-f]{24})/test/setting", protectorMiddleware, setting);
+subjectRouter.get("/:id([0-9a-f]{24})/test/solve", protectorMiddleware, solve);
+subjectRouter.get("/:id([0-9a-f]{24})/test/result", protectorMiddleware, result);
 
-subjectRouter.get("/:id/community", protectorMiddleware, community);
+subjectRouter.get("/:id([0-9a-f]{24})/community", protectorMiddleware, community);
+subjectRouter.route("/:id([0-9a-f]{24})/community/upload").all(protectorMiddleware).get(getUploadPosting).post(postUploadPosting);
+subjectRouter.get("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})", protectorMiddleware, watchPosting);
+subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/edit").all(protectorMiddleware).get(getEditPosting).post(postEditPosting);
+subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/delete").all(protectorMiddleware).get(deletePosting);
 
 export default subjectRouter;
