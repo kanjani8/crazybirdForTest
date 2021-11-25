@@ -336,7 +336,7 @@ export const postEditPosting = async (req, res) => {
   const { id, postingId  } = req.params;
   const subject = await Subject.findById(id);
   const posting = await Posting.findById(postingId);
-  const file = req.files['image'][0];
+  const file = req.files['image']?req.files['image'][0]:null;
   const imageUrl = posting.imageUrl ? posting.imageUrl : null;
   const {title, script} = req.body;
   
