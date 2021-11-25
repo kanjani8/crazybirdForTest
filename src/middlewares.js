@@ -23,5 +23,25 @@ export const publicOnlyMiddleware = (req, res, next) => {
         return res.redirect("/");
     }
 }
-
-export const uploadFiles = multer({ dest: "uploads/" });
+//avartar사진 용량 제한
+export const avatarUpload = multer({
+    dest: "uploads/avatars/",
+    limits: {
+      fileSize: 3000000,
+    },
+  });
+  //사진 용량 제한
+export const imageUpload = multer({
+  dest: "uploads/images/",
+  limits: {
+    fileSize: 3000000,
+  },
+});
+  //비디오 용량 제한
+  export const videoUpload = multer({
+    dest: "uploads/videos/",
+    limits: {
+      fileSize: 10000000,
+    },
+  });
+//export const uploadFiles = multer({ dest: "uploads/" });

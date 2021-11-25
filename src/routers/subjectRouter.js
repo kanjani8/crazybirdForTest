@@ -4,7 +4,7 @@ import { search, see, list, getUploadTest, postUploadTest,
     setting, solve, result, 
     community, getUploadPosting, postUploadPosting,
     watchPosting, getEditPosting, postEditPosting, deletePosting } from "../controllers/subjectController";
-import { protectorMiddleware } from "../middlewares";
+import { protectorMiddleware,imageUpload } from "../middlewares";
 
 const subjectRouter = express.Router();
 
@@ -21,7 +21,7 @@ subjectRouter.get("/:id([0-9a-f]{24})/test/solve", protectorMiddleware, solve);
 subjectRouter.get("/:id([0-9a-f]{24})/test/result", protectorMiddleware, result);
 
 subjectRouter.get("/:id([0-9a-f]{24})/community", protectorMiddleware, community);
-subjectRouter.route("/:id([0-9a-f]{24})/community/upload").all(protectorMiddleware).get(getUploadPosting).post(postUploadPosting);
+subjectRouter.route("/:id([0-9a-f]{24})/community/upload").all(protectorMiddleware).get(getUploadPosting).post(imageUpload.single("image"),postUploadPosting);
 subjectRouter.get("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})", protectorMiddleware, watchPosting);
 subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/edit").all(protectorMiddleware).get(getEditPosting).post(postEditPosting);
 subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/delete").all(protectorMiddleware).get(deletePosting);

@@ -2,7 +2,7 @@ import express from "express";
 import {
     protectorMiddleware,
     publicOnlyMiddleware,
-    uploadFiles,
+    avatarUpload,
   } from "../middlewares";
 import {user, getEdit, postEdit, logout, leave, startKakaoLogin, finishKakaoLogin, getChangePassword, postChangePassword} from "../controllers/userController";
 // import passport from "passport";
@@ -22,7 +22,7 @@ userRouter
   .route("/edit")
   .all(protectorMiddleware)
   .get(getEdit)
-  .post(uploadFiles.single("avatar"), postEdit);
+  .post(avatarUpload.single("avatar"), postEdit);
 userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
 userRouter.get("/logout",protectorMiddleware, logout);
 userRouter.get("/leave",protectorMiddleware, leave);

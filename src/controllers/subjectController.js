@@ -3,6 +3,7 @@ import Test from "../models/test";
 import User from "../models/user";
 import Posting from "../models/posting";
 import School from "../models/school";
+import { session } from "passport";
 
 export const search = async (req, res) => {
   const { keyword } = req.query;
@@ -297,11 +298,13 @@ export const postUploadPosting = async(req, res) =>{
   const {id} = req.params;
   const subject = Subject.findById(id);
   const {title, script} = req.body;
+  const file = req.file;
+  const imageUrl = file.path;
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
   try{
-    const createdPost = await Posting.create({title, script, subjectId:id, userId:req.session.user._id});
+    const createdPost = await Posting.create({title,imageUrl, script, subjectId:id, userId:req.session.user._id});
     console.log(createdPost);
 
     const point = req.session.user.point+5; // 글 쓸 경우 5점 플러스
