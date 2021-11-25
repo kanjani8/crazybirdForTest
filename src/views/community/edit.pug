@@ -3,7 +3,9 @@ block content
     if errorMessage
         span=errorMessage
 
-    form(method="POST")
+    form(method="POST", enctype="multipart/form-data")
+        label(for="image") 이미지
+        input(type="file", id="image", name="image", accept="image/*")
         label(for="title") 제목:
         input(placeholder="제목", type="text",id="title", name="title", maxlength=80, value=posting.title)
         label(for="script") 내용:

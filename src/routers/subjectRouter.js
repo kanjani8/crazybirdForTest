@@ -23,7 +23,7 @@ subjectRouter.get("/:id([0-9a-f]{24})/test/result", protectorMiddleware, result)
 subjectRouter.get("/:id([0-9a-f]{24})/community", protectorMiddleware, community);
 subjectRouter.route("/:id([0-9a-f]{24})/community/upload").all(protectorMiddleware).get(getUploadPosting).post(imageUpload.single("image"),postUploadPosting);
 subjectRouter.get("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})", protectorMiddleware, watchPosting);
-subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/edit").all(protectorMiddleware).get(getEditPosting).post(postEditPosting);
+subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/edit").all(protectorMiddleware).get(getEditPosting).post(imageUpload.single("image"),postEditPosting);
 subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/delete").all(protectorMiddleware).get(deletePosting);
 
 export default subjectRouter;

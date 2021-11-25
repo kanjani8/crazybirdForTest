@@ -275,13 +275,11 @@ export const community = async (req, res) => {
 export const watchPosting = async(req, res) => {
   const {id, postingId} = req.params;
   const userId = req.session.user.id;
-  console.log(userId);
   const subject = await Subject.findById(id);
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
   const posting = await Posting.findById(postingId);
-  console.log(posting);
   return res.render("community/watch", { pageTitle: `${subject.name}의 게시판`, posting});
 }
 
@@ -299,7 +297,7 @@ export const postUploadPosting = async(req, res) =>{
   const subject = Subject.findById(id);
   const {title, script} = req.body;
   const file = req.file;
-  const imageUrl = file.path;
+  const imageUrl = file ? file.path : null;
   if (!subject){
     return res.render("404", { pageTitle: "Subject not found." });
   }
@@ -336,6 +334,8 @@ export const postEditPosting = async (req, res) => {
   const { id, postingId  } = req.params;
   const subject = await Subject.findById(id);
   const posting = await Posting.findById(postingId);
+  const file = req.file;
+  const imageUrl = posting.imageUrl ? posting.imageUrl : null;
   const {title, script} = req.body;
   
   if (!subject){
@@ -344,23 +344,25 @@ export const postEditPosting = async (req, res) => {
   else if(!posting){
     return res.render("404", { pageTitle: "해당 게시물을 찾을 수 없습니다" });
   }
-
-  try{
-        await Posting.findByIdAndUpdate(postingId, {title, script});
+    try {
+        await Posting.findByIdAndUpdate(postingId, 
+          {
+            title,
+            imageUrl: file ? file.path : imageUrl,
+            script
+          });
         const updatedPosting = await Posting.findById(postingId);
-        return res.render("community/watch", { 
-          pageTitle: `${subject.name}의 게시판`,
-          subject, posting: updatedPosting});
-  }catch(error){
-        console.log(error);
-        return res.status(400).render("community/edit", {
-          pageTitle:`${subject.name}의 게시판`,
-          subject,
-          posting,
-          errorMessage: error._message,
-        });
-
-  }
+        return res.redirect(`/subject/${id}/community/${postingId}`);
+        } catch(error){
+          console.log(error);
+          return res.status(400).render("community/edit", {
+            pageTitle:`${subject.name}의 게시판`,
+            subject,
+            posting,
+            errorMessage: error._message,
+          });
+  
+    } 
 };
 
 export const deletePosting = async(req, res) =>{
