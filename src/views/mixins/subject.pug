@@ -3,5 +3,5 @@ mixin subject(subject)
         h4
             a(href=`/subject/${subject.id}`)=subject.name
             small=subject.professor
-        h5=subject.schoolName
+        h5=subject.school.name
         hr

@@ -6,6 +6,7 @@ block content
         form(method="GET")
             input(placeholder="Search by lecture or professor",name="keyword", type="text")
             input(type="submit", value="Search")
+        a(href="addSubject") 학교수업 외 과목을 추가(선검색 필수! ex.토익) 나중에 구현
         each subject in subjects
             +subject(subject)
         else

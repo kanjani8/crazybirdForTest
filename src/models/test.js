@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-const Schema = mongoose.Schema;
+import mongoose, { Schema } from "mongoose";
 
 const testSchema = new mongoose.Schema({
   question: { type: String, required: true, trim: true},

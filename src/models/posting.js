@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-const Schema = mongoose.Schema;
+import mongoose, { Schema } from "mongoose";
 
 const postingSchema = new mongoose.Schema({
   title:{type: String, required: true, trim: true, maxLength: 80}, 
@@ -10,6 +9,7 @@ const postingSchema = new mongoose.Schema({
   meta: {
     views: { type: Number, default: 0, required: true },
     rating: { type: Number, default: 0, required: true },
+    reported: { type: Number, default: 0, required: true },
   },
   subject: { type: Schema.Types.ObjectId, required: true, ref: "Subject"},
   user: { type: Schema.Types.ObjectId, required: true, ref: "User"},

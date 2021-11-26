@@ -1,6 +1,5 @@
-import mongoose from "mongoose";
-const Schema = mongoose.Schema;
-//import schoolData from "./datas/schoolData";
+import mongoose, { Schema } from "mongoose";
+import schoolData from "./datas/schoolData";
 
 
 const schoolSchema = new mongoose.Schema({

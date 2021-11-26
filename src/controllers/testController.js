@@ -4,18 +4,17 @@ import User from "../models/user";
 
 export const list = async (req, res) => {
     const { id } = req.params;
-    const subject = await Subject.findById(id);
-    if (!subject){
-      return res.render("404", { pageTitle: "Subject not found." });
+
+    try{
+      const subject = await Subject.findById(id);
+      const tests = await Test.find({subject: id, user: req.session.user._id}).populate("subject");
+      return res.render("tests/testList", { pageTitle: subject.name, tests });
+    }catch(error){
+      return res.render("404", { pageTitle: "Tests not found.", errorMessage:error._message });
     }
-    const tests = await Test.find({subjectId: id, userId: req.session.user._id});
-    if(!tests){
-      return res.render("404", { pageTitle: "Test not found." });
-    }
-  
-    return res.render("tests/testList", { pageTitle: subject.name, subject, tests });
   };
   
+
 export const getUploadTest = async (req, res) => {
     const { id } = req.params;
     const subject = await Subject.findById(id);
@@ -27,10 +26,6 @@ export const getUploadTest = async (req, res) => {
   
   export const postUploadTest = async (req, res) => {
     const { id } = req.params;
-    const subject = await Subject.findById(id);
-    if (!subject){
-      return res.status(400).render("404", { pageTitle: "해당 과목을 찾을 수 없습니다" });
-    }
     const {formType, opened, forWhen} = req.body;
    
     if(formType === "1"){ // 단답형일 경우
@@ -40,9 +35,8 @@ export const getUploadTest = async (req, res) => {
            await Test.create({
           question, 
           answer,
-          userId:req.session.user._id,
-          subjectId:id,
-          subjectName:subject.name,
+          user:req.session.user._id,
+          subject:id,
           opened,
           formType,
           forWhen
@@ -54,7 +48,7 @@ export const getUploadTest = async (req, res) => {
           const plusUser = await User.findByIdAndUpdate(req.session.user._id, {
             point},
             {new: true}
-          );
+          ).populate("school");
           req.session.user = plusUser;
         }
         return res.redirect(`/subject/${id}/test/list`);
@@ -73,9 +67,8 @@ export const getUploadTest = async (req, res) => {
         await Test.create({
           question, 
           answer,
-          userId:req.session.user._id,
-          subjectId:id,
-          subjectName:subject.name,
+          user:req.session.user._id,
+          subject:id,
           wrongAnswer1,
           wrongAnswer2,
           wrongAnswer3,
@@ -90,10 +83,9 @@ export const getUploadTest = async (req, res) => {
           const plusUser = await User.findByIdAndUpdate(req.session.user._id, {
             point},
             {new: true}
-          );
+          ).populate("school");;
           req.session.user = plusUser;
         }
-        
         return res.redirect(`/subject/${id}/test/list`);
       }catch(error){
         return res.status(400).render("404", {
@@ -101,7 +93,6 @@ export const getUploadTest = async (req, res) => {
           errorMessage: error._message,
         });
       }
-      
     }
   };
   
@@ -118,7 +109,6 @@ export const getUploadTest = async (req, res) => {
     }
     return res.render("tests/editTest", { pageTitle: subject.name, subject, test});
   };
-  
   
   export const postEditTest = async (req, res) => {
     const { id, testId } = req.params;
@@ -163,13 +153,12 @@ export const getUploadTest = async (req, res) => {
           const pointUpdatedUser = await User.findByIdAndUpdate(req.session.user._id, {
             point},
             {new: true}
-            );
+            ).populate("school");
             req.session.user = pointUpdatedUser;
           }
           const updatedTest = await Test.findById(testId);
           return res.render("tests/editTest", { pageTitle: subject.name, subject, test: updatedTest});
     }catch(error){
-          console.log(error);
           return res.status(400).render("tests/editTest", {
             pageTitle: subject.name,
             subject,
@@ -181,14 +170,14 @@ export const getUploadTest = async (req, res) => {
   };
   
   
-  
   export const deleteTest = async (req, res) => {
     const { id, testId } = req.params;
     try{
       await Test.findByIdAndDelete(testId);
   
       const point =  req.session.user.point-50;
-      const pointUpdatedUser = await User.findByIdAndUpdate(req.session.user._id, {point}, {new: true});
+      const pointUpdatedUser = await User.findByIdAndUpdate(req.session.user._id, {point}, {new: true})
+                                  .populate("school");
       req.session.user = pointUpdatedUser;
       return res.redirect(`/subject/${id}/test/list`);
     }catch(error){

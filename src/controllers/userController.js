@@ -14,6 +14,7 @@ export const postEnroll = async (req, res) => {
             errorMessage: "비밀번호가 맞지 않습니다.",
         });
     }
+    const school = await School.findOne({name:schoolName});
     const idExists = await User.exists({username});
     const emailExists = await User.exists({email});
     if(idExists && emailExists){
@@ -34,16 +35,20 @@ export const postEnroll = async (req, res) => {
             errorMessage:"이메일 " + email + "이 사용중입니다.",
         });
     }
+
+     
     try{
-        await User.create({
+        const created = await User.create({
             name,
             email,
             username,
             password,
-            schoolName
+            school: school._id
         });
+        console.log(created);
          return res.redirect("/login");
     } catch(error) {
+        console.log(error);
         return res.status(400).render("enroll", {
             pageTitle: "Enroll error",
             errorMessage: error._message,
@@ -55,7 +60,7 @@ export const getLogin = (req, res) => res.render("login",{pageTitle:"login"});
 export const postLogin = async (req, res) => {
     const { username, password } = req.body;
     const pageTitle = "Login";
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username }).populate("school");
     if (!user) {
       return res.status(400).render("login", {
         pageTitle,
@@ -109,12 +114,9 @@ export const logout = (req, res) => {
 };
 
 
-
-export const getEdit = async(req, res) => {  
-    const school = await School.find({schoolCode: req.session.user.schoolCode});
-    return res.render("users/edit-profile", {pageTitle:"프로필 수정", school});
+export const getEdit = (req, res) => {  
+    return res.render("users/edit-profile", {pageTitle:"프로필 수정"});
 };
-
 export const postEdit = async(req, res) => {
     const {
         session: {
@@ -205,8 +207,7 @@ export const postChangePassword = async(req, res) => {
 
 export const leave = async(req, res) => {
     try{
-        const deletedUser = await User.findByIdAndDelete(req.session.user._id);
-        const users = await User.find();
+        await User.findByIdAndDelete(req.session.user._id);
         req.session.destroy();
         return res.redirect("/");
     }catch(error){

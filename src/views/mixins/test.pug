@@ -1,7 +1,7 @@
 mixin test(test)
     div
         h4
-            a(href=`/subject/${subject.id}/test/${test.id}/edit`)=test.question
+            a(href=`/subject/${test.subject.id}/test/${test.id}/edit`)=test.question
             small=test.answer
-            a(href=`/subject/${subject.id}/test/${test.id}/delete`) ❌
+            a(href=`/subject/${test.subject.id}/test/${test.id}/delete`) ❌
         hr

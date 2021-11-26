@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
-import mongoose from "mongoose";
-const Schema = mongoose.Schema;
+import mongoose, { Schema } from "mongoose";
 
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true, trim:true},
@@ -9,10 +8,11 @@ const userSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true, trim: true},
     password: { type: String, required: true},
     point: {type: Number, default: 0},
-    school:{type: Schema.Types.ObjectId, required:true, ref:"School"},
-    posting:{type: Schema.Types.ObjectId, required:true, ref:"Posting"},
+    reported: {type: Number, default: 0}, // 신고당한 횟수(50넘으면 계정없애기, 포인트랑 원리같음)
+    school:{type: Schema.Types.ObjectId, ref:"School"},
+    posting:{type: Schema.Types.ObjectId, ref:"Posting"},
 })
-//학교와 포인트 추가하기
+// test는 추가안할 예정
 
 
 userSchema.pre("save", async function(){
