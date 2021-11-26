@@ -215,5 +215,12 @@ export const leave = async(req, res) => {
     }
 };
 
-export const user = (req, res) => res.send("userPage!");
+export const user = async(req, res) => {  
+    const {id} = req.params;
+    const user = await User.findById(id);
+    if(!user){
+        return res.status(404)/render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
+    }
+    return res.render("users/profile", {pageTitle:`${user.name}`, user});
+};
 

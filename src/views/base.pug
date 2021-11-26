@@ -17,7 +17,7 @@ html(lang="ko")
                         li 
                             a(href="/user/logout") 로그아웃
                         li
-                            a(href=`/user/${loggedInUser.username}`) #{loggedInUser.name}의 마이페이지
+                            a(href=`/user/${loggedInUser._id}`) #{loggedInUser.name}의 마이페이지
                         li
                             h4 포인트: #{loggedInUser.point}
                         if subject

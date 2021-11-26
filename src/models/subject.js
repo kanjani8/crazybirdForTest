@@ -1,11 +1,12 @@
-import mongoose from "mongoose";
-import subjectData from "./subjectData";
+import mongoose, { Schema } from "mongoose";
+const Schema = mongoose.Schema;
+//import subjectData from "./datas/subjectData";
 
 
 const subjectSchema = new mongoose.Schema({
   name:{type: String, required: true, trim: true}, 
   professor: {type: String, trim:true},
-  schoolName:{type: String, trim:true}
+  school:{type: Schema.Types.ObjectId, required:true, ref:"School"},
 });
 //학교 정보 추가.
 

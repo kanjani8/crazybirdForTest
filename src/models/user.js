@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
+const Schema = mongoose.Schema;
 
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true, trim:true},
@@ -7,8 +8,9 @@ const userSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true, trim: true},
     username: { type: String, required: true, unique: true, trim: true},
     password: { type: String, required: true},
-    schoolName: {type: String, default:"미지정" },
     point: {type: Number, default: 0},
+    school:{type: Schema.Types.ObjectId, required:true, ref:"School"},
+    posting:{type: Schema.Types.ObjectId, required:true, ref:"Posting"},
 })
 //학교와 포인트 추가하기
 

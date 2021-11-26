@@ -4,7 +4,9 @@ import {
     publicOnlyMiddleware,
     avatarUpload,
   } from "../middlewares";
-import {user, getEdit, postEdit, logout, leave, startKakaoLogin, finishKakaoLogin, getChangePassword, postChangePassword} from "../controllers/userController";
+import {user, getEdit, postEdit, 
+    logout, leave, startKakaoLogin, finishKakaoLogin, 
+    getChangePassword, postChangePassword} from "../controllers/userController";
 // import passport from "passport";
 // const KakaoStrategy = require('passport-kakao').Strategy;
 const userRouter = express.Router();
@@ -26,11 +28,13 @@ userRouter
 userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassword).post(postChangePassword);
 userRouter.get("/logout",protectorMiddleware, logout);
 userRouter.get("/leave",protectorMiddleware, leave);
+userRouter.get("/:id",protectorMiddleware, user);
+
+
 userRouter.get("/kakao/start", publicOnlyMiddleware, startKakaoLogin);
 userRouter.get("/kakao/finish",publicOnlyMiddleware, finishKakaoLogin);
 // userRouter.get("/kakao/start", passport.authenticate('kakao'));
 // userRouter.get("/kakao/finish", passport.authenticate(
-//         'kakao', { failureRedirect: '/', }), (req, res) => 
-//         { res.redirect('/'); });
-userRouter.get("/:id",user);
-export default userRouter;
+  //         'kakao', { failureRedirect: '/', }), (req, res) => 
+  //         { res.redirect('/'); });
+  export default userRouter;

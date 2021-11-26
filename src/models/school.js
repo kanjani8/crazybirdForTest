@@ -1,11 +1,13 @@
 import mongoose from "mongoose";
-import schoolData from "./schoolData";
+const Schema = mongoose.Schema;
+//import schoolData from "./datas/schoolData";
 
 
 const schoolSchema = new mongoose.Schema({
   name:{type: String, required: true, trim: true}, 
+  subject: { type: Schema.Types.ObjectId, required: true, ref: "Subject"},
 });
-//학교 정보 추가.
+//학교 정보 추가. 지도를 연결한다던지. 개교기념일/논술시험날 등 시간표에 표시될 공통휴일?
 
 
 schoolSchema.set('collection', 'School');

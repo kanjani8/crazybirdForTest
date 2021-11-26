@@ -12974,7 +12974,7 @@ const subjectData = [
       "name": "병태생리학",
       "professor": "전용필",
       "schoolName": "성신여자대학교"
-  }
+  },
 ]
 
 export default subjectData;
