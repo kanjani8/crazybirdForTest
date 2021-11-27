@@ -33,7 +33,7 @@ export const watchPosting = async(req, res) => {
     const {id, postingId} = req.params;
     try{
         const subject = await Subject.findById(id);
-        const posting = await Posting.findById(postingId);
+        const posting = await Posting.findById(postingId).populate("user");
         return res.render("community/watch", { pageTitle: `${subject.name}의 게시판`, posting});
     }catch(error){
         return res.render("404", {pageTitle:`게시물 보기 에러`});
@@ -56,13 +56,13 @@ export const postUploadPosting = async(req, res) =>{
     const imageUrl = file ? file.path : null;
     const videoUrl = file2 ? file2.path : null;
     try{
-      await Posting.create({title,imageUrl,videoUrl, script, 
-        subject:id, user:req.session.user._id});
-  
-      const point = req.session.user.point+5; // 글 쓸 경우 5점 플러스
-      const plusUser = 
-        await User.findByIdAndUpdate(req.session.user._id, {point}, {new: true}).populate("school");
-      req.session.user = plusUser;
+      const user = await User.findById(req.session.user._id).populate("school");
+      const newPosting = await Posting.create({title,imageUrl,videoUrl, script, 
+        subject:id, user:user._id});
+      user.postings.push(newPosting._id);
+      user.point +=5;
+      req.session.user = user;
+      user.save();
       return res.redirect(`/subject/${id}/community`);
     }catch(error){
       console.log(error);

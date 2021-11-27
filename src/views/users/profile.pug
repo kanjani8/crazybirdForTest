@@ -1,3 +1,12 @@
 extends ../base
+include ../mixins/posting
 
 block content
+    img(src="/" + user.avatarUrl, width="100", height="100")
+    h4 #{user.name}의 작성글 목록
+
+    each posting in user.postings
+            +posting(posting)
+    else
+        li 작성글이 없습니다.
+    a(href=`${user._id}/report`) 유저신고🔔 (나중에 구현)

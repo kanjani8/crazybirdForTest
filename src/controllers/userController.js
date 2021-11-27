@@ -1,4 +1,5 @@
 import User from "../models/user";
+import Posting from "../models/posting";
 import School from "../models/school";
 import bcrypt from "bcrypt";
 //import passport from "passport";
@@ -216,9 +217,9 @@ export const leave = async(req, res) => {
     }
 };
 
-export const user = async(req, res) => {  
+export const user = async(req, res) => {  // 작성글 목록을 나타내는 프로필
     const {id} = req.params;
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate("postings");
     if(!user){
         return res.status(404)/render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
     }

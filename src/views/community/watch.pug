@@ -11,8 +11,10 @@ block content
         if posting.imageUrl
             img(src="/" + posting.imageUrl, width="100", height="100")
         h4=posting.script 
+        h5 작성자:
+            a(href=`/user/${posting.user._id}`)=posting.user.name
         h5=posting.createdAt
-        if loggedInUser._id == posting.userId
+        if loggedInUser._id == posting.user._id
             h4
                 a(href=`${posting.id}/edit`) 수정하기
             h4

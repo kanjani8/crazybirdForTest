@@ -1,7 +1,7 @@
 mixin posting(posting)
     div
         h4
-            a(href=`community/${posting.id}`)=posting.title
+            a(href=`/subject/${posting.subject}/community/${posting.id}`)=posting.title
             small=posting.createdAt
-            h5=posting.meta.rating
+            h4 추천수: #{posting.meta.rating}
         hr

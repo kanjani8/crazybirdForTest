@@ -2,7 +2,7 @@ import Subject from "../models/subject";
 import School from "../models/school";
 
 export const search = async (req, res) => {
-  const school = req.session.user._id;
+  const school = req.session.user.school._id;
   console.log(school);
    //subjects = await Subject.find({});
       // for(let i = 0; i < subjects.length; i++){
