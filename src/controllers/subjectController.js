@@ -4,10 +4,10 @@ import User from "../models/user";
 
 export const search = async (req, res) => {
   const user = await User.findById(req.session.user._id).populate("likedSubjects");
-  const school = user.school._id;
-
+  const school = user.school;
   const { keyword } = req.query;
   let subjects = [];
+  const likedSubjects = user.likedSubjects;
   //subjects = await Subject.find({});
   //for(let i = 0; i < subjects.length; i++){
   //  await Subject.findByIdAndUpdate(subjects[i]._id, {school:school._id} );
@@ -29,24 +29,48 @@ export const search = async (req, res) => {
       console.log(error);
     }
   }
-  return res.render("search", { pageTitle: "Search", subjects });
+  return res.render("search", { pageTitle: "Search", likedSubjects, subjects });
 };
 
 export const see =  async (req, res) => {
   const { id } = req.params;
+  try{
   const subject = await Subject.findById(id);
   if (!subject) {
-    return res.render("404", { pageTitle: "Subject not found." });
+    return res.status(400).render("404", { pageTitle: "해당 과목을 찾을 수 없습니다" });
   }
-  return res.render("seeSubject", { pageTitle: subject.name, subject });
+  
+  return res.render("seeSubject", { pageTitle: subject.name, subject});
+  }catch(error){
+    console.log(error);
+    return res.status(400).render("404", { pageTitle: "과목 화면 에러발생", errorMessage: error._message });
+  }
 };
 
 export const like = async(req, res) => {
   const {id} = req.params;
-  
+  try{
+    const subject = await Subject.findById(id);
+    const user = await User.findById(req.session.user._id);
+    user.likedSubjects.push(subject._id);
+    user.save();
+  }catch(error){
+    // 즐겨찾기 실패했다고 알림띄우기
+    console.log(error);
+  }
+  return res.redirect(`/subject/search`);
 };
 
 export const dislike = async(req, res) => {
   const {id} = req.params;
-
+  try{
+    const subject = await Subject.findById(id);
+    const user = await User.findById(req.session.user._id);
+    user.likedSubjects.pull(subject._id);
+    user.save();
+  }catch(error){
+    // 즐겨찾기 해제 실패했다고 알림띄우기
+    console.log(error);
+  }
+  return res.redirect(`/subject/search`);
 };

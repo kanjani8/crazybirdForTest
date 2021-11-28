@@ -7,7 +7,7 @@ export const community = async (req, res) => {
     const {id} = req.params; // 과목id
     const { keyword } = req.query;
     const subject = await Subject.findById(id);
-  
+    
     let postings = [];
     if (keyword) {
       postings = await Posting.find({
@@ -117,20 +117,22 @@ export const postEditPosting = async (req, res) => {
 export const deletePosting = async(req, res) =>{
     const { id, postingId } = req.params;
     try{
+      const user = await User.findById(req.session.user._id).populate("school");
       const posting = await Posting.findById(postingId);
       if(!posting){
         return res.render("404", { pageTitle: "해당 게시물을 찾을 수 없습니다" });
       }
-      if (String(posting.user._id) !== String(req.session.user._id)){
+      if (String(posting.user._id) !== String(user._id)){
         return res.status(403).redirect(`/subject/${id}/community`);
       }
       await Posting.findByIdAndDelete(postingId);
-      const point =  req.session.user.point-5;
-      const pointUpdatedUser = await User.findByIdAndUpdate(req.session.user._id, {point}, {new: true})
-                                        .populate("school");
-      req.session.user = pointUpdatedUser;
+      user.postings.pull(postingId);
+      user.point -=5;
+      req.session.user = user;
+      user.save();
       return res.redirect(`/subject/${id}/community`);
     }catch(error){
+      console.log(error);
       return res.status(400).render("404", {pageTitle:"시험문제 삭제 에러", errorMessage: error._message});
     }
 };

@@ -32,7 +32,7 @@ export const postUploadTest = async (req, res) => {
       const question = req.body.question[0];
       const answer = req.body.answer[0];
       try{
-           await Test.create({
+           const newTest = await Test.create({
           question, 
           answer,
           user:user._id,
@@ -41,13 +41,14 @@ export const postUploadTest = async (req, res) => {
           formType,
           forWhen
          });
+         user.tests.push(newTest);
         //opened가 true이면 user의 포인트를 + 50하기
         if(opened == true)
         {
           user.point += 50;
           req.session.user = user;
-          user.save();
         }
+        user.save();
         return res.redirect(`/subject/${id}/test/list`);
       }catch(error){
         return res.status(400).render("404", {
@@ -73,13 +74,14 @@ export const postUploadTest = async (req, res) => {
           formType,
           forWhen
         });
+        user.tests.push(newTest);
         //opened가 true이면 user의 포인트를 + 50하기
         if(opened == true)
         {
           user.point += 50;
           req.session.user = user;
-          user.save();
         }
+        user.save();
         return res.redirect(`/subject/${id}/test/list`);
       }catch(error){
         return res.status(400).render("404", {
@@ -169,20 +171,17 @@ export const postEditTest = async (req, res) => {
 export const deleteTest = async (req, res) => {
     const { id, testId } = req.params;
     try{
+      const user = await User.findById(req.session.user._id).populate("school");
       const test = await Test.findById(testId);
-      if(String(test.user._id) !== String(req.session.user._id)){
+    
+      if(String(test.user._id) !== String(user._id)){
         return res.status(403).redirect(`/subject/${id}/test/list`);
       }
       await Test.findByIdAndDelete(testId);
-
-      const point =  req.session.user.point-50;
-      const pointUpdatedUser = 
-        await User.findByIdAndUpdate(
-          req.session.user._id, 
-          {point}, 
-          {new: true})
-          .populate("school");
-      req.session.user = pointUpdatedUser;
+      user.tests.pull(testId);
+      user.point -=50;
+      req.session.user = user;
+      user.save();
       return res.redirect(`/subject/${id}/test/list`);
     }catch(error){
       return res.status(400).render("404", {pageTitle:"시험문제 삭제 에러", errorMessage: error._message});
