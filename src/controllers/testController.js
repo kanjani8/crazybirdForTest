@@ -156,8 +156,8 @@ export const postEditTest = async (req, res) => {
           return res.render("tests/editTest", { pageTitle: test.subject.name, subject: test.subject, test: updatedTest});
     }catch(error){
           return res.status(400).render("tests/editTest", {
-            pageTitle: subject.name,
-            subject,
+            pageTitle: test.subject.name,
+            subject: test.subject,
             test,
             errorMessage: error._message,
           });

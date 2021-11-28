@@ -5,14 +5,13 @@ import User from "../models/user";
 export const search = async (req, res) => {
   const user = await User.findById(req.session.user._id).populate("likedSubjects");
   const school = user.school._id;
-  const schools = await School.find({});
-  console.log("schools: ", schools);
-   //subjects = await Subject.find({});
-   // for(let i = 0; i < subjects.length; i++){
-  //   await Subject.findByIdAndUpdate(subjects[i]._id, {school:school._id} );
-  // } //이런 식으로 과목들에 학교를 일괄로 집어넣음.
+
   const { keyword } = req.query;
   let subjects = [];
+  //subjects = await Subject.find({});
+  //for(let i = 0; i < subjects.length; i++){
+  //  await Subject.findByIdAndUpdate(subjects[i]._id, {school:school._id} );
+  // } //이런 식으로 과목들에 학교를 일괄로 집어넣음.
   if (keyword) {
     subjects = await Subject.find({
        $or : 

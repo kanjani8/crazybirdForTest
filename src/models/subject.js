@@ -13,7 +13,7 @@ const subjectSchema = new mongoose.Schema({
 subjectSchema.set('collection', 'Subject');
 const Subject = mongoose.model("Subject", subjectSchema);
 
-Subject.collection.insertOne({name:"미지정과목2"});
+//Subject.collection.insertOne({name:"미지정과목2"});
 //Subject.collection.deleteMany({}); //모든 과목들 한번에 삭제
 //Subject.collection.insertMany(subjectData);
 export default Subject;
