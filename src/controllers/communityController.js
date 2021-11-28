@@ -71,23 +71,29 @@ export const postUploadPosting = async(req, res) =>{
 };
   
 export const getEditPosting = async (req, res) => {
-    const { postingId  } = req.params;
+    const { id, postingId  } = req.params;
     const posting = await Posting.findById(postingId).populate("subject");
     if(!posting){
       return res.render("404", { pageTitle: "해당 게시물을 찾을 수 없습니다" });
+    }
+    if (String(posting.user._id) !== String(req.session.user._id)){
+      return res.status(403).redirect(`/subject/${id}/community`);
     }
     return res.render("community/edit", { pageTitle: posting.subject.name, posting});
 };
   
 export const postEditPosting = async (req, res) => {
-    const { postingId  } = req.params;
-    const posting = await Posting.findById(postingId).populate("subject");
+    const {id, postingId  } = req.params;
     const {title, script} = req.body;
+    const posting = await Posting.findById(postingId).populate("subject");
     const file = req.files['image']?req.files['image'][0]:null;
     const imageUrl = posting.imageUrl ? posting.imageUrl : null;
     
    if(!posting){
       return res.render("404", { pageTitle: "해당 게시물을 찾을 수 없습니다" });
+    }
+   if (String(posting.user._id) !== String(req.session.user._id)){
+      return res.status(403).redirect(`/subject/${id}/community`);
     }
       try {
           await Posting.findByIdAndUpdate(postingId, 
@@ -111,6 +117,13 @@ export const postEditPosting = async (req, res) => {
 export const deletePosting = async(req, res) =>{
     const { id, postingId } = req.params;
     try{
+      const posting = await Posting.findById(postingId);
+      if(!posting){
+        return res.render("404", { pageTitle: "해당 게시물을 찾을 수 없습니다" });
+      }
+      if (String(posting.user._id) !== String(req.session.user._id)){
+        return res.status(403).redirect(`/subject/${id}/community`);
+      }
       await Posting.findByIdAndDelete(postingId);
       const point =  req.session.user.point-5;
       const pointUpdatedUser = await User.findByIdAndUpdate(req.session.user._id, {point}, {new: true})

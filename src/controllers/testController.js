@@ -95,22 +95,28 @@ export const getEditTest = async (req, res) => {
     const { id, testId  } = req.params;
     const subject = await Subject.findById(id);
     const test = await Test.findById(testId);
-    if (!subject){
+    if(!subject){
       return res.render("404", { pageTitle: "해당 과목을 찾을 수 없습니다." });
     }
-    else if(!test){
+    if(!test){
       return res.render("404", { pageTitle: "해당 문제를 찾을 수 없습니다" });
+    }
+    if(String(test.user._id) !== String(req.session.user._id)){
+      return res.status(403).redirect(`/subject/${id}/test/list`);
     }
     return res.render("tests/editTest", { pageTitle: subject.name, subject, test});
 };
   
 export const postEditTest = async (req, res) => {
-    const { testId } = req.params;
+    const { id, testId } = req.params;
     const user = req.session.user;
     const test = await Test.findById(testId).populate("subject");
     const {question, answer, opened, forWhen} = req.body;
     if(!test){
       return res.render("404", { pageTitle: "해당 문제를 찾을 수 없습니다" });
+    }
+    if(String(test.user._id) !== String(req.session.user._id)){
+      return res.status(403).redirect(`/subject/${id}/test/list`);
     }
   
     try{
@@ -163,6 +169,10 @@ export const postEditTest = async (req, res) => {
 export const deleteTest = async (req, res) => {
     const { id, testId } = req.params;
     try{
+      const test = await Test.findById(testId);
+      if(String(test.user._id) !== String(req.session.user._id)){
+        return res.status(403).redirect(`/subject/${id}/test/list`);
+      }
       await Test.findByIdAndDelete(testId);
 
       const point =  req.session.user.point-50;
