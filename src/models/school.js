@@ -14,4 +14,5 @@ const School = mongoose.model("School", schoolSchema);
 
 //School.collection.insertMany(schoolData);
 //School.collection.deleteMany({});
+//School.collection.updateOne({name:"미소속"}, {$set: {"_id": "00000000000"} });
 export default School;

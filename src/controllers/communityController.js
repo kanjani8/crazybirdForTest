@@ -57,8 +57,8 @@ export const postUploadPosting = async(req, res) =>{
     const videoUrl = file2 ? file2.path : null;
     try{
       const user = await User.findById(req.session.user._id).populate("school");
-      const newPosting = await Posting.create({title,imageUrl,videoUrl, script, 
-        subject:id, user:user._id});
+      const newPosting = await Posting.create({title, imageUrl, videoUrl, script, 
+          subject:id, user:user._id});
       user.postings.push(newPosting._id);
       user.point +=5;
       req.session.user = user;
@@ -106,9 +106,9 @@ export const postEditPosting = async (req, res) => {
             });
     
       } 
-  };
+};
   
-  export const deletePosting = async(req, res) =>{
+export const deletePosting = async(req, res) =>{
     const { id, postingId } = req.params;
     try{
       await Posting.findByIdAndDelete(postingId);
@@ -120,4 +120,4 @@ export const postEditPosting = async (req, res) => {
     }catch(error){
       return res.status(400).render("404", {pageTitle:"시험문제 삭제 에러", errorMessage: error._message});
     }
-  }
+};

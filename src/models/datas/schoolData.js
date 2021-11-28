@@ -1,5 +1,6 @@
 const schoolData = [
     {
+      "_id": "00000000",
       "name": "미지정",
     },
     { 

@@ -4,7 +4,6 @@ import User from "../models/user";
 
 export const list = async (req, res) => {
     const { id } = req.params;
-
     try{
       const subject = await Subject.findById(id);
       const tests = await Test.find({subject: id, user: req.session.user._id}).populate("subject");
@@ -24,9 +23,10 @@ export const getUploadTest = async (req, res) => {
     return res.render("tests/uploadTest", { pageTitle: subject.name});
   };
   
-  export const postUploadTest = async (req, res) => {
+export const postUploadTest = async (req, res) => {
     const { id } = req.params;
     const {formType, opened, forWhen} = req.body;
+    const user = await User.findById(req.session.user._id).populate("school");
    
     if(formType === "1"){ // 단답형일 경우
       const question = req.body.question[0];
@@ -35,21 +35,18 @@ export const getUploadTest = async (req, res) => {
            await Test.create({
           question, 
           answer,
-          user:req.session.user._id,
+          user:user._id,
           subject:id,
           opened,
           formType,
           forWhen
          });
         //opened가 true이면 user의 포인트를 + 50하기
-        const point = req.session.user.point+50;
         if(opened == true)
         {
-          const plusUser = await User.findByIdAndUpdate(req.session.user._id, {
-            point},
-            {new: true}
-          ).populate("school");
-          req.session.user = plusUser;
+          user.point += 50;
+          req.session.user = user;
+          user.save();
         }
         return res.redirect(`/subject/${id}/test/list`);
       }catch(error){
@@ -67,7 +64,7 @@ export const getUploadTest = async (req, res) => {
         await Test.create({
           question, 
           answer,
-          user:req.session.user._id,
+          user:user._id,
           subject:id,
           wrongAnswer1,
           wrongAnswer2,
@@ -77,14 +74,11 @@ export const getUploadTest = async (req, res) => {
           forWhen
         });
         //opened가 true이면 user의 포인트를 + 50하기
-        const point = req.session.user.point+50;
         if(opened == true)
         {
-          const plusUser = await User.findByIdAndUpdate(req.session.user._id, {
-            point},
-            {new: true}
-          ).populate("school");;
-          req.session.user = plusUser;
+          user.point += 50;
+          req.session.user = user;
+          user.save();
         }
         return res.redirect(`/subject/${id}/test/list`);
       }catch(error){
@@ -94,10 +88,10 @@ export const getUploadTest = async (req, res) => {
         });
       }
     }
-  };
+};
   
   
-  export const getEditTest = async (req, res) => {
+export const getEditTest = async (req, res) => {
     const { id, testId  } = req.params;
     const subject = await Subject.findById(id);
     const test = await Test.findById(testId);
@@ -108,18 +102,14 @@ export const getUploadTest = async (req, res) => {
       return res.render("404", { pageTitle: "해당 문제를 찾을 수 없습니다" });
     }
     return res.render("tests/editTest", { pageTitle: subject.name, subject, test});
-  };
+};
   
-  export const postEditTest = async (req, res) => {
-    const { id, testId } = req.params;
-    const subject = await Subject.findById(id);
-    const test = await Test.findById(testId);
+export const postEditTest = async (req, res) => {
+    const { testId } = req.params;
+    const user = req.session.user;
+    const test = await Test.findById(testId).populate("subject");
     const {question, answer, opened, forWhen} = req.body;
-    
-    if (!subject){
-      return res.render("404", { pageTitle: "해당 과목을 찾을 수 없습니다." });
-    }
-    else if(!test){
+    if(!test){
       return res.render("404", { pageTitle: "해당 문제를 찾을 수 없습니다" });
     }
   
@@ -149,15 +139,15 @@ export const getUploadTest = async (req, res) => {
         //opened값이 바뀌었으면  user의 포인트를 +- 50하기
         if(test.opened != opened) // 오픈 여부가 바뀌었음
         { 
-          const point = (opened==1 ? req.session.user.point+50 : req.session.user.point-50);
-          const pointUpdatedUser = await User.findByIdAndUpdate(req.session.user._id, {
+          const point = (opened==1 ? user.point+50 : user.point-50);
+          const pointUpdatedUser = await User.findByIdAndUpdate(user._id, {
             point},
             {new: true}
             ).populate("school");
             req.session.user = pointUpdatedUser;
           }
           const updatedTest = await Test.findById(testId);
-          return res.render("tests/editTest", { pageTitle: subject.name, subject, test: updatedTest});
+          return res.render("tests/editTest", { pageTitle: test.subject.name, subject: test.subject, test: updatedTest});
     }catch(error){
           return res.status(400).render("tests/editTest", {
             pageTitle: subject.name,
@@ -167,26 +157,30 @@ export const getUploadTest = async (req, res) => {
           });
   
     }
-  };
+};
   
   
-  export const deleteTest = async (req, res) => {
+export const deleteTest = async (req, res) => {
     const { id, testId } = req.params;
     try{
       await Test.findByIdAndDelete(testId);
-  
+
       const point =  req.session.user.point-50;
-      const pointUpdatedUser = await User.findByIdAndUpdate(req.session.user._id, {point}, {new: true})
-                                  .populate("school");
+      const pointUpdatedUser = 
+        await User.findByIdAndUpdate(
+          req.session.user._id, 
+          {point}, 
+          {new: true})
+          .populate("school");
       req.session.user = pointUpdatedUser;
       return res.redirect(`/subject/${id}/test/list`);
     }catch(error){
       return res.status(400).render("404", {pageTitle:"시험문제 삭제 에러", errorMessage: error._message});
     }
-  };
+};
   
-  export const setting = (req, res) => res.send("subject settingPage!");
-  export const solve = (req, res) => res.send("subject solvePage!");
-  export const result = async (req, res) => {
-    return res.send("subject solvePage!");
-  };
+export const setting = (req, res) => res.send("subject settingPage!");
+export const solve = (req, res) => res.send("subject solvePage!");
+export const result = async (req, res) => {
+  return res.send("subject solvePage!");
+};

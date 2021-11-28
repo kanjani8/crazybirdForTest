@@ -1,5 +1,5 @@
 import express from "express";
-import { search, see,} from "../controllers/subjectController";
+import { search, see, like, dislike} from "../controllers/subjectController";
 import {list, getUploadTest, postUploadTest,  
     getEditTest, postEditTest, deleteTest, 
     setting, solve, result, } from "../controllers/testController";
@@ -13,6 +13,8 @@ const subjectRouter = express.Router();
 //subject Page
 subjectRouter.get("/search", protectorMiddleware, search);
 subjectRouter.get("/:id([0-9a-f]{24})", protectorMiddleware, see);
+subjectRouter.get("/:id([0-9a-f]{24})/like", protectorMiddleware, like);
+subjectRouter.get("/:id([0-9a-f]{24})/dislike", protectorMiddleware, dislike);
 
 //test Page
 subjectRouter.get("/:id([0-9a-f]{24})/test/list", list);
