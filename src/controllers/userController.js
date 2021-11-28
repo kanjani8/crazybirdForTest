@@ -15,7 +15,9 @@ export const postEnroll = async (req, res) => {
             errorMessage: "비밀번호가 맞지 않습니다.",
         });
     }
-    const school = await School.findOne({name:schoolName});
+    let school;
+    if(schoolName)
+        school = await School.findOne({name:schoolName});
     const idExists = await User.exists({username});
     const emailExists = await User.exists({email});
     if(idExists && emailExists){
@@ -39,14 +41,24 @@ export const postEnroll = async (req, res) => {
 
      
     try{
-        const created = await User.create({
-            name,
-            email,
-            username,
-            password,
-            school: school._id
-        });
-        console.log(created);
+        if(school){
+            await User.create({
+                name,
+                email,
+                username,
+                password,
+                school: school._id
+            });
+        }
+        else{
+            await User.create({
+                name,
+                email,
+                username,
+                password,
+            });
+        }
+        
          return res.redirect("/login");
     } catch(error) {
         console.log(error);
