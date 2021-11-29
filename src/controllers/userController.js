@@ -220,6 +220,7 @@ export const postChangePassword = async(req, res) => {
 
 export const leave = async(req, res) => {
     try{
+        await Posting.deleteMany({"user":req.session.user._id});
         await User.findByIdAndDelete(req.session.user._id);
         req.session.destroy();
         return res.redirect("/");
@@ -238,3 +239,26 @@ export const user = async(req, res) => {  // 작성글 목록을 나타내는 �
     return res.render("users/profile", {pageTitle:`${user.name}`, user});
 };
 
+export const getUserReport = (req,res) => {
+    return res.render("users/report", { pageTitle: "유저 신고하기"});
+}
+
+export const postUserReport = async(req,res) => {
+    const {id} = req.params;
+    const user = await User.findById(id).populate("postings");;
+    if(!user){
+        return res.status(404)/render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
+    }
+    user.reported+=1;
+    user.save();
+    if(user.reported >= 50)
+    {
+        try{
+            await Posting.deleteMany({"user":id});
+            await User.findByIdAndDelete(id);
+        }catch(error){
+            return res.status(400).render("404", {pageTitle:"신고하기 에러", errorMessage:error._message});
+        } 
+    }
+    return res.redirect(`/`);
+}

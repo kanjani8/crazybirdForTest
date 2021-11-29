@@ -1,0 +1,18 @@
+extends ../base.pug
+block content
+    if errorMessage
+        span=errorMessage
+    form(method="POST")
+        input(type="radio", id="spam",value="spam", name="report") 
+        label(for='spam') 의심스럽거나 스팸입니다.
+        br
+        input(type="radio", value="hacking", name="report")
+        label(for='porno') 계정 해킹이 의심됩니다.
+        br
+        input(type="radio", value="profile", name="report")
+        label(for='insult') 프로필 정보 및 이미지에 가학적 콘텐츠 또는 혐오 콘텐츠가 포함되어 있습니다.
+        br
+        input(type="radio", value="disgust", name="report")
+        label(for='privacy') 가학적이거나 혐오 내용을 담은 게시글을 올리고 있습니다.
+        br
+        input(type="submit", value="신고하기")

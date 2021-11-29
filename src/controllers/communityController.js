@@ -136,3 +136,29 @@ export const deletePosting = async(req, res) =>{
       return res.status(400).render("404", {pageTitle:"시험문제 삭제 에러", errorMessage: error._message});
     }
 };
+
+export const getPostingReport = (req, res) => {
+  return res.render("community/report", { pageTitle: "게시글 신고하기"});
+};
+export const postPostingReport = async (req, res) => {
+  const {id, postingId} = req.params;
+  const posting = await Posting.findById(postingId);
+  if(!posting){
+    return res.render("404", { pageTitle: "해당 게시물을 찾을 수 없습니다" });
+  }
+  posting.meta.reported += 1;
+  posting.save();
+  const user = await User.findById(posting.user);
+  if(posting.meta.reported >= 50)
+  {
+    try {
+      await Posting.findByIdAndDelete(postingId);
+      user.postings.pull(postingId);
+      user.point -=5;
+      user.save();
+    }catch(error){
+        return res.status(400).render("404", {pageTitle:"신고하기 에러", errorMessage:error._message});
+    }
+  }
+  return res.redirect(`/subject/${id}/community`);
+};

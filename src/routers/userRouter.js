@@ -6,7 +6,7 @@ import {
   } from "../middlewares";
 import {user, getEdit, postEdit, 
     logout, leave, startKakaoLogin, finishKakaoLogin, 
-    getChangePassword, postChangePassword} from "../controllers/userController";
+    getChangePassword, postChangePassword, getUserReport, postUserReport} from "../controllers/userController";
 // import passport from "passport";
 // const KakaoStrategy = require('passport-kakao').Strategy;
 const userRouter = express.Router();
@@ -29,7 +29,7 @@ userRouter.route("/change-password").all(protectorMiddleware).get(getChangePassw
 userRouter.get("/logout",protectorMiddleware, logout);
 userRouter.get("/leave",protectorMiddleware, leave);
 userRouter.get("/:id",protectorMiddleware, user);
-
+userRouter.route("/:id/report").get(getUserReport).post(postUserReport);
 
 userRouter.get("/kakao/start", publicOnlyMiddleware, startKakaoLogin);
 userRouter.get("/kakao/finish",publicOnlyMiddleware, finishKakaoLogin);

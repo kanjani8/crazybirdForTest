@@ -5,7 +5,7 @@ import {list, getUploadTest, postUploadTest,
     setting, solve, result, } from "../controllers/testController";
 import {community, getUploadPosting, postUploadPosting,
     watchPosting, getEditPosting, postEditPosting, 
-    deletePosting} from "../controllers/communityController";
+    deletePosting,getPostingReport, postPostingReport} from "../controllers/communityController";
 import { protectorMiddleware, communityUpload } from "../middlewares";
 
 const subjectRouter = express.Router();
@@ -39,5 +39,7 @@ subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/edit"
     .get(getEditPosting)
     .post(communityUpload.fields([{name:"image", maxCount:1}, {name:"video", maxCount:1}]),postEditPosting);
 subjectRouter.get("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/delete",protectorMiddleware,deletePosting);
-
+subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/report")
+            .get(getPostingReport)
+            .post(postPostingReport);
 export default subjectRouter;
