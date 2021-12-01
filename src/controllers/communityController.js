@@ -1,7 +1,7 @@
 import Subject from "../models/subject";
 import User from "../models/user";
 import Posting from "../models/posting";
-
+import Reporting from "../models/reporting";
 
 export const community = async (req, res) => {
     const {id} = req.params; // 과목id
@@ -83,7 +83,7 @@ export const getEditPosting = async (req, res) => {
 };
   
 export const postEditPosting = async (req, res) => {
-    const {id, postingId  } = req.params;
+    const {id, postingId} = req.params;
     const {title, script} = req.body;
     const posting = await Posting.findById(postingId).populate("subject");
     const file = req.files['image']?req.files['image'][0]:null;
@@ -137,18 +137,47 @@ export const deletePosting = async(req, res) =>{
     }
 };
 
-export const getPostingReport = (req, res) => {
+export const getReportPosting = (req, res) => {
   return res.render("community/report", { pageTitle: "게시글 신고하기"});
 };
-export const postPostingReport = async (req, res) => {
+export const postReportPosting = async (req, res) => {
   const {id, postingId} = req.params;
+  const {report} = req.body;
   const posting = await Posting.findById(postingId);
   if(!posting){
     return res.render("404", { pageTitle: "해당 게시물을 찾을 수 없습니다" });
   }
-  posting.meta.reported += 1;
-  posting.save();
-  const user = await User.findById(posting.user);
+
+  try{
+    const reporter = req.session.user._id;
+    const user = await User.findById(posting.user);
+    if(String(reporter) === String(user._id)){
+      // 본인의 글은 신고할 수 없습니다 알림
+      return res.redirect(`/subject/${id}/community`);
+    }
+
+    const already = await Reporting.find({
+        reporter,
+        reportedPosting: posting._id,
+    });
+    if (already){
+        //이미 신고하셨습니다 알림
+        console.log("already reported");
+        return res.redirect(`/subject/${id}/community`);
+    };
+    posting.meta.reported += 1;
+    posting.save();
+    const newReported = await Reporting.create({
+      title: `Posting '${posting.title}'is reported`,
+      script: report,
+      reporter,
+      reportedPosting: posting._id
+    });
+    console.log(newReported);
+  }catch(error){
+    console.log(error);
+  }
+  
   if(posting.meta.reported >= 50)
   {
     try {

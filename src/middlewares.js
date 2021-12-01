@@ -23,6 +23,29 @@ export const publicOnlyMiddleware = (req, res, next) => {
         return res.redirect("/");
     }
 }
+
+export const reportMiddleware = (req, res, next) => {
+  let user = "Somebody";
+  if(req.session.user)
+    user = req.session.user.username;
+  const ids = req.params;
+  let id;
+
+  if(ids.postingId)
+    id = "posting " + ids.postingId;
+  else if(ids.testId)
+    id = "testQuestion " + ids.testId;
+  else if(ids.userId)
+    id = "user " + ids.userId;
+  else
+    id = "Error";
+
+  console.log(`🙀 ${user} tried to report ${id}`);
+  next();
+}
+
+
+
 //avartar사진 용량 제한
 export const avatarUpload = multer({
     dest: "uploads/avatars/",

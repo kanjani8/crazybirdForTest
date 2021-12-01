@@ -19,10 +19,11 @@ block content
                 a(href=`${posting.id}/edit`) 수정하기
             h4
                 a(href=`${posting.id}/delete`) 삭제하기
-        h4
-            a(href=`${posting.id}/recommend`) 추천하기💖  (나중에 구현)
-        h4
-            a(href=`${posting.id}/report`) 신고하기⛔  (나중에 구현)
+        else
+            h4
+                a(href=`${posting.id}/recommend`) 추천하기💖  (나중에 구현)
+            h4
+                a(href=`${posting.id}/report`) 신고하기⛔
         h4
             a(href="upload") 글쓰기
     else

@@ -32,7 +32,7 @@ export const postUploadTest = async (req, res) => {
       const question = req.body.question[0];
       const answer = req.body.answer[0];
       try{
-           const newTest = await Test.create({
+           const newTest1 = await Test.create({
           question, 
           answer,
           user:user._id,
@@ -41,9 +41,9 @@ export const postUploadTest = async (req, res) => {
           formType,
           forWhen
          });
-         user.tests.push(newTest);
+         user.tests.push(newTest1);
         //opened가 true이면 user의 포인트를 + 50하기
-        if(opened == true)
+        if(opened)
         {
           user.point += 50;
           req.session.user = user;
@@ -62,7 +62,7 @@ export const postUploadTest = async (req, res) => {
       const answer = req.body.answer[1];
       const {wrongAnswer1, wrongAnswer2, wrongAnswer3} = req.body;
       try{
-        await Test.create({
+        const newTest2 = await Test.create({
           question, 
           answer,
           user:user._id,
@@ -74,9 +74,9 @@ export const postUploadTest = async (req, res) => {
           formType,
           forWhen
         });
-        user.tests.push(newTest);
+        user.tests.push(newTest2);
         //opened가 true이면 user의 포인트를 + 50하기
-        if(opened == true)
+        if(opened)
         {
           user.point += 50;
           req.session.user = user;
@@ -84,6 +84,7 @@ export const postUploadTest = async (req, res) => {
         user.save();
         return res.redirect(`/subject/${id}/test/list`);
       }catch(error){
+        console.log(error);
         return res.status(400).render("404", {
           pageTitle: "문제 업로드 에러",
           errorMessage: error._message,
@@ -173,14 +174,17 @@ export const deleteTest = async (req, res) => {
     try{
       const user = await User.findById(req.session.user._id).populate("school");
       const test = await Test.findById(testId);
-    
+      const opened = test.opened;
       if(String(test.user._id) !== String(user._id)){
         return res.status(403).redirect(`/subject/${id}/test/list`);
       }
+
       await Test.findByIdAndDelete(testId);
       user.tests.pull(testId);
-      user.point -=50;
-      req.session.user = user;
+      if(opened){
+        user.point -=50;
+        req.session.user = user;
+      }
       user.save();
       return res.redirect(`/subject/${id}/test/list`);
     }catch(error){
@@ -193,3 +197,4 @@ export const solve = (req, res) => res.send("subject solvePage!");
 export const result = async (req, res) => {
   return res.send("subject solvePage!");
 };
+export const report = (req, res) => res.send("subject reportPage!");

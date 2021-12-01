@@ -10,4 +10,5 @@ block content
             +posting(posting)
     else
         li 작성글이 없습니다.
-    a(href=`${user._id}/report`) 유저신고🔔 (나중에 구현)
+    if String(loggedInUser._id) !== String(user._id)
+        a(href=`${user._id}/report`) 유저신고🔔

@@ -2,11 +2,11 @@ import express from "express";
 import { search, see, like, dislike} from "../controllers/subjectController";
 import {list, getUploadTest, postUploadTest,  
     getEditTest, postEditTest, deleteTest, 
-    setting, solve, result, } from "../controllers/testController";
+    setting, solve, result, report } from "../controllers/testController";
 import {community, getUploadPosting, postUploadPosting,
     watchPosting, getEditPosting, postEditPosting, 
-    deletePosting,getPostingReport, postPostingReport} from "../controllers/communityController";
-import { protectorMiddleware, communityUpload } from "../middlewares";
+    deletePosting,getReportPosting, postReportPosting} from "../controllers/communityController";
+import { protectorMiddleware, communityUpload, reportMiddleware } from "../middlewares";
 
 const subjectRouter = express.Router();
 
@@ -25,6 +25,7 @@ subjectRouter.route("/:id([0-9a-f]{24})/test/:testId([0-9a-f]{24})/delete").all(
 //solving-testPage
 subjectRouter.get("/:id([0-9a-f]{24})/test/setting", protectorMiddleware, setting);
 subjectRouter.get("/:id([0-9a-f]{24})/test/solve", protectorMiddleware, solve);
+subjectRouter.get("/:id([0-9a-f]{24})/test/:testId([0-9a-f]{24})/report", protectorMiddleware, reportMiddleware, report);
 subjectRouter.get("/:id([0-9a-f]{24})/test/result", protectorMiddleware, result);
 
 //community page
@@ -40,6 +41,7 @@ subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/edit"
     .post(communityUpload.fields([{name:"image", maxCount:1}, {name:"video", maxCount:1}]),postEditPosting);
 subjectRouter.get("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/delete",protectorMiddleware,deletePosting);
 subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/report")
-            .get(getPostingReport)
-            .post(postPostingReport);
+    .all(protectorMiddleware)
+    .get(getReportPosting)
+    .post(reportMiddleware, postReportPosting);
 export default subjectRouter;

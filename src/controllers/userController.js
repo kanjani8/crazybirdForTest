@@ -1,6 +1,7 @@
 import User from "../models/user";
 import Posting from "../models/posting";
 import School from "../models/school";
+import Reporting from "../models/reporting";
 import bcrypt from "bcrypt";
 //import passport from "passport";
 //const KakaoStrategy = require('passport-kakao').Strategy;
@@ -231,31 +232,65 @@ export const leave = async(req, res) => {
 };
 
 export const user = async(req, res) => {  // 작성글 목록을 나타내는 프로필
-    const {id} = req.params;
+    const {userId:id} = req.params;
     const user = await User.findById(id).populate("postings");
     if(!user){
-        return res.status(404)/render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
+        return res.status(404).render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
     }
     return res.render("users/profile", {pageTitle:`${user.name}`, user});
 };
 
 export const getUserReport = (req,res) => {
+    const {userId} = req.params;
+    if(String(userId) === String(req.session.user._id)){
+        // 본인을 신고할 수 없다는 알림
+        return res.status(403).redirect(`/user/${userId}`);
+    }
     return res.render("users/report", { pageTitle: "유저 신고하기"});
 }
 
 export const postUserReport = async(req,res) => {
-    const {id} = req.params;
-    const user = await User.findById(id).populate("postings");;
+    const {userId:id} = req.params;
+    const {report} = req.body;
+    const user = await User.findById(id);
+    const reporter = req.session.user._id;
     if(!user){
-        return res.status(404)/render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
+        return res.status(404).render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
     }
-    user.reported+=1;
-    user.save();
+    if(String(user._id) === String(reporter)){
+        //본인을 신고할 수 없습니다 알림
+        return res.status(403).redirect(`/user/${id}`);
+    }
+   
+    try{
+        const already = await Reporting.find({
+            reporter,
+            reportedUser: user._id,
+        });
+        if (already){
+            //이미 신고하셨습니다 알림
+            console.log("already reported");
+            return res.redirect(`/`);
+        }
+        user.reported+=1;
+        user.save();
+        const newReported = await Reporting.create({
+          title: `User '${user.username}'is reported`,
+          script: report,
+          reporter,
+          reportedUser: user._id,
+        });
+        console.log(newReported);
+      }catch(error){
+        console.log(error);
+      }
+
     if(user.reported >= 50)
     {
         try{
             await Posting.deleteMany({"user":id});
             await User.findByIdAndDelete(id);
+            console.log(`username ${user.username} is 50times reported and deleted`);
         }catch(error){
             return res.status(400).render("404", {pageTitle:"신고하기 에러", errorMessage:error._message});
         } 
