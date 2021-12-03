@@ -7,7 +7,10 @@ block content
         img(src="/" + loggedInUser.avatarUrl, width="100", height="100")
         label(for="avatar") Avatar
         input(type="file", id="avatar", name="avatar", accept="image/*")
-        h4 #{loggedInUser.school.name} (변경불가)
+        if(loggedInUser.school)
+         h4 #{loggedInUser.school.name} (변경불가)
+        else
+         h4 학교 미소속 회원
         input(placeholder="이름", name="name", type="text", required, value=loggedInUser.name)
         input(placeholder="email", name="email", type="email", required, value=loggedInUser.email)
         input(placeholder="id", name="username", type="text", required, value=loggedInUser.username)

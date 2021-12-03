@@ -1,6 +1,4 @@
 extends base.pug
-block script 
-    script(src="/frontJS/chkPW.js")
 
 block content
     h1 회원가입
@@ -8,16 +6,21 @@ block content
       span=errorMessage
 
 
-    form(method="POST")
+    form(method="POST", onsubmit="return chkPW();")
         input(placeholder="닉네임", name="name", type="text", required)
         input(placeholder="email", name="email", type="email", required)
         input(placeholder="id", name="username", type="text", required)
-        input(placeholder="비밀번호", id = "password", name="password", type="password", required)
-        input(placeholder="비밀번호 확인", name="password2", type="password", required)
+        input(placeholder="비밀번호", id = "password", name="password", type="password", 
+         minlength=8, maxlength=20, required)
+        input(placeholder="비밀번호 확인", name="password2", type="password", 
+         minlength=8, maxlength=20, required)
         select(name="schoolName")
           option(value="") 미지정
           option(value="성신여자대학교") 성신여자대학교 
-        input(type="submit", value="가입하기", onsubmit='chkPW();')
+        input(type="submit", value="가입하기")
     hr
     div 
         a(href="/login") 로그인 하기 &rarr;
+
+block script 
+    script(src="/frontJS/chkPW.js")

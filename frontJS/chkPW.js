@@ -1,10 +1,8 @@
 function chkPW(){
-
-    var pw = $("#password").val();
-    var num = pw.search(/[0-9]/g);
-    var eng = pw.search(/[a-z]/ig);
-    var spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
-    console.log("비밀번호:", pw);
+    const pw = document.getElementById("password").value;
+    const num = pw.search(/[0-9]/g);
+    const eng = pw.search(/[a-z]/ig);
+    const spe = pw.search(/[`~!@@#$%^&*|₩₩₩'₩";:₩/?]/gi);
     if(pw.length < 8 || pw.length > 20)
     {
         alert("8자리 ~ 20자리 이내로 입력해주세요.");
