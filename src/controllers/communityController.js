@@ -34,7 +34,10 @@ export const watchPosting = async(req, res) => {
     try{
         const subject = await Subject.findById(id);
         const posting = await Posting.findById(postingId).populate("user");
-        return res.render("community/watch", { pageTitle: `${subject.name}의 게시판`, posting});
+        posting.meta.views+=1;
+        posting.save();
+        const recommend = req.session.user.recommendPost.includes(postingId);
+        return res.render("community/watch", { pageTitle: `${subject.name}의 게시판`, posting,recommend});
     }catch(error){
         return res.render("404", {pageTitle:`게시물 보기 에러`});
     }
@@ -191,3 +194,29 @@ export const postReportPosting = async (req, res) => {
   }
   return res.redirect(`/subject/${id}/community`);
 };
+
+export const getRecommend = async (req, res) => {
+  const {id, postingId} = req.params;
+  const user = await User.findById(req.session.user._id).populate("school");
+  const posting = await Posting.findById(postingId);
+  if(user.recommendPost){
+    if(user.recommendPost.includes(postingId))
+  {
+    posting.meta.rating-=1;
+    posting.save();
+    user.recommendPost.pull(postingId);
+    user.save();
+    req.session.user = user;
+    res.locals.loggedInUser = req.session.user;
+    return res.redirect(`/subject/${id}/community/${postingId}`);
+  }
+  }
+  posting.meta.rating+=1;
+  posting.save();
+  user.recommendPost.push(postingId);
+  user.save();
+  console.log("테스트: ",user.recommendPost);
+  req.session.user = user;
+  res.locals.loggedInUser = req.session.user;
+  return res.redirect(`/subject/${id}/community/${postingId}`);
+}

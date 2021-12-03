@@ -11,7 +11,7 @@ export const search = async (req, res) => {
   //subjects = await Subject.find({});
   //for(let i = 0; i < subjects.length; i++){
   //  await Subject.findByIdAndUpdate(subjects[i]._id, {school:school._id} );
-  // } //이런 식으로 과목들에 학교를 일괄로 집어넣음.
+   //} //이런 식으로 과목들에 학교를 일괄로 집어넣음.
   if (keyword) {
     subjects = await Subject.find({
        $or : 

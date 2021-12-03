@@ -5,7 +5,7 @@ import {list, getUploadTest, postUploadTest,
     setting, solve, result, report } from "../controllers/testController";
 import {community, getUploadPosting, postUploadPosting,
     watchPosting, getEditPosting, postEditPosting, 
-    deletePosting,getReportPosting, postReportPosting} from "../controllers/communityController";
+    deletePosting,getReportPosting, postReportPosting,getRecommend} from "../controllers/communityController";
 import { protectorMiddleware, communityUpload, reportMiddleware } from "../middlewares";
 
 const subjectRouter = express.Router();
@@ -44,4 +44,5 @@ subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/repor
     .all(protectorMiddleware)
     .get(getReportPosting)
     .post(reportMiddleware, postReportPosting);
+subjectRouter.get("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/recommend",getRecommend);
 export default subjectRouter;

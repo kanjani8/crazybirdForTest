@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true},
     point: {type: Number, default: 0},
     reported: {type: Number, default: 0}, // 신고당한 횟수 나중에 (50넘으면 계정없애기, 포인트랑 원리같음)
+    recommendPost: [{type:Schema.Types.ObjectId, ref:"Posting"}],
     school:{type: Schema.Types.ObjectId, ref:"School"},
     likedSubjects:[{type: Schema.Types.ObjectId, ref:"Subject"}], 
     postings:[{type: Schema.Types.ObjectId, ref:"Posting"}], // profile에서 띄우기
@@ -23,4 +24,6 @@ userSchema.pre("save", async function(){
 });
 
 const User = mongoose.model("User", userSchema);
+
+//User.collection.deleteMany();
 export default User;

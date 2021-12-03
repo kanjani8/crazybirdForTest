@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 //const KakaoStrategy = require('passport-kakao').Strategy;
 
 export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"enroll"});
+
 export const postEnroll = async (req, res) => {
     const { name, email, username, password, password2, schoolName} = req.body;
     const pageTitle = "회원가입";

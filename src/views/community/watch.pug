@@ -21,7 +21,10 @@ block content
                 a(href=`${posting.id}/delete`) 삭제하기
         else
             h4
-                a(href=`${posting.id}/recommend`) 추천하기💖  (나중에 구현)
+                if(recommend)
+                    a(href=`${posting.id}/recommend`) 추천하기 ❤
+                else
+                    a(href=`${posting.id}/recommend`) 추천하기 ♡
             h4
                 a(href=`${posting.id}/report`) 신고하기⛔
         h4
