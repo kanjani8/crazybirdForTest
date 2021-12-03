@@ -1,0 +1,22 @@
+extends base.pug
+
+block content
+    h1 아이디 찾기
+    if errorMessage
+        span=errorMessage
+    form(method="POST")
+        input(placeholder="이메일", name="email", type="text", required)
+        input(type="submit", value="아이디 찾기")
+    hr
+    div
+        a(href="/join") 회원가입 하기 &rarr;
+    div
+        a(href="/join") 비밀번호 찾기 &rarr;
+    hr
+    div
+        a(id="kakaoLogin")
+            img(src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="222")
+
+block scripts
+    script(src="https://developers.kakao.com/sdk/js/kakao.js")
+    script(src="/frontJS/kakaoLogin.js")

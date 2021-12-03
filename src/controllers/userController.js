@@ -3,6 +3,8 @@ import Posting from "../models/posting";
 import School from "../models/school";
 import Reporting from "../models/reporting";
 import bcrypt from "bcrypt";
+import nodemailer from "nodemailer";
+
 //import passport from "passport";
 //const KakaoStrategy = require('passport-kakao').Strategy;
 
@@ -123,10 +125,38 @@ export const startKakaoLogin = async(req, res) =>{
 //       }
 // };
 
-export const logout = (req, res) => {
-    req.session.destroy();
-    return res.redirect("/");
+export const getFindId = (req, res) => {
+    return res.render("findId", {pageTitle:"아이디 찾기"});
 };
+export const postFindId = async(req, res) => {
+    const {email} = req.body;
+    let transporter = nodemailer.createTransport({
+        service: 'gmail', // 학교메일만 받을 경우 수정 필요?
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.NODEMAILER_USER,
+          pass: process.env.NODEMAILER_PASSWORD,
+        },
+    });
+    try{
+        const user = await User.findOne({email});
+        const mailOption = {
+            from: `"씨부리(Cbird)" <${process.env.NODEMAILER_USER}>`,
+            to: email,
+            subject: "Cbird 사이트 아이디 찾기",
+            text: `당신의 아이디는 ${user.username}입니다.`,
+          }
+        const info = await transporter.sendMail(mailOption);
+        console.log(info);
+        return res.render("login", {pageTitle:"Login", message: "아이디 정보가 해당 주소로 전송되었습니다."});
+    }catch(error){
+        console.log(error);
+        return res.render("login", {pageTitle:"Login", errorMessage: error._message});
+    }
+};
+
 
 
 export const getEdit = (req, res) => {  
@@ -219,6 +249,11 @@ export const postChangePassword = async(req, res) => {
     return res.redirect("/user/logout");
 }
 
+
+export const logout = (req, res) => {
+    req.session.destroy();
+    return res.redirect("/");
+};
 
 export const leave = async(req, res) => {
     try{

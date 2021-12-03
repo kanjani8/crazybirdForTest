@@ -4,7 +4,6 @@ html(lang="ko")
         title #{pageTitle} | #{siteName}
         link(rel="stylesheet" href="https://unpkg.com/mvp.css")
         block script
-    
     body
         header 
             h1=pageTitle
@@ -33,3 +32,6 @@ html(lang="ko")
             block content
         include partials/footer.pug
     block scripts
+    if message
+            script    
+                |alert(#{message})
