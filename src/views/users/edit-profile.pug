@@ -11,9 +11,12 @@ block content
          h4 #{loggedInUser.school.name} (변경불가)
         else
          h4 학교 미소속 회원
-        input(placeholder="이름", name="name", type="text", required, value=loggedInUser.name)
-        input(placeholder="email", name="email", type="email", required, value=loggedInUser.email)
-        input(placeholder="id", name="username", type="text", required, value=loggedInUser.username)
+        label(for="name") 이름 
+        input(placeholder="이름",id="name", name="name", type="text", required, value=loggedInUser.name)
+        label(for="email") 이메일 
+        input(placeholder="email", id="email", name="email", type="email", required, value=loggedInUser.email)
+        label(for="id") 아이디 
+        input(placeholder="id", name="username",id="id", type="text", required, value=loggedInUser.username)
         input(type="submit", value="수정하기")
     if(!loggedInUser.socialOnly)
         a(href=`/user/change-password`, style="color: black;") 비밀번호 변경하기

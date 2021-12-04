@@ -4,7 +4,6 @@ import School from "../models/school";
 import Reporting from "../models/reporting";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
-
 //import passport from "passport";
 //const KakaoStrategy = require('passport-kakao').Strategy;
 
@@ -130,6 +129,7 @@ export const getFindId = (req, res) => {
 };
 export const postFindId = async(req, res) => {
     const {email} = req.body;
+
     let transporter = nodemailer.createTransport({
         service: 'gmail', // 학교메일만 받을 경우 수정 필요?
         host: 'smtp.gmail.com',
@@ -140,6 +140,7 @@ export const postFindId = async(req, res) => {
           pass: process.env.NODEMAILER_PASSWORD,
         },
     });
+
     try{
         const user = await User.findOne({email});
         const mailOption = {
@@ -157,7 +158,49 @@ export const postFindId = async(req, res) => {
     }
 };
 
-
+export const getFindPass = (req, res) => {
+    return res.render("findPass", {pageTitle:"비밀번호 찾기"});
+}
+export const postFindPass = async (req, res) => {
+    const {email, id} = req.body;
+    try {
+        let user = await User.findOne({email});
+        let transporter = nodemailer.createTransport({
+            service: 'gmail', // 학교메일만 받을 경우 수정 필요?
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            auth: {
+              user: process.env.NODEMAILER_USER,
+              pass: process.env.NODEMAILER_PASSWORD,
+            },
+        });
+        if(user.username == id) {
+            const newPW = Math.random().toString(36).slice(2) + "!";
+            try {
+                user.password = newPW;
+                user.save();
+                const mailOption = {
+                    from: `"씨부리(Cbird)" <${process.env.NODEMAILER_USER}>`,
+                    to: email,
+                    subject: "Cbird 사이트 비밀번호 찾기",
+                    text: `당신의 임시비밀번호는 ${newPW} 입니다.`,
+                  }
+                const info = await transporter.sendMail(mailOption);
+                return res.render("login", {pageTitle:"Login", message: "임시 비밀번호가 해당 주소로 전송되었습니다."});
+            } catch (error) {
+                console.log(error);
+                return res.render("login", {pageTitle:"Login", errorMessage: error._message});
+            }
+        } else {
+            return res.render("findPass", {pageTitle:"비밀번호 찾기", errorMessage: "아이디가 일치하지 않습니다."});
+        }
+    } catch (error) {
+        return res.render("findPass", {pageTitle:"비밀번호 찾기", errorMessage: "해당 이메일을 사용하는 계정이 존재하지 않습니다."});
+    }
+    
+    
+}
 
 export const getEdit = (req, res) => {  
     return res.render("users/edit-profile", {pageTitle:"프로필 수정"});
