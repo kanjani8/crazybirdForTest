@@ -4,8 +4,6 @@ import School from "../models/school";
 import Reporting from "../models/reporting";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
-//import passport from "passport";
-//const KakaoStrategy = require('passport-kakao').Strategy;
 
 export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"enroll"});
 
@@ -96,33 +94,22 @@ export const postLogin = async (req, res) => {
 };
 
 export const startKakaoLogin = async(req, res) =>{
-    
+    const baseLink = "https://kauth.kakao.com/oauth/authorize";
+    const config = {
+        response_type: "code",
+        client_id: process.env.KAKAO_KEY,
+        redirect_uri: process.env.REDIRECT_URL,
+        state: process.env.KAKAO_STATE
+    };
+    const params = new URLSearchParams(config).toString();
+    const url = `${baseLink}?${params}`;
+    return res.redirect(url);
  };
  
  export const finishKakaoLogin = async(req, res) =>{
      
  };
 
-// export const startKakaoLogin = async(req, res) =>{
-//    await passport.use('kakao', new KakaoStrategy({
-//        clientID: process.env.KAKAO_KEY,
-//        callbackURL: process.env.REDIRECT_URL,
-//    }, async(accessToken, refreshToken, profile, done) => {
-//     console.log(profile);
-//     console.log(accessToken);
-//     console.log(refreshToken);
-//    }));
-//    passport.authenticate('kakao');
-// };
-
-// export const finishKakaoLogin = async(req, res) =>{
-//     passport.authenticate('kakao', {
-//         failureRedirect: '/',
-//       }), (res, req) => {
-//         res.redirect('/');
-//         console.log("login success");
-//       }
-// };
 
 export const getFindId = (req, res) => {
     return res.render("findId", {pageTitle:"아이디 찾기"});

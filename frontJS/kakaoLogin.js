@@ -7,7 +7,7 @@ document.body.appendChild(link);
 window.Kakao.init("b169c21eaa77d6cdaca38772a3182193");
 function kakaoLogin(){
     window.Kakao.Auth.login({
-        scope: 'profile, account_email',
+        scope: 'profile_nickname, profile_image, account_email',
         success: function(authObj){
             console.log("authObj: ", authObj);
             window.Kakao.API.request({
