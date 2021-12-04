@@ -176,9 +176,9 @@ export const deleteTest = async (req, res) => {
       const test = await Test.findById(testId);
       const opened = test.opened;
       if(String(test.user._id) !== String(user._id)){
-        return res.status(403).redirect(`/subject/${id}/test/list`);
+        return res.send(`<script>alert("타인의 시험문제는 삭제할 수 없습니다.");
+            location.href='/subject/${id}/test/list';</script>`);
       }
-
       await Test.findByIdAndDelete(testId);
       user.tests.pull(testId);
       if(opened){
@@ -191,7 +191,8 @@ export const deleteTest = async (req, res) => {
       return res.status(400).render("404", {pageTitle:"시험문제 삭제 에러", errorMessage: error._message});
     }
 };
-  
+
+
 export const setting = (req, res) => res.send("subject settingPage!");
 export const solve = (req, res) => res.send("subject solvePage!");
 export const result = async (req, res) => {

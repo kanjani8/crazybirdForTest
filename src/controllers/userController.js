@@ -143,6 +143,13 @@ export const postFindId = async(req, res) => {
 
     try{
         const user = await User.findOne({email});
+        if(!user){
+            return res.render("findId", 
+            {
+                pageTitle:"아이디 찾기", 
+                errorMessage:"해당 이메일을 사용하는 계정이 존재하지 않습니다"
+            });
+        }
         const mailOption = {
             from: `"씨부리(Cbird)" <${process.env.NODEMAILER_USER}>`,
             to: email,
@@ -151,10 +158,11 @@ export const postFindId = async(req, res) => {
           }
         const info = await transporter.sendMail(mailOption);
         console.log(info);
-        return res.render("login", {pageTitle:"Login", message: "아이디 정보가 해당 주소로 전송되었습니다."});
+        return res.send(`<script>alert("아이디 정보가 해당 주소로 전송되었습니다.");
+            location.href='/login';</script>`);
     }catch(error){
         console.log(error);
-        return res.render("login", {pageTitle:"Login", errorMessage: error._message});
+        return res.render("findId", {pageTitle:"findId", errorMessage: error._message});
     }
 };
 
@@ -187,7 +195,9 @@ export const postFindPass = async (req, res) => {
                     text: `당신의 임시비밀번호는 ${newPW} 입니다.`,
                   }
                 const info = await transporter.sendMail(mailOption);
-                return res.render("login", {pageTitle:"Login", message: "임시 비밀번호가 해당 주소로 전송되었습니다."});
+                console.log(info);
+                return res.send(`<script>alert("임시 비밀번호가 해당 주소로 전송되었습니다.");
+                location.href='/login';</script>`);
             } catch (error) {
                 console.log(error);
                 return res.render("login", {pageTitle:"Login", errorMessage: error._message});
@@ -273,7 +283,7 @@ export const postChangePassword = async(req, res) => {
     } = req;
     const user = await User.findById(_id);
     const ok = await bcrypt.compare(oldPassword, user.password);
-    //기존 비밀번호입력이 올바르게 됐는지 확인
+    //기존 비밀번호 입력이 올바르게 됐는지 확인
     if (!ok)    {
         return res.status(400).render("users/change-password",{
             pageTitle: "Change Password",
@@ -322,8 +332,8 @@ export const user = async(req, res) => {  // 작성글 목록을 나타내는 �
 export const getUserReport = (req,res) => {
     const {userId} = req.params;
     if(String(userId) === String(req.session.user._id)){
-        // 본인을 신고할 수 없다는 알림
-        return res.status(403).redirect(`/user/${userId}`);
+        return res.send(`<script>alert("본인을 신고할 수 없습니다.");
+            location.href='/user/${userId}';</script>`);
     }
     return res.render("users/report", { pageTitle: "유저 신고하기"});
 }
@@ -337,8 +347,9 @@ export const postUserReport = async(req,res) => {
         return res.status(404).render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
     }
     if(String(user._id) === String(reporter)){
-        //본인을 신고할 수 없습니다 알림
         return res.status(403).redirect(`/user/${id}`);
+        return res.send(`<script>alert("본인을 신고할 수 없습니다.");
+            location.href='/user/${userId}';</script>`);
     }
    
     try{

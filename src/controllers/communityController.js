@@ -155,8 +155,8 @@ export const postReportPosting = async (req, res) => {
     const reporter = req.session.user._id;
     const user = await User.findById(posting.user);
     if(String(reporter) === String(user._id)){
-      // 본인의 글은 신고할 수 없습니다 알림
-      return res.redirect(`/subject/${id}/community`);
+      return res.send(`<script>alert("본인의 글은 신고할 수 없습니다.");
+            location.href='/subject/${id}/community';</script>`);
     }
 
     const already = await Reporting.find({
@@ -164,9 +164,8 @@ export const postReportPosting = async (req, res) => {
         reportedPosting: posting._id,
     });
     if (already){
-        //이미 신고하셨습니다 알림
-        console.log("already reported");
-        return res.redirect(`/subject/${id}/community`);
+        return res.send(`<script>alert("이미 신고하셨습니다.");
+            location.href='/subject/${id}/community';</script>`);
     };
     posting.meta.reported += 1;
     posting.save();
@@ -176,7 +175,7 @@ export const postReportPosting = async (req, res) => {
       reporter,
       reportedPosting: posting._id
     });
-    console.log(newReported);
+    console.log("신고된 포스팅:", newReported);
   }catch(error){
     console.log(error);
   }
@@ -200,16 +199,15 @@ export const getRecommend = async (req, res) => {
   const user = await User.findById(req.session.user._id).populate("school");
   const posting = await Posting.findById(postingId);
   if(user.recommendPost){
-    if(user.recommendPost.includes(postingId))
-  {
-    posting.meta.rating-=1;
-    posting.save();
-    user.recommendPost.pull(postingId);
-    user.save();
-    req.session.user = user;
-    res.locals.loggedInUser = req.session.user;
-    return res.redirect(`/subject/${id}/community/${postingId}`);
-  }
+    if(user.recommendPost.includes(postingId)){
+      posting.meta.rating-=1;
+      posting.save();
+      user.recommendPost.pull(postingId);
+      user.save();
+      req.session.user = user;
+      res.locals.loggedInUser = req.session.user;
+      return res.redirect(`/subject/${id}/community/${postingId}`);
+    }
   }
   posting.meta.rating+=1;
   posting.save();

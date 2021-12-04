@@ -23,11 +23,12 @@ export const postReportError = async(req, res) => {
             console.log(newReport2);
         }
         // 사용자에게 오류가 보고되었다는 알람 추가 필요
+        return res.send(`<script>alert("문제가 성공적으로 보고되었습니다.");
+            location.href='/';</script>`);
     }catch(error){
         console.log("Report error: ", error);
         return res.status(404).render("404", {pageTitle: "에러 보고 오류"});
     }
-    return res.redirect("/");
 }
 
 //달력, 지도, 시간표, testbird캐릭터 등 메인페이지를 채울 추가기능 넣을 공간
