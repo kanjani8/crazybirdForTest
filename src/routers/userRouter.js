@@ -6,7 +6,7 @@ import {
     reportMiddleware
   } from "../middlewares";
 import {user, getEdit, postEdit, 
-    logout, leave, startKakaoLogin, finishKakaoLogin, 
+    logout, leave, startKakaoLogin, finishKakaoLogin, startNaverLogin,finishNaverLogin,
     getChangePassword, postChangePassword, getUserReport, postUserReport} from "../controllers/userController";
 
 const userRouter = express.Router();
@@ -30,4 +30,6 @@ userRouter.route("/:userId([0-9a-f]{24})/report")
 
 userRouter.get("/kakao/start", publicOnlyMiddleware, startKakaoLogin);
 userRouter.get("/kakao/finish",publicOnlyMiddleware, finishKakaoLogin);
+userRouter.get("/naverlogin", publicOnlyMiddleware, startNaverLogin);
+userRouter.get("/naver/finish", publicOnlyMiddleware, finishNaverLogin);
 export default userRouter;

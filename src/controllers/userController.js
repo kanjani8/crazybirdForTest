@@ -110,6 +110,22 @@ export const startKakaoLogin = async(req, res) =>{
      
  };
 
+ export const startNaverLogin = async (req,res) => {
+    const baseLink = "https://nid.naver.com/oauth2.0/authorize";
+    const config = {
+        response_type: "code",
+        client_id: process.env.NAVER_KEY,
+        redirect_uri: process.env.REDIRECT_NAVER_URL,
+        state: "RANDOM_STATE"
+    }
+    const params = new URLSearchParams(config).toString();
+    const url = `${baseLink}?${params}`;
+    return res.redirect(url);
+ }
+ 
+ export const finishNaverLogin = async(req, res) =>{
+     
+};
 
 export const getFindId = (req, res) => {
     return res.render("findId", {pageTitle:"아이디 찾기"});
