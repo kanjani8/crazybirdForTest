@@ -4,6 +4,7 @@ import School from "../models/school";
 import Reporting from "../models/reporting";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
+import fetch from "node-fetch";
 
 export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"enroll"});
 
@@ -99,7 +100,7 @@ export const startKakaoLogin = async(req, res) =>{
         response_type: "code",
         client_id: process.env.KAKAO_KEY,
         redirect_uri: process.env.REDIRECT_URL,
-        state: process.env.KAKAO_STATE
+        //state: process.env.KAKAO_STATE // 랜덤한 숫자로 바꿔야함
     };
     const params = new URLSearchParams(config).toString();
     const url = `${baseLink}?${params}`;
@@ -107,7 +108,45 @@ export const startKakaoLogin = async(req, res) =>{
  };
  
  export const finishKakaoLogin = async(req, res) =>{
-     
+    if(req.query.error){
+        const err = req.query.error;
+        console.log("에러", err);
+        if(err === "consent_required"){
+            // 사용자가 필요한 거 동의안함
+            return res.send(`<script>alert("필요한 항목이 동의되지 않아서 취소되었습니다.");
+            location.href='/login';</script>`);
+        }
+        if(err === "access_denied"){
+            // 사용자가 로그인 취소 혹은 14세 동의
+            return res.send(`<script>alert("로그인이 취소되었습니다.");
+            location.href='/login';</script>`);
+        }
+    }
+    const baseLink = "https://kauth.kakao.com/oauth/token";
+    const config = {
+        grant_type: "authorization_code",
+        client_id: process.env.KAKAO_KEY,
+        client_secret: process.env.KAKAO_SECRET_KEY,
+        redirect_uri: process.env.REDIRECT_URL,
+        code: req.query.code
+     };
+    const params = new URLSearchParams(config).toString();
+    const finalLink = `${baseLink}?${params}`;
+    try{
+        const tokenRequest = await (
+            await fetch(finalLink, {
+              method: "POST",
+              headers: {
+                'content-type':'application/x-www-form-urlencoded;charset=utf-8'
+              },
+            })
+          ).json();
+        console.log(tokenRequest);
+        // 여기에서 유저 생성 마저 
+    }catch(error){
+        console.log("error", error);
+    }
+    return res.send("You succeed");
  };
 
  export const startNaverLogin = async (req,res) => {
