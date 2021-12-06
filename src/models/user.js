@@ -6,6 +6,7 @@ const userSchema = new mongoose.Schema({
     avatarUrl: String,
     email: { type: String, required: true, unique: true, trim: true},
     username: { type: String, required: true, unique: true, trim: true},
+    socialOnly: {type: Boolean, default: false},
     password: { type: String, required: true},
     point: {type: Number, default: 0},
     reported: {type: Number, default: 0}, // 신고당한 횟수 나중에 (50넘으면 계정없애기, 포인트랑 원리같음)

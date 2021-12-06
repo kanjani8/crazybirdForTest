@@ -1,0 +1,17 @@
+extends ../base.pug
+
+block content
+    h1 소셜 회원가입
+    if errorMessage
+      span=errorMessage
+
+    form(method="POST", onsubmit="return chkPW();")
+        input(placeholder="닉네임", name="name", type="text", value=loggedInUser.name, required)
+        select(name="schoolName")
+          option(value="") 미지정
+          option(value="성신여자대학교") 성신여자대학교 
+        input(type="submit", value="마저 가입하기")
+    hr
+
+block script 
+    script(src="/frontJS/chkPW.js")

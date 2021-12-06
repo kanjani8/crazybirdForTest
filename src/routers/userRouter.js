@@ -6,8 +6,9 @@ import {
     reportMiddleware
   } from "../middlewares";
 import {user, getEdit, postEdit, 
-    logout, leave, startKakaoLogin, finishKakaoLogin, startNaverLogin,finishNaverLogin,
-    getChangePassword, postChangePassword, getUserReport, postUserReport} from "../controllers/userController";
+    logout, leave, startKakaoLogin, finishKakaoLogin, startNaverLogin,finishNaverLogin, 
+    getSocialEnroll, postSocialEnroll, getChangePassword, postChangePassword, 
+    getUserReport, postUserReport} from "../controllers/userController";
 
 const userRouter = express.Router();
 
@@ -28,8 +29,12 @@ userRouter.route("/:userId([0-9a-f]{24})/report")
   .get(getUserReport)
   .post(reportMiddleware, postUserReport);
 
-userRouter.get("/kakao/start", publicOnlyMiddleware, startKakaoLogin);
-userRouter.get("/kakao/finish",publicOnlyMiddleware, finishKakaoLogin);
-userRouter.get("/naverlogin", publicOnlyMiddleware, startNaverLogin);
-userRouter.get("/naver/finish", publicOnlyMiddleware, finishNaverLogin);
+  userRouter.get("/kakao/start", publicOnlyMiddleware, startKakaoLogin);
+  userRouter.get("/kakao/finish",publicOnlyMiddleware, finishKakaoLogin);
+  userRouter.get("/naverlogin", publicOnlyMiddleware, startNaverLogin);
+  userRouter.get("/naver/finish", publicOnlyMiddleware, finishNaverLogin);
+  userRouter.route("/social-enroll")
+    .all(protectorMiddleware)
+    .get(getSocialEnroll)
+    .post(postSocialEnroll);
 export default userRouter;

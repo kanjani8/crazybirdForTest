@@ -100,6 +100,7 @@ export const startKakaoLogin = async(req, res) =>{
         response_type: "code",
         client_id: process.env.KAKAO_KEY,
         redirect_uri: process.env.REDIRECT_URL,
+        //scope: "profile_nickname profile_image account_email"
         //state: process.env.KAKAO_STATE // 랜덤한 숫자로 바꿔야함
     };
     const params = new URLSearchParams(config).toString();
@@ -107,7 +108,7 @@ export const startKakaoLogin = async(req, res) =>{
     return res.redirect(url);
  };
  
- export const finishKakaoLogin = async(req, res) =>{
+export const finishKakaoLogin = async(req, res) =>{
     if(req.query.error){
         const err = req.query.error;
         console.log("에러", err);
@@ -141,13 +142,67 @@ export const startKakaoLogin = async(req, res) =>{
               },
             })
           ).json();
-        console.log(tokenRequest);
-        // 여기에서 유저 생성 마저
+        if("access_token" in tokenRequest){
+            const {access_token} = tokenRequest;
+            const userData = await(
+                await fetch(`https://kapi.kakao.com/v2/user/me`, {
+                    headers:{
+                        Authorization: `Bearer ${access_token}`,
+                    }
+                })
+            ).json();
+            console.log("유저 정보:", userData);
+            const profile = userData.kakao_account.profile;
+            const email = userData.kakao_account.email;
+            let existingUser = await User.findOne({email}).populate("school"); 
+            if(existingUser){
+                // 사이트계정에는 프사가 없고 카톡프사는 있을 경우 추가해주기
+                if(!existingUser.avatarUrl && !profile.is_default_image){
+                    const avatarUrl = profile.profile_image_url; // 카톡이미지url은 언제까지나 계속 있나? 확인해봐야함
+                    existingUser = await User.findByIdAndUpdate(
+                        existingUser._id, {avatarUrl}, {new: true}
+                        ).populate("school");
+                }
+                req.session.loggedIn = true;
+                req.session.user = existingUser;
+                return res.redirect("/");
+            }else{ // 계정이 없을 경우(회원가입)
+                const password = Math.random().toString(36).slice(2); 
+                // 비밀번호 찾기로 바꾸지 않는이상 일반 로그인을 할 수 없게됨
+                
+                // 프사가 있는지 확인
+                if(!profile.is_default_image){
+                    const createdUser = await User.create({
+                        name: profile.nickname,
+                        avatarUrl: profile.profile_image_url,
+                        email,
+                        username: userData.id,
+                        password,
+                        socialOnly: true
+                    })
+                    req.session.loggedIn = true;
+                    req.session.user = createdUser;
+                }else{// 프사없는 유저의 회원가입
+                    const createdUser = await User.create({
+                        name: profile.nickname,
+                        email,
+                        username: userData.id,
+                        password,
+                        socialOnly: true
+                    })
+                    req.session.loggedIn = true;
+                    req.session.user = createdUser;
+                }
+                return res.redirect("/user/social-enroll"); // 학교 정보 등을 마저 입력하게 하기
+            }
+        }
+        return res.redirect("/");
     }catch(error){
         console.log("error", error);
+        return res.send(`<script>alert("${error._message}");
+            location.href='/login';</script>`);
     }
-    return res.send("You succeed");
- };
+};
 
  export const startNaverLogin = async (req,res) => {
     const baseLink = "https://nid.naver.com/oauth2.0/authorize";
@@ -216,6 +271,37 @@ export const startKakaoLogin = async(req, res) =>{
     }
     return res.send("You succeed");
 };
+
+export const getSocialEnroll = (req, res) =>{
+    return res.render("users/socialEnroll", {pageTitle:"추가 정보 입력"});
+}
+export const postSocialEnroll = async(req, res) =>{
+    const {name, schoolName} = req.body;
+    try{
+        if(schoolName){
+            const school = await School.findOne({name:schoolName});
+            const updatedUser = await User.findByIdAndUpdate(
+                req.session.user._id, 
+                {name, school: school._id}, 
+                {new: true}
+                ).populate("school");
+            req.session.user = updatedUser;
+        }else{
+            const updatedUser = await User.findByIdAndUpdate(
+                req.session.user._id, 
+                {name}, 
+                {new: true}
+                );
+            req.session.user = updatedUser;
+        }
+        console.log(req.session.user);
+        return res.redirect("/");
+    }catch(error){
+        console.log(error);
+        return res.status(400).render("404", {pageTitle: `추가 정보 입력 중 에러`, errorMessage: error._message});
+    }
+}
+
 
 export const getFindId = (req, res) => {
     return res.render("findId", {pageTitle:"아이디 찾기"});
