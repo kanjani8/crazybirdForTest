@@ -142,7 +142,7 @@ export const startKakaoLogin = async(req, res) =>{
             })
           ).json();
         console.log(tokenRequest);
-        // 여기에서 유저 생성 마저 
+        // 여기에서 유저 생성 마저
     }catch(error){
         console.log("error", error);
     }
@@ -162,8 +162,59 @@ export const startKakaoLogin = async(req, res) =>{
     return res.redirect(url);
  }
  
- export const finishNaverLogin = async(req, res) =>{
-     
+ export const finishNaverLogin = async (req, res) =>{
+    if(req.query.error){
+        const err = req.query.error;
+        console.log("에러", err);
+        if(err === "consent_required"){
+            // 사용자가 필요한 거 동의안함
+            return res.send(`<script>alert("필요한 항목이 동의되지 않아서 취소되었습니다.");
+            location.href='/login';</script>`);
+        }
+        if(err === "access_denied"){
+            // 사용자가 로그인 취소 혹은 14세 동의
+            return res.send(`<script>alert("로그인이 취소되었습니다.");
+            location.href='/login';</script>`);
+        }
+    }
+
+    const baseLink ="https://nid.naver.com/oauth2.0/token";
+    const config = {
+        grant_type: "authorization_code",
+        client_id: process.env.NAVER_KEY,
+        client_secret: process.env.NAVER_SECRET_KEY,
+        redirect_uri: process.env.REDIRECT_NAVER_URL,
+        code: req.query.code,
+        state: req.query.state
+     };
+    const params = new URLSearchParams(config).toString();
+    const url = `${baseLink}?${params}`;
+    try{
+        const tokenRequest = await (
+            await fetch(url, {
+              method: "POST",
+              headers: {
+                'content-type':'application/x-www-form-urlencoded;charset=utf-8'
+              },
+            })
+          ).json();
+        if ("access_token" in tokenRequest) {
+            const { access_token } = tokenRequest;
+            const userRequest = await (
+              await fetch("https://openapi.naver.com/v1/nid/me", {
+                headers: {
+                    Authorization: `Bearer ${access_token}`
+                },
+              })
+            ).json();
+            console.log("이거보기", userRequest);
+        }
+
+        
+    }catch(error){
+        console.log("error", error);
+    }
+    return res.send("You succeed");
 };
 
 export const getFindId = (req, res) => {
