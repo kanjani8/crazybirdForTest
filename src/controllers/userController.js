@@ -99,9 +99,7 @@ export const startKakaoLogin = async(req, res) =>{
     const config = {
         response_type: "code",
         client_id: process.env.KAKAO_KEY,
-        redirect_uri: process.env.REDIRECT_URL,
-        //scope: "profile_nickname profile_image account_email"
-        //state: process.env.KAKAO_STATE // 랜덤한 숫자로 바꿔야함
+        redirect_uri: process.env.REDIRECT_KAKAO_URL,
     };
     const params = new URLSearchParams(config).toString();
     const url = `${baseLink}?${params}`;
@@ -123,16 +121,16 @@ export const finishKakaoLogin = async(req, res) =>{
             location.href='/login';</script>`);
         }
     }
-    const baseLink = "https://kauth.kakao.com/oauth/token";
+    const baseLink = "https://kauth.kakao.com/oauth";
     const config = {
         grant_type: "authorization_code",
         client_id: process.env.KAKAO_KEY,
         client_secret: process.env.KAKAO_SECRET_KEY,
-        redirect_uri: process.env.REDIRECT_URL,
+        redirect_uri: process.env.REDIRECT_KAKAO_URL,
         code: req.query.code
      };
     const params = new URLSearchParams(config).toString();
-    const finalLink = `${baseLink}?${params}`;
+    const finalLink = `${baseLink}/token?${params}`;
     try{
         const tokenRequest = await (
             await fetch(finalLink, {
@@ -152,8 +150,22 @@ export const finishKakaoLogin = async(req, res) =>{
                 })
             ).json();
             console.log("유저 정보:", userData);
-            const profile = userData.kakao_account.profile;
+            if(userData.kakao_account.email_needs_agreement){
+                const configForEmail = {
+                    client_id: process.env.KAKAO_KEY,
+                    redirect_uri: process.env.REDIRECT_KAKAO_URL,
+                    response_type: "code",
+                    scope: "account_email"
+                 };
+                const askingEmailLink = `${baseLink}/authorize?${configForEmail}`
+                return res.redirect(askingEmailLink);
+            }// 서비스 시작 후 이부분 다른 계정으로 확인 필요(베타 테스터..? 주변 아무나?)
+            else if(!is_email_valid || !is_email_verified){
+                return res.send(`<script>alert("이메일이 카카오에서 valid/verified되지 않아서 취소되었습니다.");
+                location.href='/login';</script>`);
+            }
             const email = userData.kakao_account.email;
+            const profile = userData.kakao_account.profile;
             req.session.access_token = access_token;
             let existingUser = await User.findOne({email}).populate("school"); 
             if(existingUser){
@@ -179,7 +191,7 @@ export const finishKakaoLogin = async(req, res) =>{
                         email,
                         username: userData.id,
                         password,
-                        socialOnly: true
+                        social: "Kakao"
                     })
                     req.session.loggedIn = true;
                     req.session.user = createdUser;
@@ -189,7 +201,7 @@ export const finishKakaoLogin = async(req, res) =>{
                         email,
                         username: userData.id,
                         password,
-                        socialOnly: true
+                        social: "Kakao"
                     })
                     req.session.loggedIn = true;
                     req.session.user = createdUser;
@@ -268,9 +280,9 @@ export const finishKakaoLogin = async(req, res) =>{
             req.session.access_token = access_token;
             let existingUser = await User.findOne({email}).populate("school"); 
             if(existingUser){
-                // 사이트계정에는 프사가 없고 카톡프사는 있을 경우 추가해주기
+                // 사이트계정에는 프사가 없고 네이버 프사는 있을 경우 추가
                 if(!existingUser.avatarUrl && profile){
-                    const avatarUrl = profile; // 카톡이미지url은 언제까지나 계속 있나? 확인해봐야함
+                    const avatarUrl = profile; // 네이버이미지url은 언제까지나 계속 있나? 확인해봐야함
                     existingUser = await User.findByIdAndUpdate(
                         existingUser._id, {avatarUrl}, {new: true}
                         ).populate("school");
@@ -289,7 +301,7 @@ export const finishKakaoLogin = async(req, res) =>{
                     email,
                     username:userData.response.id,
                     password,
-                    socialOnly: true
+                    social: "Naver"
                 })
                 req.session.loggedIn = true;
                 req.session.user = createdUser;
@@ -299,7 +311,7 @@ export const finishKakaoLogin = async(req, res) =>{
                     email,
                     username: userData.response.id,
                     password,
-                    socialOnly: true
+                    social: "Kakao"
                 })
                 req.session.loggedIn = true;
                 req.session.user = createdUser;
@@ -526,7 +538,26 @@ export const postChangePassword = async(req, res) => {
 }
 
 
-export const logout = (req, res) => {
+export const logout = async(req, res) => { 
+    if(req.session.user.social === "Kakao"){ // 사용자 액세스 토큰과 리프레시 토큰을 만료
+        try{
+            const logoutRequest = await (
+                await fetch( "https://kapi.kakao.com/v1/user/logout",{
+                    headers:{
+                        Authorization: `Bearer ${req.session.access_token}`
+                    }
+                })
+             ).json();
+            if(logoutRequest)
+                console.log(`소셜 로그아웃 성공: ${logoutRequest}`);
+        }catch(error){
+            console.log(error);
+        }
+    }
+    else if(req.session.user.social === "Naver"){
+
+    }
+    
     req.session.destroy();
     return res.redirect("/");
 };
@@ -535,7 +566,7 @@ export const leave = async(req, res) => {
     try{
         await Posting.deleteMany({"user":req.session.user._id});
         const user = await User.findById(req.session.user._id);
-        if (user.socialOnly){
+        if (user.social === "Naver"){
             const baseLink ="https://nid.naver.com/oauth2.0/token";
             const config = {
                 grant_type: "delete",
@@ -552,6 +583,15 @@ export const leave = async(req, res) => {
                 })
               ).json();
             console.log(tokenReq);
+        }else if(user.social === "Kakao"){
+            const leaveRequest = await (
+                await fetch( "https://kapi.kakao.com/v1/user/unlink",{
+                    headers:{
+                        Authorization: `Bearer ${req.session.access_token}`
+                    }
+                })
+             ).json();
+            console.log("소셜 탈퇴:", leaveRequest);
         }
         await User.findByIdAndDelete(req.session.user._id);
         req.session.destroy();
