@@ -154,6 +154,7 @@ export const finishKakaoLogin = async(req, res) =>{
             console.log("유저 정보:", userData);
             const profile = userData.kakao_account.profile;
             const email = userData.kakao_account.email;
+            req.session.access_token = access_token;
             let existingUser = await User.findOne({email}).populate("school"); 
             if(existingUser){
                 // 사이트계정에는 프사가 없고 카톡프사는 있을 경우 추가해주기
@@ -255,21 +256,63 @@ export const finishKakaoLogin = async(req, res) =>{
           ).json();
         if ("access_token" in tokenRequest) {
             const { access_token } = tokenRequest;
-            const userRequest = await (
+            const userData = await (
               await fetch("https://openapi.naver.com/v1/nid/me", {
                 headers: {
                     Authorization: `Bearer ${access_token}`
                 },
               })
             ).json();
-            console.log("이거보기", userRequest);
+            const profile = userData.response.profile_image;
+            const email = userData.response.email;
+            req.session.access_token = access_token;
+            let existingUser = await User.findOne({email}).populate("school"); 
+            if(existingUser){
+                // 사이트계정에는 프사가 없고 카톡프사는 있을 경우 추가해주기
+                if(!existingUser.avatarUrl && profile){
+                    const avatarUrl = profile; // 카톡이미지url은 언제까지나 계속 있나? 확인해봐야함
+                    existingUser = await User.findByIdAndUpdate(
+                        existingUser._id, {avatarUrl}, {new: true}
+                        ).populate("school");
+                }
+                req.session.loggedIn = true;
+                req.session.user = existingUser;
+                return res.redirect("/");
+            } else{ // 계정이 없을 경우(회원가입)
+            const password = Math.random().toString(36).slice(2); 
+            // 비밀번호 찾기로 바꾸지 않는이상 일반 로그인을 할 수 없게됨
+            // 프사가 있는지 확인
+            if(profile){
+                const createdUser = await User.create({
+                    name:userData.response.name,
+                    avatarUrl: profile,
+                    email,
+                    username:userData.response.id,
+                    password,
+                    socialOnly: true
+                })
+                req.session.loggedIn = true;
+                req.session.user = createdUser;
+            }else{// 프사없는 유저의 회원가입
+                const createdUser = await User.create({
+                    name: userData.response.name,
+                    email,
+                    username: userData.response.id,
+                    password,
+                    socialOnly: true
+                })
+                req.session.loggedIn = true;
+                req.session.user = createdUser;
+            }
+            return res.redirect("/user/social-enroll"); // 학교 정보 등을 마저 입력하게 하기
+        }    
         }
-
-        
+        return res.redirect("/");
     }catch(error){
         console.log("error", error);
+        return res.send(`<script>alert("${error._message}");
+            location.href='/login';</script>`);
     }
-    return res.send("You succeed");
 };
 
 export const getSocialEnroll = (req, res) =>{
@@ -300,6 +343,7 @@ export const postSocialEnroll = async(req, res) =>{
         console.log(error);
         return res.status(400).render("404", {pageTitle: `추가 정보 입력 중 에러`, errorMessage: error._message});
     }
+    
 }
 
 
@@ -490,6 +534,25 @@ export const logout = (req, res) => {
 export const leave = async(req, res) => {
     try{
         await Posting.deleteMany({"user":req.session.user._id});
+        const user = await User.findById(req.session.user._id);
+        if (user.socialOnly){
+            const baseLink ="https://nid.naver.com/oauth2.0/token";
+            const config = {
+                grant_type: "delete",
+                client_id: process.env.NAVER_KEY,
+                client_secret: process.env.NAVER_SECRET_KEY,
+                access_token:req.session.access_token,
+                service_provider:"NAVER"
+            };
+            const params = new URLSearchParams(config).toString();
+            const url = `${baseLink}?${params}`;
+            const tokenReq = await (
+                await fetch(url, {
+                  method: "POST"
+                })
+              ).json();
+            console.log(tokenReq);
+        }
         await User.findByIdAndDelete(req.session.user._id);
         req.session.destroy();
         return res.redirect("/");
