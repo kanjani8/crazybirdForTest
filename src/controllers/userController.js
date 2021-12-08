@@ -627,9 +627,6 @@ export const logout = async(req, res) => {
             console.log(error);
         }
     }
-    else if(req.session.user.social === "Naver"){
-
-    }
     
     req.session.destroy();
     return res.redirect("/");
