@@ -37,7 +37,7 @@ export const watchPosting = async(req, res) => {
         posting.meta.views+=1;
         posting.save();
         const recommend = req.session.user.recommendPost.includes(postingId);
-        return res.render("community/watch", { pageTitle: `${subject.name}의 게시판`, posting,recommend});
+        return res.render("community/watch", { pageTitle: `${subject.name}의 게시판`, posting, recommend});
     }catch(error){
         return res.render("404", {pageTitle:`게시물 보기 에러`});
     }
@@ -49,7 +49,7 @@ export const getUploadPosting = async(req, res) =>{
     if (!subject){
       return res.render("404", { pageTitle: "Subject not found." });
     }
-    return res.render("community/upload", { pageTitle: `${subject.name}의 게시판`, subject });
+    return res.render("community/upload", { pageTitle: `${subject.name}의 게시판`});
 };
 export const postUploadPosting = async(req, res) =>{
     const {id} = req.params;

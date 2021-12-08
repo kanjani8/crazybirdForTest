@@ -8,10 +8,14 @@ import {
 import {user, getEdit, postEdit, 
     logout, leave, startKakaoLogin, finishKakaoLogin, startNaverLogin,finishNaverLogin, 
     getSocialEnroll, postSocialEnroll, getChangePassword, postChangePassword, 
-    getUserReport, postUserReport} from "../controllers/userController";
+    getUserReport, postUserReport, getEmailCertificate, postEmailCertificate} from "../controllers/userController";
 
 const userRouter = express.Router();
 
+userRouter.route("/certificate-email")
+  .all(protectorMiddleware)
+  .get(getEmailCertificate)
+  .post(postEmailCertificate);
 userRouter
   .route("/edit")
   .all(protectorMiddleware)

@@ -60,7 +60,6 @@ export const postEnroll = async (req, res) => {
                 password,
             });
         }
-        
          return res.redirect("/login");
     } catch(error) {
         console.log(error);
@@ -91,8 +90,74 @@ export const postLogin = async (req, res) => {
     }
     req.session.loggedIn = true;
     req.session.user = user;
-    return res.redirect("/");
+    if(!user.emailCertificated){
+        return res.redirect("/user/certificate-email");
+    }else{
+        return res.redirect("/");
+    }
 };
+export const getEmailCertificate = async(req, res) =>{
+    if(req.session.user.emailCertificated){
+        return redirect("/") // +이미 email certificate가 되었습니다 알림
+    }
+    const code = Math.random().toString(9).slice(3, 7);
+    req.session.emailCode = code;
+    //메일로 유저 메일한테 보내주기
+    let transporter = nodemailer.createTransport({
+        service: 'gmail', // 학교메일만 받을 경우 수정 필요?
+        host: 'smtp.gmail.com',
+        port: 587,
+        secure: false,
+        auth: {
+          user: process.env.NODEMAILER_USER,
+          pass: process.env.NODEMAILER_PASSWORD,
+        },
+    });
+    try{
+        const mailOption = {
+            from: `"씨부리(Cbird)" <${process.env.NODEMAILER_USER}>`,
+            to: req.session.user.email,
+            subject: "Cbird 사이트 이메일 인증 요청",
+            text: `이메일 인증 코드는 ${code}입니다.`,
+          }
+        const info = await transporter.sendMail(mailOption);
+        console.log(info);
+        return res.render("users/certificate-email", {pageTitle: "이메일 인증 페이지"}); 
+    }catch(error){
+        console.log("메일인증 코드 전송 에러")
+        return res.status(400).render("404", {pageTitle:"메일 인증코드 전송에러", errorMessage:error._message});  
+    }
+}
+export const postEmailCertificate = async(req, res) =>{
+    const {code} = req.body;
+    const user = req.session.user;
+    if(req.session.emailCode === code){
+        try{
+            const updatedUser = await User.findByIdAndUpdate(
+                user._id, 
+                {emailCertificated: true}, 
+                {new: true}
+                ).populate("school");
+            console.log("유저 이메일 확인 완료: ", updatedUser)
+            req.session.user = updatedUser;
+            res.locals.loggedInUser = req.session.user;
+            return res.redirect("/");
+        }catch(error){
+            console.log("이메일 인증 에러", error)
+            return res.status(400).render("404", {
+                pageTitle: "이메일 인증 에러",
+                errorMessage: error._message,
+              });
+        }
+    }
+    else{
+        return res.status(400).render("users/certificate-email", {
+            pageTitle,
+            errorMessage: "코드가 일치하지 않습니다",
+          });
+    }
+
+}
 
 export const startKakaoLogin = async(req, res) =>{
     const baseLink = "https://kauth.kakao.com/oauth/authorize";
@@ -157,10 +222,11 @@ export const finishKakaoLogin = async(req, res) =>{
                     response_type: "code",
                     scope: "account_email"
                  };
-                const askingEmailLink = `${baseLink}/authorize?${configForEmail}`
+                 const paramsForEmail = new URLSearchParams(configForEmail).toString();
+                const askingEmailLink = `${baseLink}/authorize?${paramsForEmail}`
                 return res.redirect(askingEmailLink);
-            }// 서비스 시작 후 이부분 다른 계정으로 확인 필요(베타 테스터..? 주변 아무나?)
-            else if(!is_email_valid || !is_email_verified){
+            }
+            else if(!userData.kakao_account.is_email_valid || !userData.kakao_account.is_email_verified){
                 return res.send(`<script>alert("이메일이 카카오에서 valid/verified되지 않아서 취소되었습니다.");
                 location.href='/login';</script>`);
             }
@@ -173,7 +239,7 @@ export const finishKakaoLogin = async(req, res) =>{
                 if(!existingUser.avatarUrl && !profile.is_default_image){
                     const avatarUrl = profile.profile_image_url; // 카톡이미지url은 언제까지나 계속 있나? 확인해봐야함
                     existingUser = await User.findByIdAndUpdate(
-                        existingUser._id, {avatarUrl}, {new: true}
+                        existingUser._id, {avatarUrl, emailCertificated: true}, {new: true}
                         ).populate("school");
                 }
                 req.session.loggedIn = true;
@@ -189,6 +255,7 @@ export const finishKakaoLogin = async(req, res) =>{
                         name: profile.nickname,
                         avatarUrl: profile.profile_image_url,
                         email,
+                        emailCertificated: true,
                         username: userData.id,
                         password,
                         social: "Kakao"
@@ -199,6 +266,7 @@ export const finishKakaoLogin = async(req, res) =>{
                     const createdUser = await User.create({
                         name: profile.nickname,
                         email,
+                        emailCertificated: true,
                         username: userData.id,
                         password,
                         social: "Kakao"
@@ -284,7 +352,7 @@ export const finishKakaoLogin = async(req, res) =>{
                 if(!existingUser.avatarUrl && profile){
                     const avatarUrl = profile; // 네이버이미지url은 언제까지나 계속 있나? 확인해봐야함
                     existingUser = await User.findByIdAndUpdate(
-                        existingUser._id, {avatarUrl}, {new: true}
+                        existingUser._id, {avatarUrl,  emailCertificated: true,}, {new: true}
                         ).populate("school");
                 }
                 req.session.loggedIn = true;
@@ -299,6 +367,7 @@ export const finishKakaoLogin = async(req, res) =>{
                     name:userData.response.name,
                     avatarUrl: profile,
                     email,
+                    emailCertificated: true,
                     username:userData.response.id,
                     password,
                     social: "Naver"
@@ -309,6 +378,7 @@ export const finishKakaoLogin = async(req, res) =>{
                 const createdUser = await User.create({
                     name: userData.response.name,
                     email,
+                    emailCertificated: true,
                     username: userData.response.id,
                     password,
                     social: "Kakao"
@@ -461,11 +531,14 @@ export const postEdit = async(req, res) => {
 
     let idExists = false;
     let emailExists = false;
+    let emailCertificated = true;
+    
     //email과 username(id)만 다른 사람과 안겹치게 처리하자. 이름은 겹칠수도 있으니 ㅇㅇ..
     if(username != req.session.user.username)
         idExists = await User.exists({username});
     if(email != req.session.user.email)
         emailExists = await User.exists({email});
+        emailCertificated = false;
     if(idExists && emailExists){
         return res.status(400).render("users/edit-profile", {
             pageTitle:"프로필 업데이트 에러",
@@ -485,7 +558,6 @@ export const postEdit = async(req, res) => {
         });
     }
 
-
     try{
         const updatedUser = await User.findByIdAndUpdate(
             _id,
@@ -493,6 +565,7 @@ export const postEdit = async(req, res) => {
                 avatarUrl: file ? file.path : avatarUrl,
                 name,
                 email,
+                emailCertificated,
                 username
             },
                 {new: true}

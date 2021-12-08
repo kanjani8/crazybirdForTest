@@ -2,46 +2,49 @@ extends ../base.pug
 block content
     if errorMessage
         span=errorMessage
+    if loggedInUser.emailCertificated
+        form(method="POST")
+            input( type="radio", required, id="short", name="formType", value="1", onclick="chooseForm(this.name)", checked="checked")
+            label( for="short") 단답형
+            input( type="radio", required, id="multiple", name="formType", value="2", onclick="chooseForm(this.name)")
+            label( for="multiple")   객관식
+            br
+            input( type="radio", required, id="open", name="opened", value=1, checked="checked")
+            label( for="open") 공개(+ 50 point)
+            input( type="radio", required, id="close", name="opened", value=0)
+            label( for="close") 비공개
+            br
+            input( type="radio", required, id="middleTest", name="forWhen", value="middle", checked="checked")
+            label( for="middleTest") 중간고사용
+            input( type="radio", required, id="finalTest", name="forWhen", value="final")
+            label( for="finalTest") 기말고사용
+            input( type="radio", required, id="exactraTest", name="forWhen", value="exactra")
+            label( for="exactraTest") 그 외
+            br
+            br
+            div(id="form_1")
+                label(for="question") 질문:
+                input(placeholder="질문", type="text",id="question", name="question")
+                label(for="answer") 정답:
+                input(placeholder="정답", type="text", id="answer",name="answer")
+                input(type="submit", value="문제 등록하기")
 
-    form(method="POST")
-        input( type="radio", required, id="short", name="formType", value="1", onclick="chooseForm(this.name)", checked="checked")
-        label( for="short") 단답형
-        input( type="radio", required, id="multiple", name="formType", value="2", onclick="chooseForm(this.name)")
-        label( for="multiple")   객관식
-        br
-        input( type="radio", required, id="open", name="opened", value=1, checked="checked")
-        label( for="open") 공개(+ 50 point)
-        input( type="radio", required, id="close", name="opened", value=0)
-        label( for="close") 비공개
-        br
-        input( type="radio", required, id="middleTest", name="forWhen", value="middle", checked="checked")
-        label( for="middleTest") 중간고사용
-        input( type="radio", required, id="finalTest", name="forWhen", value="final")
-        label( for="finalTest") 기말고사용
-        input( type="radio", required, id="exactraTest", name="forWhen", value="exactra")
-        label( for="exactraTest") 그 외
-        br
-        br
-        div(id="form_1")
-            label(for="question") 질문:
-            input(placeholder="질문", type="text",id="question", name="question")
-            label(for="answer") 정답:
-            input(placeholder="정답", type="text", id="answer",name="answer")
-            input(type="submit", value="문제 등록하기")
-
-        div(id="form_2" style="display: none;")
-            span **틀린 선택지 3개를 전부 입력해주세요
-            label(for="question") 질문:
-            input(placeholder="질문", type="text",id="question", name="question")
-            label(for="answer") 정답:
-            input(placeholder="정답", type="text", id="answer",name="answer")
-            label(for="wrongAnswer1") 틀린 선택지1:
-            input(placeholder="틀린 답1",type="text", id="wrongAnswer1",name="wrongAnswer1")
-            label(for="wrongAnswer2") 틀린 선택지2:
-            input(placeholder="틀린 답2",type="text", id="wrongAnswer2",name="wrongAnswer2")
-            label(for="wrongAnswer3") 틀린 선택지3:
-            input(placeholder="틀린 답3", type="text", id="wrongAnswer3",name="wrongAnswer3")
-            input(type="submit", value="문제 등록하기")
+            div(id="form_2" style="display: none;")
+                span **틀린 선택지 3개를 전부 입력해주세요
+                label(for="question") 질문:
+                input(placeholder="질문", type="text",id="question", name="question")
+                label(for="answer") 정답:
+                input(placeholder="정답", type="text", id="answer",name="answer")
+                label(for="wrongAnswer1") 틀린 선택지1:
+                input(placeholder="틀린 답1",type="text", id="wrongAnswer1",name="wrongAnswer1")
+                label(for="wrongAnswer2") 틀린 선택지2:
+                input(placeholder="틀린 답2",type="text", id="wrongAnswer2",name="wrongAnswer2")
+                label(for="wrongAnswer3") 틀린 선택지3:
+                input(placeholder="틀린 답3", type="text", id="wrongAnswer3",name="wrongAnswer3")
+                input(type="submit", value="문제 등록하기")
+    else
+        h4 이메일을 인증해야 문제를 등록할 수 있습니다.
+        a(href="/user/certificate-email") 인증하기 &rarr;
 
 block script 
     script(src="/frontJS/chooseQuestionType.js")

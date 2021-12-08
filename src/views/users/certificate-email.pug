@@ -1,0 +1,10 @@
+extends ../base
+
+block content
+    if(errorMessage)
+        span=errorMessage 
+    h4 이메일에서 확인코드를 확인해 입력해주세요
+    form(method="post")
+        label(for="code") 이메일 확인 코드
+        input(placeholder="확인 코드", type="text",id="code", name="code")
+        input(type="submit", value="인증하기")
