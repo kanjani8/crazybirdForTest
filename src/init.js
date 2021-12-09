@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "dotenv/config";//.env처리
 import "./db";
 import "./models/subject";
 import "./models/test";
