@@ -4,10 +4,10 @@
   "description": "Crazy bird for test",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon -L --exec babel-node src/init.js",
-    "mongo": "sudo service mongodb start",
-    "mongostop": "sudo service mongodb stop",
-    "assets": "webpack --config webpack.config.js"
+    "dev:server": "nodemon",
+    "dev:assets": "webpack",
+    "db": "sudo service mongodb start",
+    "dbStop": "sudo service mongodb stop"
   },
   "repository": {
     "type": "git",
