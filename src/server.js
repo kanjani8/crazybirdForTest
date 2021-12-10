@@ -36,7 +36,6 @@ app.use(
 // });
 app.use(localsMiddleware);
 //user can access to this file
-//app.use("/assets", express.static("assets"));
 app.use("/frontJS", express.static("frontJS"));
 app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
