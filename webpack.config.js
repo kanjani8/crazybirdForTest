@@ -5,6 +5,8 @@ module.exports = {
     entry: {
         main: "./src/client/js/main.js",
         videoPlayer: "./src/client/js/videoPlayer.js",
+        chooseQuestionType: "./src/client/js/chooseQuestionType.js",
+        checkPW: "./src/client/js/checkPW.js"
       },
     mode: "development", // developnemt or production(개발완료/default)
     watch: true,
@@ -15,6 +17,7 @@ module.exports = {
     output: {
         filename: "js/[name].js",
         path: path.resolve(__dirname, "assets"),
+        library: "common",
         clean: true,
     },
     module: {

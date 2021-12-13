@@ -4,9 +4,9 @@ block content
         span=errorMessage
     if loggedInUser.emailCertificated
         form(method="POST")
-            input( type="radio", required, id="short", name="formType", value="1", onclick="chooseForm(this.name)", checked="checked")
+            input( type="radio", required, id="short", name="formType", value="1", checked="checked")
             label( for="short") 단답형
-            input( type="radio", required, id="multiple", name="formType", value="2", onclick="chooseForm(this.name)")
+            input( type="radio", required, id="multiple", name="formType", value="2")
             label( for="multiple")   객관식
             br
             input( type="radio", required, id="open", name="opened", value=1, checked="checked")
@@ -45,7 +45,7 @@ block content
     else
         h4 이메일을 인증해야 문제를 등록할 수 있습니다.
         a(href="/user/certificate-email") 인증하기 &rarr;
+block scripts
+    script(src="/static/js/chooseQuestionType.js")
 
-block script 
-    script(src="/frontJS/chooseQuestionType.js")
         

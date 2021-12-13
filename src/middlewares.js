@@ -57,7 +57,7 @@ export const avatarUpload = multer({
 export const communityUpload = multer({
   dest: "uploads/community/",
   limits: {
-    fileSize: 10000000,
+    fileSize: 20000000,
   },
 });
 

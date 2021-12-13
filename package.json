@@ -4,7 +4,7 @@
   "description": "Crazy bird for test",
   "main": "server.js",
   "scripts": {
-    "dev": "nodemon -L --exec babel-node src/init.js",
+    "dev": "nodemon -L",
     "assets": "webpack",
     "db": "sudo service mongodb start",
     "dbStop": "sudo service mongodb stop"

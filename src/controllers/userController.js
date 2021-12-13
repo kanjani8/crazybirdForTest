@@ -234,12 +234,14 @@ export const finishKakaoLogin = async(req, res) =>{
             const profile = userData.kakao_account.profile;
             req.session.access_token = access_token;
             let existingUser = await User.findOne({email}).populate("school"); 
+            console.log("유저", existingUser);
             if(existingUser){
-                // 사이트계정에는 프사가 없고 카톡프사는 있을 경우 추가해주기
+                // 사이트계정에는 프사가 없고 카톡프사는 있을 경우
                 if(!existingUser.avatarUrl && !profile.is_default_image){
-                    const avatarUrl = profile.profile_image_url; // 카톡이미지url은 언제까지나 계속 있나? 확인해봐야함
+                    const avatarUrl = profile.profile_image_url; 
                     existingUser = await User.findByIdAndUpdate(
-                        existingUser._id, {avatarUrl, emailCertificated: true}, {new: true}
+                        existingUser._id, {avatarUrl, social:true,
+                            social: "Kakao", kakaoImg:true, emailCertificated:true}, {new: true}
                         ).populate("school");
                 }
                 req.session.loggedIn = true;
@@ -582,7 +584,6 @@ export const getChangePassword = (req, res) => {
     return res.render("users/change-password", {pageTitle: "비밀번호 변경"});
 }
 export const postChangePassword = async(req, res) => {
-
     const {
         session: {
             user: {_id},
@@ -605,9 +606,14 @@ export const postChangePassword = async(req, res) => {
           errorMessage: "새 비밀번호 확인이 잘못되었습니다.",
         });
       }
-    user.password = newPassword;
-    await user.save();
-    return res.redirect("/user/logout");
+    try{
+        user.password = newPassword;
+        await user.save();
+        return res.redirect("/"); 
+    }catch(error){
+        console.log(error);
+        return res.status(400).render("404", {pageTitle: "비밀번호 변경 에러", errorMessage:error._message});
+    }
 }
 
 

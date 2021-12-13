@@ -54,11 +54,11 @@ export const getUploadPosting = async(req, res) =>{
 export const postUploadPosting = async(req, res) =>{
     const {id} = req.params;
     const {title, script} = req.body;
-    const file =req.files['image'] ?req.files['image'][0]: null;
-    const file2 = req.files['video'] ? req.files['video'][0] : null;
-    const imageUrl = file ? file.path : null;
-    const videoUrl = file2 ? file2.path : null;
     try{
+      const file = req.files['image'] ?req.files['image'][0]: null;
+      const file2 = req.files['video'] ? req.files['video'][0] : null;
+      const imageUrl = file ? file.path : null;
+      const videoUrl = file2 ? file2.path : null;
       const user = await User.findById(req.session.user._id).populate("school");
       const newPosting = await Posting.create({title, imageUrl, videoUrl, script, 
           subject:id, user:user._id});

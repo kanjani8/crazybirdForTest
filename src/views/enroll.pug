@@ -6,7 +6,7 @@ block content
       span=errorMessage
 
 
-    form(method="POST", onsubmit="return chkPW();")
+    form(method="POST", onsubmit="return common.chkPW();")
         input(placeholder="닉네임", name="name", type="text", required)
         input(placeholder="email", name="email", type="email", required)
         input(placeholder="id", name="username", type="text", required)
@@ -25,5 +25,5 @@ block content
       a(href="/user/kakao/start")
         img(src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="222")
 
-block script 
-    script(src="/frontJS/chkPW.js")
+block script
+    script(src="/static/js/checkPW.js")

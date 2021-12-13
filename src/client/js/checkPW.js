@@ -1,4 +1,4 @@
-function chkPW(){
+export function chkPW(){
     const pw = document.getElementById("password").value;
     const num = pw.search(/[0-9]/g);
     const eng = pw.search(/[a-z]/ig);
