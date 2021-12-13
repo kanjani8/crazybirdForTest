@@ -1,0 +1,23 @@
+header 
+            h1=pageTitle
+            nav
+                ul 
+                    li
+                        a(href="/") 메인 페이지
+                    if loggedIn
+                        li 
+                            a(href="/user/edit") 프로필 설정
+                        li 
+                            a(href="/user/logout") 로그아웃
+                        li
+                            a(href=`/user/${loggedInUser._id}`) 내 작성글 목록
+                        li
+                            h4 포인트: #{loggedInUser.point}
+                        if subject
+                            li 
+                            a(href=`/subject/${subject.id}`) #{subject.name}로 이동
+                    else
+                        li
+                            a(href="/enroll") 회원가입
+                        li
+                            a(href="/login") 로그인
