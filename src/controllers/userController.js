@@ -152,7 +152,7 @@ export const postEmailCertificate = async(req, res) =>{
     }
     else{
         return res.status(400).render("users/certificate-email", {
-            pageTitle,
+            pageTitle : "인증 에러" ,
             errorMessage: "코드가 일치하지 않습니다",
           });
     }

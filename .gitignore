@@ -1,6 +1,6 @@
 /node_modules
-/src/modesl/subjectData
-.env
-/uploads 
-.DS_Store
+/src/models/subjectData
 /assets
+/uploads 
+.env
+.DS_Store

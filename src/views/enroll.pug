@@ -6,7 +6,7 @@ block content
       span=errorMessage
 
 
-    form(method="POST", onsubmit="return common.chkPW();")
+    form(method="POST", id="chkPW", onsubmit="return false")
         input(placeholder="닉네임", name="name", type="text", required)
         input(placeholder="email", name="email", type="email", required)
         input(placeholder="id", name="username", type="text", required)
@@ -18,12 +18,9 @@ block content
           option(value="") 미지정
           option(value="성신여자대학교") 성신여자대학교 
         input(type="submit", value="가입하기")
+        include partials/social-login
     hr
     div 
         a(href="/login") 로그인 하기 &rarr;
-    div
-      a(href="/user/kakao/start")
-        img(src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="222")
-
 block script
     script(src="/static/js/checkPW.js")

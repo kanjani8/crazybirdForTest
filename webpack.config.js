@@ -6,7 +6,8 @@ module.exports = {
         main: "./src/client/js/main.js",
         videoPlayer: "./src/client/js/videoPlayer.js",
         chooseQuestionType: "./src/client/js/chooseQuestionType.js",
-        checkPW: "./src/client/js/checkPW.js"
+        checkPW: "./src/client/js/checkPW.js",
+        showMap: "./src/client/js/showMap.js"
       },
     mode: "development", // developnemt or production(개발완료/default)
     watch: true,

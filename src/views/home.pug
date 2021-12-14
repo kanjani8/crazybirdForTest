@@ -1,6 +1,21 @@
 extends base.pug
 
 block content
-    h1 MainPage
-    
-    a(href=`subject/search`) 과목 검색하기
+    div.whole__box
+        div.left__box
+            img(src="/uploads/default/redBird.png")
+            if loggedIn
+                a(href=`subject/search`).big__img 과목 검색하기
+        div.right__box
+            if loggedIn
+                div(id = "map")
+            else
+                p 이 사이트는 대학생들의 시험공부를 위한 사이트 입니다.
+                 | 문제를 등록 후 테스트하거나 , 직접 만든 시험문제를 공유해서 서로 풀어볼 수 있고,
+                 | 같은 과목을 선택한 학우들과 과목 게시판에서 수업에 대한 이야기를 나눌 수도 있습니다.
+                p 지원 학교:
+                 | 성신여대
+                 | ㅁㅁ대
+block scripts 
+    script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoJS}`)
+    script(src="/static/js/showMap.js")

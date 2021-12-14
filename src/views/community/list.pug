@@ -3,7 +3,7 @@ include ../mixins/posting
 
 block content
     if loggedIn
-        form(method="GET")
+        form(method="GET").search__form
             input(placeholder="글 검색하기",name="keyword", type="text")
             input(type="submit", value="검색")
         each posting in postings

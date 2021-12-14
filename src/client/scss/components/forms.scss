@@ -1,0 +1,46 @@
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin: 10px auto;
+  align-items: center;
+  &:not(.search__form) {
+    padding: 30px;
+    background-color: $obj-bg;
+    border: 1px solid rgba($color: #fff, $alpha: 0.1);
+  }
+}
+
+input {
+  padding: 15px 20px;
+  margin-bottom: 8px;
+  width: 90%;
+  font-size: 16px;
+  color: black;
+  border: 1px solid rgba($color: black, $alpha: 0.1);
+  background-color: #fafafa;
+  &::placeholder {
+    color: rgba($color: $thema-red, $alpha: 0.7);
+  }
+}
+
+input[type="submit"] {
+  width: 95%;
+  text-align: center;
+  border-radius: 5px;
+  padding: 12px 20px;
+  cursor: pointer;
+  display: block;
+  margin-top: 30px;
+}
+
+.form__item {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 20px;
+  margin-bottom: 5px;
+  input {
+    width: 80%;
+    margin-left: 3px;
+  }
+}

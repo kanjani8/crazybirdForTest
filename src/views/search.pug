@@ -4,7 +4,7 @@ include mixins/likedSubject
 
 block content
     if loggedIn
-        form(method="GET")
+        form(method="GET").search__form
             input(placeholder="Search by lecture or professor",name="keyword", type="text")
             input(type="submit", value="Search")
         each subject in likedSubjects

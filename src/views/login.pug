@@ -9,6 +9,7 @@ block content
         input(placeholder="비밀번호", name="password", type="password",
          minlength=8, maxlength=20, required)
         input(type="submit", value="Login")
+        include partials/social-login
     hr
     div
         a(href="/enroll") 회원가입 하기 &rarr;
@@ -17,8 +18,4 @@ block content
     div
         a(href="/findPassword") 비밀번호 찾기 &rarr;
     hr
-    div
-        a(href="/user/kakao/start")
-            img(src="//k.kakaocdn.net/14/dn/btqCn0WEmI3/nijroPfbpCa4at5EIsjyf0/o.jpg" width="222")
-        a(href="/user/naverlogin")
-            img(height='50' src='http://static.nid.naver.com/oauth/small_g_in.PNG')
+    
