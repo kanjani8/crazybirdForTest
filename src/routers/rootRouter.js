@@ -1,11 +1,12 @@
 import express from "express";
-import {main, getReportError, postReportError} from "../controllers/globalController";
+import {main, getReportError, postReportError, getMap} from "../controllers/globalController";
 import {getLogin, postLogin, getEnroll, postEnroll, getFindId, postFindId,getFindPass,postFindPass } from "../controllers/userController";
 import { publicOnlyMiddleware, reportMiddleware } from "../middlewares";
 
 const rootRouter = express.Router();
 
 rootRouter.get("/",main);
+rootRouter.get("/map", getMap);
 rootRouter.route("/enroll").all(publicOnlyMiddleware).get(getEnroll).post(postEnroll);
 rootRouter.route("/login").all(publicOnlyMiddleware).get(getLogin).post(postLogin);
 rootRouter.route("/findId").all(publicOnlyMiddleware).get(getFindId).post(postFindId);

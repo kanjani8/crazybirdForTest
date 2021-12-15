@@ -8,7 +8,9 @@ block content
                 a(href=`subject/search`).big__img 과목 검색하기
         div.right__box
             if loggedIn
-                div(id = "map")
+                a(href="/map")
+                    div(id = "map")
+                
             else
                 p 이 사이트는 대학생들의 시험공부를 위한 사이트 입니다.
                  | 문제를 등록 후 테스트하거나 , 직접 만든 시험문제를 공유해서 서로 풀어볼 수 있고,

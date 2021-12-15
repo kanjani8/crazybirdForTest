@@ -6,6 +6,7 @@ import "./models/user";
 import "./models/school";
 import "./models/posting";
 import "./models/reporting";
+import "./models/location";
 import app from "./server";
 
 const PORT = 4000;

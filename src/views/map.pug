@@ -1,0 +1,8 @@
+extends base.pug
+block content 
+    div(id = "map__whole", style="width: 100%; height: 100vh;")
+    h4(id = "markers", style="display:none")=locations
+
+block scripts 
+    script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoJS}`)
+    script(src="/static/js/showMap.js")

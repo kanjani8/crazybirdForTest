@@ -1,6 +1,7 @@
 import Subject from "../models/subject";
 import School from "../models/school";
 import User from "../models/user";
+import Location from "../models/location";
 
 export const search = async (req, res) => {
   const user = await User.findById(req.session.user._id).populate("likedSubjects");
@@ -8,10 +9,17 @@ export const search = async (req, res) => {
   const { keyword } = req.query;
   let subjects = [];
   const likedSubjects = user.likedSubjects;
-  //subjects = await Subject.find({});
-  //for(let i = 0; i < subjects.length; i++){
-  //  await Subject.findByIdAndUpdate(subjects[i]._id, {school:school._id} );
-   //} //이런 식으로 과목들에 학교를 일괄로 집어넣음.
+  // subjects = await Subject.find({});
+ //   console.log(subjects);
+ //   for(let i = 0; i < subjects.length; i++){
+  //    await Subject.findByIdAndUpdate(subjects[i]._id, {school} );
+  //   } //이런 식으로 과목들에 학교를 일괄로 집어넣음.
+  //  let locations = await Location.find({});
+  //  for(let i = 0; i< locations.length; i++){
+  //    await Location.findByIdAndUpdate(locations[i]._id, {school});
+  //  } // 위치들에 학교 집어넣는 임시코드
+  // const result = School.findByIdAndUpdate(school, {locations}, {new: true});
+  //console.log(result);
   if (keyword) {
     subjects = await Subject.find({
        $or : 

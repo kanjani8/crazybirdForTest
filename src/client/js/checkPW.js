@@ -1,6 +1,7 @@
 const form = document.getElementById("chkPW");
 
 const chkPW = (event) => {
+    console.log(event);
     const pw = document.getElementById("password").value;
     const num = pw.search(/[0-9]/g);
     const eng = pw.search(/[a-z]/ig);
