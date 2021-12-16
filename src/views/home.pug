@@ -6,6 +6,8 @@ block content
             img(src="/uploads/default/redBird.png")
             if loggedIn
                 a(href=`subject/search`).big__img 과목 검색하기
+                div(id = "calendar")
+                
         div.right__box
             if loggedIn
                 a(href="/map")
@@ -18,6 +20,13 @@ block content
                 p 지원 학교:
                  | 성신여대
                  | ㅁㅁ대
+
+
 block scripts 
+    <base href="/"> 
+    link(rel="stylesheet", href="../fullcalendar/lib/main.css") 
+    script(src="../fullcalendar/lib/main.js")
+    script(src="/static/js/showCalendar.js")
     script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoJS}`)
     script(src="/static/js/showMap.js")
+    

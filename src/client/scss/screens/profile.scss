@@ -1,0 +1,19 @@
+.list {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+    margin-bottom: 5px;
+    flex-direction:column;
+  }
+.aaa {
+    padding: 15px 20px;
+    background-color: $thema;
+    color: white;
+    max-width:fit-content;
+    font-size: 20px;
+}
+.write {
+    margin-top: 30px;
+    padding: 15px 20px;
+    border: 1px solid rgba($color: $thema, $alpha: 1);
+}
