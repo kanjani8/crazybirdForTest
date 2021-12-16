@@ -5,14 +5,17 @@ include mixins/likedSubject
 block content
     if loggedIn
         form(method="GET").search__form
-            input(placeholder="Search by lecture or professor",name="keyword", type="text")
-            input(type="submit", value="Search")
-        each subject in likedSubjects
-            +likedSubject(subject)
-        h4 ----모든 과목-----
-        each subject in subjects
-            +subject(subject)
-        else
-            li Sorry nothing found.
+            input(placeholder="Search by lecture or professor",name="keyword", type="text").search
+            input(type="submit", value="Search").push
+        div.allsubs
+            div.likesubs
+                each subject in likedSubjects
+                    +likedSubject(subject)
+            div.subs
+                h4 ----모든 과목-----
+                each subject in subjects
+                    +subject(subject)
+                else
+                    li Sorry nothing found.
     else
         a(href="/login") 문제와 게시판을 보려면 먼저 로그인 하기 &rarr;

@@ -2,10 +2,10 @@ extends ../base
 include ../mixins/posting
 
 block content
-    if user.avartarUrl
-        img(src="/" + user.avatarUrl, width="100", height="100")
+    img(src="/" + user.avatarUrl, width="100", height="100")
+    
     div.list
-        h4.aaa #{user.name}의 작성글 목록
+        h4.userprofile #{user.name}의 작성글 목록
         div.write
             each posting in user.postings
                     +posting(posting)

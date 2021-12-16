@@ -684,6 +684,7 @@ export const user = async(req, res) => {  // 작성글 목록을 나타내는 �
     if(!user){
         return res.status(404).render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
     }
+    console.log(user);
     return res.render("users/profile", {pageTitle:`${user.name}`, user});
 };
 
