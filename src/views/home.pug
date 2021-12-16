@@ -6,12 +6,12 @@ block content
             img(src="/uploads/default/redBird.png")
             if loggedIn
                 a(href=`subject/search`).big__img 과목 검색하기
-                div(id = "calendar")
                 
         div.right__box
             if loggedIn
                 a(href="/map")
                     div(id = "map")
+                div(id = "calendar")
                 
             else
                 p 이 사이트는 대학생들의 시험공부를 위한 사이트 입니다.
@@ -23,8 +23,7 @@ block content
 
 
 block scripts 
-    link(rel="stylesheet", href="../fullcalendar/lib/main.css") 
-    script(src="../fullcalendar/lib/main.js")
+    link(rel="stylesheet", href="/static/css/showCalendar.css") 
     script(src="/static/js/showCalendar.js")
     script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoJS}`)
     script(src="/static/js/showMap.js")

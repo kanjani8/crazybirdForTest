@@ -1,14 +1,41 @@
+import { Calendar } from '@fullcalendar/core';
+import interactionPlugin from '@fullcalendar/interaction';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 console.log("캘린더");
 
-var calendarEl = document.getElementById('calendar');
 
-calendarEl.addEventListener('DOMContentLoaded', function() {
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth'
-    });
-
-    calendar.render();
+document.addEventListener('DOMContentLoaded', function() {
+  const calendarEl = document.getElementById('calendar');
+  var calendar = new Calendar(calendarEl, {
+    plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin ],
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+    },
+    initialDate: '2021-12-17',
+    navLinks: true, // can click day/week names to navigate views
+    editable: true,
+    dayMaxEvents: true, // allow "more" link when too many events
+    events: [
+      {
+        title: '해냈다',
+        start: '2021-12-15',
+      },
+      {
+        title: '시험기간',
+        start: '2021-12-17',
+        end: '2021-12-24'
+      },
+    ]
   });
+  calendar.render();
+});
+
+
+
 
 /*
 홈페이지 예시

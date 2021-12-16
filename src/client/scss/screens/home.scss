@@ -14,10 +14,13 @@
   flex-direction: column;
 }
 #map {
-  width: 200px;
-  height: 180px;
+  width: 400px;
+  height: 300px;
 }
-
+#calendar {
+  width: 400px;
+  margin: 0 auto;
+}
 p {
   padding: 50px;
   max-width: 300px;

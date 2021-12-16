@@ -13,7 +13,7 @@ module.exports = {
     mode: "development", // developnemt or production(개발완료/default)
     watch: true,
     plugins: [new MiniCssExtractPlugin({
-            filename: "css/styles.css",
+            filename: "css/[name].css",
         }),
     ],
     output: {
@@ -37,6 +37,13 @@ module.exports = {
                 test: /\.scss$/,
                 use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
             },
+            {
+                test: /\.css$/,
+                use: [
+                  { loader: MiniCssExtractPlugin.loader },
+                  { loader: 'css-loader', options: { importLoaders: 1 } }
+                ]
+              }
         ],
     },
 };
