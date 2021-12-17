@@ -4,6 +4,7 @@ import Event from "../models/event";
 export const main = async(req, res) => {
     const event_obj = await Event.find({});
     const events =  JSON.stringify(event_obj);
+    console.log(events);
     return res.render("home", {pageTitle: "main", events});
 }
 export const getReportError = (req, res) => {
