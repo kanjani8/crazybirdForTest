@@ -1,0 +1,9 @@
+extends base.pug
+
+block content
+    div(id = "calendar__whole", style="width: 100%; height: 100vh;")
+    h4(id = "events", style="display:none")=events
+
+block scripts 
+    link(rel="stylesheet", href="/static/css/showCalendar.css") 
+    script(src="/static/js/showCalendar.js")

@@ -1,7 +1,10 @@
 import Reporting from "../models/reporting";
 import Location from "../models/location";
-export const main = (req, res) => {
-        return res.render("home", {pageTitle: "main"});
+import Event from "../models/event";
+export const main = async(req, res) => {
+    const event_obj = await Event.find({});
+    const events =  JSON.stringify(event_obj);
+    return res.render("home", {pageTitle: "main", events});
 }
 export const getReportError = (req, res) => {
     return res.render("report", {pageTitle: "오류 보고 페이지"});
@@ -34,10 +37,13 @@ export const postReportError = async(req, res) => {
 }
 
 export const getMap = async(req, res) =>{
-    const location = await Location.find({school: req.session.user.school._id});
-    const locations = JSON.stringify(location);
+    const location_obj = await Location.find({school: req.session.user.school._id});
+    const locations = JSON.stringify(location_obj);
     return res.render("map", {pageTitle: "학교 근처 공부할 곳들", locations});
 }
 
-
-//달력, 지도, 시간표, testbird캐릭터 등 메인페이지를 채울 추가기능 넣을 공간
+export const getCalendar = async(req, res) =>{
+    const event_obj = await Event.find({});
+    const events =  JSON.stringify(event_obj);
+    return res.render("calendar", {pageTitle: "일정표", events});
+}

@@ -3,70 +3,67 @@ import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-console.log("캘린더");
 
+const calendarEl = document.getElementById('calendar');
+const calendarElBig = document.getElementById('calendar__whole');
+const events_text = document.getElementById('events');
+const today = new Date;
+const initialDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 
+// const events = [
+//   {
+//     title: '해냈다',
+//     start: '2021-12-15',
+//   },
+//   {
+//     title: '시험기간',
+//     start: '2021-12-17',
+//     end: '2021-12-24'
+//   },
+// ] ; 이런식으로 데베에서 넘어온다.
+
+const events = JSON.parse(events_text.textContent);
 document.addEventListener('DOMContentLoaded', function() {
-  const calendarEl = document.getElementById('calendar');
-  var calendar = new Calendar(calendarEl, {
-    plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin ],
-    headerToolbar: {
-      left: 'prev,next today',
-      center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-    },
-    initialDate: '2021-12-17',
-    navLinks: true, // can click day/week names to navigate views
-    editable: true,
-    dayMaxEvents: true, // allow "more" link when too many events
-    events: [
-      {
-        title: '해냈다',
-        start: '2021-12-15',
+  if(calendarEl){
+    let calendar = new Calendar(calendarEl, {
+      plugins: [dayGridPlugin, timeGridPlugin, listPlugin ], // no interaction 
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
       },
-      {
-        title: '시험기간',
-        start: '2021-12-17',
-        end: '2021-12-24'
+      initialDate,
+      navLinks: true,
+      dayMaxEvents: true, 
+      events,
+    });
+    calendar.render();
+  }
+  else if(calendarElBig){
+    let calendar = new Calendar(calendarElBig, {
+      plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin ],
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
       },
-    ]
-  });
-  calendar.render();
+      initialDate,
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      dayMaxEvents: true, // allow "more" link when too many events
+      events,
+    });
+    calendar.render();
+  }
 });
 
 
 
-
-/*
-홈페이지 예시
-document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth'
-    });
-    calendar.render();
-  });
-  */
-
-  /*
-  나중에 이벤트 넣을때 참고할거
-  var calendar = new Calendar(calendarEl, {
-    events: [
-      {
-        title  : 'event1',
-        start  : '2010-01-01'
-      },
-      {
-        title  : 'event2',
-        start  : '2010-01-05',
-        end    : '2010-01-07'
-      },
-      {
-        title  : 'event3',
-        start  : '2010-01-09T12:30:00',
-        allDay : false // will make the time show
-      }
-    ]
-  });
-
-  */
+window.onload = function(){ // 메인에서 캘린더로 이동
+  try{
+    let linkButton = document.getElementsByClassName("fc-view-harness")[0];
+    linkButton.onclick = function(){ window.location.href = "/calendar";};
+  }catch(error){
+    console.log(error);
+  }
+};
