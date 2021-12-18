@@ -27,8 +27,19 @@ document.addEventListener('DOMContentLoaded', function() {
   if(calendarEl){
     let calendar = new Calendar(calendarEl, {
       plugins: [dayGridPlugin, timeGridPlugin, listPlugin ], // no interaction 
+      customButtons: {
+        myCustomButton: {
+          text: 'add schedule!',
+          click: function popup(){
+            var url = "user/addschedule";
+            var name = "popup test";
+            var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+            window.open(url, name, option);
+          }
+        }
+      },
       headerToolbar: {
-        left: 'prev,next today',
+        left: 'prev,next today myCustomButton',
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
       },
@@ -42,8 +53,19 @@ document.addEventListener('DOMContentLoaded', function() {
   else if(calendarElBig){
     let calendar = new Calendar(calendarElBig, {
       plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin ],
+      customButtons: {
+        myCustomButton: {
+          text: 'add schedule!',
+          click: function popup(){
+            var url = "user/addschedule";
+            var name = "popup test";
+            var option = "width = 500, height = 500, top = 100, left = 200, location = no"
+            window.open(url, name, option);
+          }
+        }
+      },
       headerToolbar: {
-        left: 'prev,next today',
+        left: 'prev,next today myCustomButton',
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
       },

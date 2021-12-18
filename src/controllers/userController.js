@@ -1,4 +1,5 @@
 import User from "../models/user";
+import Event from "../models/event";
 import Posting from "../models/posting";
 import School from "../models/school";
 import Reporting from "../models/reporting";
@@ -745,4 +746,29 @@ export const postUserReport = async(req,res) => {
         } 
     }
     return res.redirect(`/`);
+}
+
+export const getaddSchedule = (req,res) => {
+    return res.render("users/addCalendarSchedule", { pageTitle: "일정 추가"});
+}
+
+export const postaddSchedule = async (req,res) => {
+    const {
+        session: {
+            user: { _id },
+        },
+        body: {title, start, finish},
+    } = req;
+
+    const user = await User.findById(_id);
+    const event = await Event.create({
+            title,
+            start,
+            finish,
+            allDay:true,
+            user
+    });
+
+    console.log(event);
+    return res.render("users/fisishAddSchedule", { pageTitle: "일정 등록 완료"});
 }

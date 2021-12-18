@@ -8,7 +8,8 @@ import {
 import {user, getEdit, postEdit, 
     logout, leave, startKakaoLogin, finishKakaoLogin, startNaverLogin,finishNaverLogin, 
     getSocialEnroll, postSocialEnroll, getChangePassword, postChangePassword, 
-    getUserReport, postUserReport, getEmailCertificate, postEmailCertificate} from "../controllers/userController";
+    getUserReport, postUserReport, getEmailCertificate, postEmailCertificate, 
+    getaddSchedule,postaddSchedule} from "../controllers/userController";
 
 const userRouter = express.Router();
 
@@ -41,4 +42,5 @@ userRouter.route("/:userId([0-9a-f]{24})/report")
     .all(protectorMiddleware)
     .get(getSocialEnroll)
     .post(postSocialEnroll);
+  userRouter.route("/addschedule").all(protectorMiddleware).get(getaddSchedule).post(postaddSchedule);
 export default userRouter;
