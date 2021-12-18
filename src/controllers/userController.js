@@ -748,11 +748,11 @@ export const postUserReport = async(req,res) => {
     return res.redirect(`/`);
 }
 
-export const getaddSchedule = (req,res) => {
+export const getAddSchedule = (req,res) => {
     return res.render("users/addCalendarSchedule", { pageTitle: "일정 추가"});
 }
 
-export const postaddSchedule = async (req,res) => {
+export const postAddSchedule = async (req,res) => {
     const {
         session: {
             user: { _id },
@@ -770,5 +770,24 @@ export const postaddSchedule = async (req,res) => {
     });
 
     console.log(event);
-    return res.render("users/fisishAddSchedule", { pageTitle: "일정 등록 완료"});
+    return res.send(`<script>alert("일정 등록 완료"); opener.location.reload(); window.close();</script>`);
+}
+export const postDeleteSchedule = async (req,res) => {
+    const {
+        session: {
+            user: { _id },
+        },
+        body: {title},
+    } = req;
+    try{
+        const user = await User.findById(_id);
+        const event = await Event.findOneAndDelete({
+            title,
+        });
+        console.log(event);
+        return res.send(`<script>alert("일정 삭제 완료");  location.href='/calendar'; </script>`);
+    }catch(error){
+        console.log(error);
+        return res.status(400).render("404", {pageTitle:"삭제하기 에러", errorMessage:error._message});
+    }
 }
