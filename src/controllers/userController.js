@@ -757,19 +757,21 @@ export const postAddSchedule = async (req,res) => {
         session: {
             user: { _id },
         },
-        body: {title, start, finish},
+        body: {title, start},
     } = req;
-
-    const user = await User.findById(_id);
-    const event = await Event.create({
+    try {
+        const user = await User.findById(_id);
+        const event = await Event.create({
             title,
             start,
-            finish,
             allDay:true,
             user
     });
-
-    console.log(event);
+    } catch (error) {
+        console.log(error);
+        return res.status(400).render("404", {pageTitle:"일정추가 에러", errorMessage:error._message});
+    }
+    
     return res.send(`<script>alert("일정 등록 완료"); opener.location.reload(); window.close();</script>`);
 }
 export const postDeleteSchedule = async (req,res) => {
@@ -789,5 +791,24 @@ export const postDeleteSchedule = async (req,res) => {
     }catch(error){
         console.log(error);
         return res.status(400).render("404", {pageTitle:"삭제하기 에러", errorMessage:error._message});
+    }
+}
+
+export const postChangeschedule = async (req,res) => {
+    const {
+        body: {title,start},
+    } = req;
+    console.log(title,start);
+    try{
+        const user = await User.findById(req.session.user._id);
+        const event = await Event.findOne({title:req.body.title});
+        event.start = start;
+        event.save();
+        console.log(event);
+        
+        return res.send(`<script>alert("일정 변경 완료");  location.href='/calendar'; </script>`);
+    }catch(error){
+        console.log(error);
+        return res.status(400).render("404", {pageTitle:"변경하기 에러", errorMessage:error._message});
     }
 }

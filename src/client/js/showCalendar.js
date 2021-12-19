@@ -1,8 +1,12 @@
 import { Calendar } from '@fullcalendar/core';
+import bootstrapPlugin from '@fullcalendar/bootstrap';
 import interactionPlugin from '@fullcalendar/interaction';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
+import 'bootstrap/dist/css/bootstrap.css';
+import '@fortawesome/fontawesome-free/css/all.css'; 
+
 
 const calendarEl = document.getElementById('calendar');
 const calendarElBig = document.getElementById('calendar__whole');
@@ -26,7 +30,8 @@ console.log(events);
 document.addEventListener('DOMContentLoaded', function() {
   if(calendarEl){
     let calendar = new Calendar(calendarEl, {
-      plugins: [dayGridPlugin, timeGridPlugin, listPlugin ], // no interaction 
+      plugins: [dayGridPlugin, timeGridPlugin, listPlugin ,bootstrapPlugin ], // no interaction 
+      themeSystem: 'bootstrap',
       customButtons: {
         myCustomButton: {
           text: 'add schedule!',
@@ -39,9 +44,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       },
       headerToolbar: {
-        left: 'prev,next today myCustomButton',
+        left: 'prev,next today',
         center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        right: 'myCustomButton'
       },
       initialDate,
       navLinks: true,
@@ -52,7 +57,8 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   else if(calendarElBig){
     let calendar = new Calendar(calendarElBig, {
-      plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin ],
+      plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin,bootstrapPlugin  ],
+      themeSystem: 'bootstrap',
       customButtons: {
         myCustomButton: {
           text: 'add schedule!',
@@ -68,16 +74,23 @@ document.addEventListener('DOMContentLoaded', function() {
           const title = arg.el.innerText; // 과목명
           deleteEvent(title);
         },
-        eventDrop: function(arg){
+        eventDrop: function(info){
          // insertModalOpen(arg);		//이벤트 드래그드랍 시 모달 호출
+          if (!confirm("일정을 변경하시겠습니까?")) {
+            info.revert();
+          } else {
+            changeEvent(info.event.title, info.event.start);
+          }
+          
+          console.log(info.delta);
         },
         eventResize: function(arg){
           //insertModalOpen(arg);		//이벤트 사이즈 변경시(일정변경) 모달 호출
         },	
       headerToolbar: {
-        left: 'prev,next today myCustomButton',
+        left: 'prev,next today',
         center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        right: 'myCustomButton'
       },
       initialDate,
       navLinks: true, // can click day/week names to navigate views
@@ -103,6 +116,29 @@ function deleteEvent(title){
     form.submit();
   }
   
+}
+
+function changeEvent(title, start){
+  console.log(title, start);
+  let form = document.createElement("form");
+  form.setAttribute("method", "post");
+  form.setAttribute("action","/user/changeSchedule" );
+  let hidden = document.createElement("input");
+  hidden.setAttribute("name", "title");
+  hidden.setAttribute("value", title);
+  form.appendChild(hidden);
+  hidden = document.createElement("input");
+  hidden.setAttribute("name", "start");
+  hidden.setAttribute("value", start);
+  form.appendChild(hidden);
+ // hidden = document.createElement("input");
+  //hidden.setAttribute("name", "finish");
+  //hidden.setAttribute("value", finish);
+  //form.appendChild(hidden);
+  document.body.appendChild(form);
+  console.log(form.innerHTML);
+  form.submit();
+
 }
 
 if(calendarEl){
