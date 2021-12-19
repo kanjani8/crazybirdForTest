@@ -1,25 +1,25 @@
 .whole__box {
-  width: 1200px;
+  width: 100vw;
   display: flex;
   flex-direction: row;
 }
 .left__box {
-  width: 600px;
+  width: 55vw;
   display: flex;
   flex-direction: column;
 }
 .right__box {
-  width: 600px;
+  width: 45vw;
   display: flex;
   flex-direction: column;
 }
 #map {
-  width: 400px;
-  height: 300px;
+  width: 40vw;
+  height: 40vh;
 }
 #calendar {
-  width: 400px;
-  margin: 0 auto;
+  width: 40vw;
+  height: 40vh;
 }
 p {
   padding: 50px;
@@ -31,6 +31,6 @@ p {
 }
 
 .big__img {
-  width: 300px;
-  height: 300px;
+  width: 100%;
+  height: auto;
 }

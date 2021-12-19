@@ -6,7 +6,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import 'bootstrap/dist/css/bootstrap.css';
 import '@fortawesome/fontawesome-free/css/all.css'; 
-
+import "../scss/main.scss";
 
 const calendarEl = document.getElementById('calendar');
 const calendarElBig = document.getElementById('calendar__whole');
@@ -153,4 +153,3 @@ if(calendarEl){
     }
   };
 }
-

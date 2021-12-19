@@ -11,9 +11,9 @@ if(container){
 		level: 5
     };
 	const map = new kakao.maps.Map(container, options);
-	const iwContent = "공부할 장소 추천", 
+	const iwContent = "<div style='padding: 5px;'>공부할 장소 추천</div>", 
 	iwPosition = location,
-	iwRemoveable = true;
+	iwRemoveable = false;
 
 	var infowindow = new kakao.maps.InfoWindow({
 		map: map,
@@ -41,7 +41,7 @@ else if(containerBig){
 				image : markerImage
 			});
 			console.log(marker, "marker");
-			var iwContent = markers[i].name, 
+			var iwContent = `<div style='padding: 5px;'>${markers[i].name}</div>`, 
     		iwPosition = location,
     		iwRemoveable = true;
 

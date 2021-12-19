@@ -10,7 +10,8 @@ header
                         li 
                             a(href="/user/logout") 로그아웃
                         li
-                            a(href=`/user/${loggedInUser._id}`) 내 작성글 목록
+                            a(href=`/user/${loggedInUser._id}`)
+                                i(class="fas fa-user")
                         li
                             h4 포인트: #{loggedInUser.point}
                         if subject

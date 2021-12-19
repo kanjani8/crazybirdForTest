@@ -1,0 +1,39 @@
+extends ../base.pug
+include ../mixins/test
+
+block content
+    if errorMessage
+        span=errorMessage
+    if loggedInUser.emailCertificated
+        form(method="POST")
+            input( type="radio", required, id="middle", name="forWhen", value="middle", checked="checked")
+            label( for="middle") 중간고사
+            input( type="radio", required, id="final", name="forWhen", value="final")
+            label( for="final") 기말고사
+            input( type="radio", required, id="extra", name="forWhen", value="extra")
+            label( for="exactra") 그 외
+            br
+            h4 총 풀 수 있는 문제 수
+            span(id="length_middle").length=length[0]
+            span(id="length_final", style="display: none;").length=length[1]
+            span(id="length_extra", style="display: none;").length=length[2]
+            h4 내가 낸 문제 수
+            span(id="myLength_middle").length=myLength[0]
+            span(id="myLength_final", style="display: none;").length=myLength[1]
+            span(id="myLength_extra", style="display: none;").length=myLength[2]
+            br
+            input( type="radio", required, id="close", name="opened", value=0, checked="checked")
+            label( for="close") 내 문제만 풀기
+            input( type="radio", required, id="open", name="opened", value=1)
+            label( for="open") 공개된 문제 포함(- 50 point)
+            br
+            select(id="select", name="length")
+                option(value="") 0개
+            br
+            input(type="submit", value="시작하기")
+
+    else
+        h4 이메일을 인증해야 문제를 풀 수 있습니다.
+        a(href="/user/certificate-email") 인증하기 &rarr;
+block scripts
+    script(src="/static/js/chooseTestType.js")

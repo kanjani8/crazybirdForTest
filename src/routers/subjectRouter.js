@@ -23,10 +23,11 @@ subjectRouter.route("/:id([0-9a-f]{24})/test/:testId([0-9a-f]{24})/edit").all(pr
 subjectRouter.route("/:id([0-9a-f]{24})/test/:testId([0-9a-f]{24})/delete").all(protectorMiddleware).get(deleteTest);
 
 //solving-testPage
-subjectRouter.get("/:id([0-9a-f]{24})/test/setting", protectorMiddleware, setting);
-subjectRouter.get("/:id([0-9a-f]{24})/test/solve", protectorMiddleware, solve);
-subjectRouter.get("/:id([0-9a-f]{24})/test/:testId([0-9a-f]{24})/report", protectorMiddleware, reportMiddleware, report);
+subjectRouter.route("/:id([0-9a-f]{24})/test/setting")
+    .all(protectorMiddleware)
+    .get(setting).post(solve);
 subjectRouter.get("/:id([0-9a-f]{24})/test/result", protectorMiddleware, result);
+subjectRouter.get("/:id([0-9a-f]{24})/test/:testId([0-9a-f]{24})/report", protectorMiddleware, reportMiddleware, report);
 
 //community page
 subjectRouter.get("/:id([0-9a-f]{24})/community", protectorMiddleware, community);

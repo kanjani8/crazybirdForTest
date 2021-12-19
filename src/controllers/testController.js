@@ -193,9 +193,31 @@ export const deleteTest = async (req, res) => {
 };
 
 
-export const setting = (req, res) => res.send("subject settingPage!");
-export const solve = (req, res) => res.send("subject solvePage!");
-export const result = async (req, res) => {
+export const setting = async(req, res) => {
+  const { id } = req.params;
+  let length = [0, 0, 0];
+  const tests1 = await Test.find({subject: id, forWhen: "middle", $or: [{opened: true}, {user: req.session.user._id}]});
+  length[0] = tests1.length;
+  const tests2 = await Test.find({subject: id, forWhen: "final", $or: [{opened: true}, {user: req.session.user._id}]});
+  length[1] = tests2.length;
+  const tests3 = await Test.find({subject: id, forWhen: "extra", $or: [{opened: true}, {user: req.session.user._id}]});
+  length[2] = tests3.length;
+
+  let myLength = [0, 0, 0];
+  const testsMine1 = await Test.find({subject: id, forWhen: "middle", user: req.session.user._id});
+  myLength[0] = testsMine1.length;
+  const testsMine2 = await Test.find({subject: id, forWhen: "final", user: req.session.user._id});
+  myLength[1] = testsMine2.length;
+  const testsMine3 = await Test.find({subject: id, forWhen: "extra", user: req.session.user._id});
+  myLength[2] = testsMine3.length;
+ 
+  res.render("tests/setTest", {pageTitle: "시험 설정", length, myLength});
+};
+export const solve = (req, res) => {
+
+  res.render("tests/setTest"); // 여기서 문제푸는 페이지(+신고버튼) 펴서 보여줘야함 form에서는 다른 url로 이동하기
+};
+export const result = async (req, res) => {// form으로 받아와서 채점해서 보여주기.
   return res.send("subject solvePage!");
 };
 export const report = (req, res) => res.send("subject reportPage!");

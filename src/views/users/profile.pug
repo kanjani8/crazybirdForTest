@@ -2,10 +2,15 @@ extends ../base
 include ../mixins/posting
 
 block content
-    img(src="/" + user.avatarUrl, width="100", height="100")
-    
+    div.profile
+        if user.avatarUrl
+            img(src="/" + user.avatarUrl).profile__img
+        else
+            img(src="https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png").profile__img
+        h2.profile__name=user.name
+    hr
     div.list
-        h4.userprofile #{user.name}의 작성글 목록
+        h4.list__name #{user.name}의 작성글 목록
         div.write
             each posting in user.postings
                     +posting(posting)

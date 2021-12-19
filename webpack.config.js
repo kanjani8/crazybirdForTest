@@ -6,6 +6,7 @@ module.exports = {
         main: "./src/client/js/main.js",
         videoPlayer: "./src/client/js/videoPlayer.js",
         chooseQuestionType: "./src/client/js/chooseQuestionType.js",
+        chooseTestType: "./src/client/js/chooseTestType.js",
         checkPW: "./src/client/js/checkPW.js",
         showMap: "./src/client/js/showMap.js",
         showCalendar: "./src/client/js/showCalendar.js"
