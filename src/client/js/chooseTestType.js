@@ -13,8 +13,7 @@ const handleChoose = (event) => {
     const {
       target: { value }, // middle final extra 중 하나
     } = event;
-    console.log(event);
-    if(value === 0 || value ===1){
+    if(value === "0" || value === "1"){
         opened = value;
     }
     else{
@@ -25,31 +24,53 @@ const handleChoose = (event) => {
         document.getElementById("length_" + value).style.display = 'block';
         document.getElementById("myLength_" + value).style.display = 'block';
     }
-    next();
+
+    countNum(event);
 };
 
 const countNum = (event) => { 
-    const select = document.getElementById("select");
     let num;
-    if(opened){
-       num = document.getElementById("length_" + type).innerText;
-    }
-    else{
-      num = document.getElementById("myLength_" + type).innerText;
-    }
-    num = Number(num);// 해당 옵션에서 풀수 있는 문제 수
-    for(let i = 0; i < num; i++){ // option추가를 마저 해야함
-        let option = document.createElement("option");
-        option.setAttribute("value", )
+    if(opened === "1"){
+        num = document.getElementById("length_" + type).innerText;
 
-        select.appendChild(option);
     }
+    else if(opened === "0" || opened === 0){
+        num = document.getElementById("myLength_" + type).innerText;
+    }
+    num = Number(num);// 해당 옵션에서 풀 수 있는 문제 수
+    let select = document.getElementById("select");
+    for(let i =  select.length - 1; i > 0; i--){ 
+        select.options[i] = null;
+   }
+    for(let i = 1; i <= num; i++){ // option추가를 마저 해야함
+        let option = document.createElement("option");   
+        option.text = i + "개";
+        option.value = i;
+        select.options.add(option);
+   }
 };
 
+window.onload = countNum;
+radio1.addEventListener("change", handleChoose);
+radio2.addEventListener("change", handleChoose); 
+radio3.addEventListener("change", handleChoose); 
+radio4.addEventListener("change", handleChoose); 
+radio5.addEventListener("change", handleChoose); 
 
-radio1.addEventListener("change", handleChoose, countNum);
-radio2.addEventListener("change", handleChoose, countNum); 
-radio3.addEventListener("change", handleChoose, countNum); 
-radio4.addEventListener("change", handleChoose, countNum); 
-radio5.addEventListener("change", handleChoose, countNum); 
 
+const form = document.getElementById("testSettingForm");
+
+const checkSelect = (event) => {
+    console.log(event);
+    const value = select.value;
+    if(value === "0"){
+        form.onsubmit = "return false";
+    }
+    else{
+        console.log("통과"); 
+        form.onsubmit = "return true";
+        form.submit();
+    }
+}
+
+form.addEventListener("submit", checkSelect);

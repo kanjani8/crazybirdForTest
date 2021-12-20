@@ -1,0 +1,25 @@
+mixin test(test)
+    div.radioBox_row
+        br
+        h4(name="id", style="display:none;")=test.id
+        if test.formType === "1"
+            h4 Q. #{test.question}
+            input(placeholder="정답", type="text", id="answer",name="answer")
+        else
+            h4 Q. #{test.question}
+            div.radioBox_row
+                div.radioItem
+                    label( for="middleTest")=test.wrongAnswer1
+                    input( type="radio", required, id="middleTest", name="forWhen", value="middle")
+                div.radioItem
+                    label( for="finalTest")=test.wrongAnswer2
+                    input( type="radio", required, id="finalTest", name="forWhen", value="final")
+                div.radioItem
+                    label( for="extraTest")=test.wrongAnswer3
+                    input( type="radio", required, id="extraTest", name="forWhen", value="extra")
+                div.radioItem
+                    label( for="extraTest2")=test.answer
+                    input( type="radio", required, id="extraTest2", name="forWhen", value="extra2")
+        a(href="") 신고
+            i(class="fas fa-exclamation-triangle")
+        br

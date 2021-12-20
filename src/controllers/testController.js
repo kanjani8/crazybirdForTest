@@ -195,28 +195,45 @@ export const deleteTest = async (req, res) => {
 
 export const setting = async(req, res) => {
   const { id } = req.params;
-  let length = [0, 0, 0];
-  const tests1 = await Test.find({subject: id, forWhen: "middle", $or: [{opened: true}, {user: req.session.user._id}]});
-  length[0] = tests1.length;
-  const tests2 = await Test.find({subject: id, forWhen: "final", $or: [{opened: true}, {user: req.session.user._id}]});
-  length[1] = tests2.length;
-  const tests3 = await Test.find({subject: id, forWhen: "extra", $or: [{opened: true}, {user: req.session.user._id}]});
-  length[2] = tests3.length;
 
-  let myLength = [0, 0, 0];
+  const tests1 = await Test.find({subject: id, forWhen: "middle", $or: [{opened: true}, {user: req.session.user._id}]});
+  const tests2 = await Test.find({subject: id, forWhen: "final", $or: [{opened: true}, {user: req.session.user._id}]});
+  const tests3 = await Test.find({subject: id, forWhen: "extra", $or: [{opened: true}, {user: req.session.user._id}]});
+  const length = [tests1.length, tests2.length, tests3.length];
+
   const testsMine1 = await Test.find({subject: id, forWhen: "middle", user: req.session.user._id});
-  myLength[0] = testsMine1.length;
   const testsMine2 = await Test.find({subject: id, forWhen: "final", user: req.session.user._id});
-  myLength[1] = testsMine2.length;
   const testsMine3 = await Test.find({subject: id, forWhen: "extra", user: req.session.user._id});
-  myLength[2] = testsMine3.length;
+  const myLength = [testsMine1.length, testsMine2.length, testsMine3.length];
  
   res.render("tests/setTest", {pageTitle: "시험 설정", length, myLength});
 };
-export const solve = (req, res) => {
-
-  res.render("tests/setTest"); // 여기서 문제푸는 페이지(+신고버튼) 펴서 보여줘야함 form에서는 다른 url로 이동하기
+export const solve = async(req, res) => {
+  const {id} = req.params;
+  const {forWhen, opened, length} = req.body;
+  let tests;
+  let randomTests = [];
+  try{
+    if(opened === "1"){
+      tests = await Test.find({forWhen, subject:id,  $or: [{opened: true}, {user: req.session.user._id}]});
+      }
+    else{
+      tests = await Test.find({forWhen, subject:id, user: req.session.user._id});
+    }
+    for(let i = 0; i < length; i++){
+      const num = Math.floor(Math.random() * (tests.length));
+      console.log("랜덤넘버:", num);
+      console.log("타입", typeof(tests[num]));
+      randomTests.push(tests[num]);
+    }
+    return res.render("tests/solveTest", {pageTitle: "문제 풀기", tests: randomTests}); // 여기서 문제푸는 페이지(+신고버튼) 펴서 보여줘야함 form에서는 다른 url로 이동하는 속성 추가
+  }catch(error){
+    console.log(error);
+    return res.render("404", {pageTitle: "문제 페이지 에러", errorMessage: error._message}); 
+  }
 };
+
+
 export const result = async (req, res) => {// form으로 받아와서 채점해서 보여주기.
   return res.send("subject solvePage!");
 };

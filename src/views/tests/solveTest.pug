@@ -1,0 +1,12 @@
+extends ../base.pug
+include ../mixins/solvingTest
+
+block content
+    form(method="POST", url=`/subject/${id}/test/`)
+        div
+            each test in tests
+                +test(test)
+            else
+                li Sorry nothing found.
+        br
+        input(type="submit", value="제출하기")

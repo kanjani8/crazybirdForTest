@@ -24,8 +24,9 @@ block content
 
 
 block scripts 
-    link(rel="stylesheet", href="/static/css/showCalendar.css") 
-    script(src="/static/js/showCalendar.js")
-    script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoJS}`)
-    script(src="/static/js/showMap.js")
-    
+    if(loggedIn)
+        link(rel="stylesheet", href="/static/css/showCalendar.css") 
+        script(src="/static/js/showCalendar.js")
+        script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoJS}`)
+        script(src="/static/js/showMap.js")
+        
