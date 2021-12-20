@@ -32,9 +32,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let calendar = new Calendar(calendarEl, {
       plugins: [dayGridPlugin, timeGridPlugin, listPlugin ,bootstrapPlugin ], // no interaction 
       themeSystem: 'bootstrap',
+
       customButtons: {
         myCustomButton: {
           text: 'add schedule!',
+
           click: function popup(){
             var url = "user/addSchedule";
             var name = "popup test";
@@ -46,7 +48,9 @@ document.addEventListener('DOMContentLoaded', function() {
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
-        right: 'myCustomButton'
+        right: 'myCustomButton',
+        prev: 'fal fa-edit',
+        next: 'right-single-arrow',
       },
       initialDate,
       navLinks: true,
@@ -59,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let calendar = new Calendar(calendarElBig, {
       plugins: [ interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin,bootstrapPlugin  ],
       themeSystem: 'bootstrap',
+      eventColor: '#8ca6fa',
       customButtons: {
         myCustomButton: {
           text: 'add schedule!',
@@ -97,6 +102,13 @@ document.addEventListener('DOMContentLoaded', function() {
       editable: true,
       dayMaxEvents: true, // allow "more" link when too many events
       events,
+      viewSkeletonRender: function(info) {
+        calendarEl.querySelectorAll('.fc-button').forEach((button) => {
+          if (button.innerText === 'add schedule!') {
+            button.classList.add('yellow-button')
+          }
+        });
+      }
     });
     calendar.render();
   }
