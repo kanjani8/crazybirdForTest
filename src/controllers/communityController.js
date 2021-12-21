@@ -29,17 +29,21 @@ export const community = async (req, res) => {
     return res.render("community/list", { pageTitle: subject.name+"의 게시판", postings });
 };
   
-export const watchPosting = async(req, res) => {
+export const watchPosting = async (req, res) => {
     const {id, postingId} = req.params;
     try{
         const subject = await Subject.findById(id);
         const posting = await Posting.findById(postingId).populate("user");
-        posting.meta.views+=1;
-        posting.save();
         const recommend = req.session.user.recommendPost.includes(postingId);
+        console.log("1: ",posting.meta.views);
+        console.log(id,postingId);
+        // await fetch(`/api//subject/${id}/community/${postingId}/view`, {
+        //  method: "POST",
+        // });
         return res.render("community/watch", { pageTitle: `${subject.name}의 게시판`, posting, recommend});
     }catch(error){
-        return res.render("404", {pageTitle:`게시물 보기 에러`});
+        console.log(error._message);
+        return res.render("404", {pageTitle:`게시물 보기 에러`,errorMessage:error._message});
     }
 };
   
@@ -217,4 +221,7 @@ export const getRecommend = async (req, res) => {
   req.session.user = user;
   res.locals.loggedInUser = req.session.user;
   return res.redirect(`/subject/${id}/community/${postingId}`);
+}
+export const registerView = async (req,res) => {
+  
 }
