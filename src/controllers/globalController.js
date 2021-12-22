@@ -1,11 +1,15 @@
 import Reporting from "../models/reporting";
 import Location from "../models/location";
 import Event from "../models/event";
-export const main = async(req, res) => {
+import User from "../models/user";
+export const main = async (req, res) => {
+    const user = await User.findById(req.session.user._id).populate("likedSubjects");
+    const likedSubjects = user.likedSubjects;
+
     const event_obj = await Event.find({});
     const events =  JSON.stringify(event_obj);
     console.log(events);
-    return res.render("home", {pageTitle: "main", events});
+    return res.render("home", {pageTitle: "main", events,likedSubjects});
 }
 export const getReportError = (req, res) => {
     return res.render("report", {pageTitle: "오류 보고 페이지"});

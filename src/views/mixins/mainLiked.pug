@@ -1,0 +1,7 @@
+mixin mainLiked(subject)
+    div.star
+        h4
+            a(href=`/subject/${subject.id}/dislike`, style="color: black;").star ⭐ 
+            a(href=`/subject/${subject.id}`)=subject.name 
+            small.professor=subject.professor
+        

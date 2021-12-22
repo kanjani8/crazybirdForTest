@@ -35,9 +35,7 @@ export const watchPosting = async (req, res) => {
         const subject = await Subject.findById(id);
         const posting = await Posting.findById(postingId).populate("user");
         const recommend = req.session.user.recommendPost.includes(postingId);
-        console.log("1: ",posting.meta.views);
-        console.log(id,postingId);
-        // await fetch(`/api//subject/${id}/community/${postingId}/view`, {
+        // await fetch(`http://localhost:4000/api/subject/${id}/community/${postingId}/view`, {
         //  method: "POST",
         // });
         return res.render("community/watch", { pageTitle: `${subject.name}의 게시판`, posting, recommend});
@@ -223,5 +221,13 @@ export const getRecommend = async (req, res) => {
   return res.redirect(`/subject/${id}/community/${postingId}`);
 }
 export const registerView = async (req,res) => {
-  
+  console.log("들어옴");
+  const { postingId } = req.params;
+  const posting = await Posting.findById(postingId);
+  if (!posting) {
+    return res.status(404);
+  }
+  posting.meta.views = posting.meta.views + 1;
+  await posting.save();
+  return res.status(200);
 }

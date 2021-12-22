@@ -1,12 +1,16 @@
 extends base.pug
+include mixins/mainLiked
 
 block content
     div.whole__box
         div.left__box
             img(src="/uploads/default/redBird.png")
             if loggedIn
-                a(href=`subject/search`).big__img 과목 선택하기
-                
+                div.mainLiked
+                    div.likesubs
+                        each subject in likedSubjects
+                            +mainLiked(subject)
+                        a(href=`subject/search`).big__img 과목 선택하기
         div.right__box
             if loggedIn
                 a(href="/map")
