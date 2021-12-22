@@ -35,11 +35,10 @@ p {
   height: 40vh;
   padding: 10px;
   background-color: $thema;
-  border:  1px solid $thema;
-  text-align: justify
-  
+  border: 1px solid $thema;
+  text-align: justify;
 }
-.star{
+.star {
   flex-direction: row;
   margin-top: 5px;
   margin-bottom: 15px;
@@ -47,17 +46,17 @@ p {
   text-align: justify;
   color: white;
 }
-.professor{
+.professor {
   margin-left: 10vh;
   font-size: smaller;
   color: gray;
 }
 .big__img {
   width: 100%;
-  height: auto;
+  height: 50vh;
   font-size: 4vh;
   margin-top: 10vh;
   background-color: $thema-2;
-        color: black;
-        padding: 5px 10px;
+  color: black;
+  padding: 5px 10px;
 }

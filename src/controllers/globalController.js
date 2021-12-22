@@ -3,13 +3,22 @@ import Location from "../models/location";
 import Event from "../models/event";
 import User from "../models/user";
 export const main = async (req, res) => {
-    const user = await User.findById(req.session.user._id).populate("likedSubjects");
-    const likedSubjects = user.likedSubjects;
+    if(req.session.user){
+        try{
+            const user = await User.findById(req.session.user._id).populate("likedSubjects");
+            const likedSubjects = user.likedSubjects;
+            const event_obj = await Event.find({});
+            const events =  JSON.stringify(event_obj);
+            return res.render("home", {pageTitle: "main", events,likedSubjects});
+        }catch(error){
+            console.log(error)
+            return res.status(404).render("404", {pageTitle: "오류", errorMessage: error._message});
+        }
+    }
+    else{
+        return res.render("home", {pageTitle: "main"});
+    }
 
-    const event_obj = await Event.find({});
-    const events =  JSON.stringify(event_obj);
-    console.log(events);
-    return res.render("home", {pageTitle: "main", events,likedSubjects});
 }
 export const getReportError = (req, res) => {
     return res.render("report", {pageTitle: "오류 보고 페이지"});

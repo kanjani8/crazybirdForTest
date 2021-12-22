@@ -1,0 +1,12 @@
+mixin test(test)
+    div.radioBox_row
+        if test.formType === "1"
+            h4 Q. #{test.question}
+            h4 A. #{test.answer}
+        else
+            h4 Q. #{test.question}
+            h4 A. #{test.answer}
+            h4 오답: #{test.wrongAnswer1}, #{test.wrongAnswer2}, #{test.wrongAnswer3}
+        h4 내가 고른 답: #{test.myAnswer}
+        h4 #{test.result ? '⭕' : '❌'}
+        br

@@ -1,7 +1,8 @@
 import Subject from "../models/subject";
-import School from "../models/school";
 import User from "../models/user";
-import Location from "../models/location";
+import Score from "../models/score";
+//import School from "../models/school";
+//import Location from "../models/location";
 
 export const search = async (req, res) => {
   const user = await User.findById(req.session.user._id).populate("likedSubjects");
@@ -44,11 +45,14 @@ export const see =  async (req, res) => {
   const { id } = req.params;
   try{
   const subject = await Subject.findById(id);
-  if (!subject) {
-    return res.status(400).render("404", { pageTitle: "해당 과목을 찾을 수 없습니다" });
+  const scores = await Score.find({subject: subject._id, user: req.session.user._id})
+    .sort({ createdAt: "desc"});
+  if(!scores){
+    return res.render("seeSubject", { pageTitle: subject.name, subject});
   }
-  
-  return res.render("seeSubject", { pageTitle: subject.name, subject});
+  else{
+    return res.render("seeSubject", { pageTitle: subject.name, subject, scores});
+  }
   }catch(error){
     console.log(error);
     return res.status(400).render("404", { pageTitle: "과목 화면 에러발생", errorMessage: error._message });

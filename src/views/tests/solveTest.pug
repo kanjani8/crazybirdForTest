@@ -2,7 +2,7 @@ extends ../base.pug
 include ../mixins/solvingTest
 
 block content
-    form(method="POST", url=`/subject/${id}/test/`)
+    form(method="POST", action=`/subject/${id}/test/result`)
         div
             each test in tests
                 +test(test)

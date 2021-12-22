@@ -1,0 +1,18 @@
+.whole__box .see {
+  width: 100%;
+}
+.left__box .see {
+  width: 50vw;
+  padding: 10px;
+}
+.right__box .see {
+  width: 50vw;
+  padding: 10px;
+}
+
+.postingBox {
+  width: 80%;
+  height: 70vh;
+  margin: 20px auto;
+  border: 1px solid rgba($color: $thema, $alpha: 1);
+}

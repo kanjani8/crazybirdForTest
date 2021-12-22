@@ -1,0 +1,7 @@
+mixin score(score)
+    div
+        a(href="/자세히보게 링크만들기")
+            h4 점수: #{score.score}
+            h4 #{score.createdAt}
+            h4 문제 수: #{score.tests.length}
+        hr

@@ -1,6 +1,7 @@
 import Subject from "../models/subject";
 import Test from "../models/test";
 import User from "../models/user";
+import Score from "../models/score";
 
 export const list = async (req, res) => {
     const { id } = req.params;
@@ -216,17 +217,34 @@ export const solve = async(req, res) => {
   try{
     if(opened === "1"){
       tests = await Test.find({forWhen, subject:id,  $or: [{opened: true}, {user: req.session.user._id}]});
+
+      //여기서 유저의 포인트 깎는 작업이 필요함.
       }
     else{
       tests = await Test.find({forWhen, subject:id, user: req.session.user._id});
     }
-    for(let i = 0; i < length; i++){
-      const num = Math.floor(Math.random() * (tests.length));
-      console.log("랜덤넘버:", num);
-      console.log("타입", typeof(tests[num]));
-      randomTests.push(tests[num]);
+
+    let array = [];
+    let i = 0;
+    let isOverlaped = false;
+    while(i < length){
+      let num = Math.floor(Math.random() * (tests.length));
+        for(let j = 0; j < i; j++){
+          if(array[j] === num){
+            isOverlaped = true;
+          }
+        }
+        if(isOverlaped === true){
+          isOverlaped = false;
+        }else{
+          array.push(num);
+          i++;
+        }
     }
-    return res.render("tests/solveTest", {pageTitle: "문제 풀기", tests: randomTests}); // 여기서 문제푸는 페이지(+신고버튼) 펴서 보여줘야함 form에서는 다른 url로 이동하는 속성 추가
+    for(let i = 0; i < length; i++){
+      randomTests.push(tests[array[i]]);
+    }
+    return res.render("tests/solveTest", {pageTitle: "문제 풀기", id, tests: randomTests}); // 여기서 문제푸는 페이지(+신고버튼) 펴서 보여줘야함 form에서는 다른 url로 이동하는 속성 추가
   }catch(error){
     console.log(error);
     return res.render("404", {pageTitle: "문제 페이지 에러", errorMessage: error._message}); 
@@ -235,6 +253,30 @@ export const solve = async(req, res) => {
 
 
 export const result = async (req, res) => {// form으로 받아와서 채점해서 보여주기.
-  return res.send("subject solvePage!");
+  const {id:subjectId} = req.params
+  const {id, answer} = req.body;
+  let tests = [];
+  let score = 0;
+  for(let i = 0; i < id.length; i++){
+    let test = await Test.findById(id[i]);
+    const result = String(test.answer) === String(answer[i]);
+    if(result){
+      score ++;
+    }
+    test = {
+      ... test._doc,
+      ... {myAnswer: answer[i]},
+      ... {result}
+    };
+    tests.push(test);
+  }
+  score = Math.floor(100 * score / id.length);
+  await Score.create({
+    score,
+    subject: subjectId,
+    user: req.session.user._id,
+    tests,
+  });
+  return res.render("tests/result", {pageTitle: "결과 확인", tests, score, id:subjectId });
 };
 export const report = (req, res) => res.send("subject reportPage!");

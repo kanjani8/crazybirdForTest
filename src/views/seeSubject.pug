@@ -1,12 +1,21 @@
 extends base
-
+include mixins/score
 block content
     if loggedIn
-        a(href=`${subject.id}/community`) 게시판
-        br
-        a(href=`${subject.id}/test/setting`) 문제 풀기
-        br
-        a(href=`${subject.id}/test/list`) 문제 리스트
-        br
+        div.whole__box.see
+            div.left__box.see
+                a(href=`${subject.id}/community`) 게시판
+                div.postingBox
+                    h4(style= "color: pink;") 여기다가 최신 게시글 10개정도 출력시키기
+            div.right__box.see
+                a(href=`${subject.id}/test/setting`) 문제 풀기
+                a(href=`${subject.id}/test/list`) 문제 리스트
+                hr
+                div.scoreBox
+                if scores
+                    each score in scores 
+                        +score(score)
+
+
     else
         a(href="/login") 문제와 게시판을 보려면 먼저 로그인 하기 &rarr;

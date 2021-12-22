@@ -1,7 +1,7 @@
 mixin test(test)
     div.radioBox_row
         br
-        h4(name="id", style="display:none;")=test.id
+        input(name="id", style="display:none;", value=test.id)
         if test.formType === "1"
             h4 Q. #{test.question}
             input(placeholder="정답", type="text", id="answer",name="answer")
@@ -9,17 +9,17 @@ mixin test(test)
             h4 Q. #{test.question}
             div.radioBox_row
                 div.radioItem
-                    label( for="middleTest")=test.wrongAnswer1
-                    input( type="radio", required, id="middleTest", name="forWhen", value="middle")
+                    label( for="answer1")=test.wrongAnswer1
+                    input( type="radio", required, id="answer1", name="answer", value=test.wrongAnswer1)
                 div.radioItem
-                    label( for="finalTest")=test.wrongAnswer2
-                    input( type="radio", required, id="finalTest", name="forWhen", value="final")
+                    label( for="answer2")=test.wrongAnswer2
+                    input( type="radio", required, id="answer2", name="answer", value=test.wrongAnswer2)
                 div.radioItem
-                    label( for="extraTest")=test.wrongAnswer3
-                    input( type="radio", required, id="extraTest", name="forWhen", value="extra")
+                    label( for="answer3")=test.wrongAnswer3
+                    input( type="radio", required, id="answer3", name="answer", value=test.wrongAnswer3)
                 div.radioItem
-                    label( for="extraTest2")=test.answer
-                    input( type="radio", required, id="extraTest2", name="forWhen", value="extra2")
+                    label( for="answer4")=test.answer
+                    input( type="radio", required, id="answer4", name="answer", value=test.answer)
         a(href="") 신고
             i(class="fas fa-exclamation-triangle")
         br

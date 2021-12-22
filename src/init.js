@@ -8,6 +8,7 @@ import "./models/posting";
 import "./models/reporting";
 import "./models/location";
 import "./models/event";
+import "./models/score";
 import app from "./server";
 
 const PORT = 4000;
