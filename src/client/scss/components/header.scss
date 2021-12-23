@@ -1,23 +1,33 @@
 header {
-    padding: 20px 50px;
+  width: 100%;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: $thema;
+  color: white;
+  nav {
+    width: 100%;
     display: flex;
-    justify-content:  center;
+    justify-content: space-between;
+  }
+  ul {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    background-color: $thema;
-    color: white;
-    ul {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      li {
-        margin-left: 30px;
-        font-size: 14px;
-        font-weight: 600;
-        text-transform: uppercase;
-      }
-      i {
-        font-size: 16px;
-      }
+    li {
+      margin-left: 30px;
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    i {
+      font-size: 16px;
     }
   }
-  
+}
+.main__logo {
+  max-width: 35px;
+  height: auto;
+  border-radius: 50%;
+}

@@ -1,9 +1,10 @@
 header 
-            h1=pageTitle
+            a(href="/")
+                h1=pageTitle
             nav
-                ul 
-                    li
-                        a(href="/") 메인 페이지
+                a(href="/")
+                    img(src="/uploads/default/redBird.png").main__logo
+                ul
                     if loggedIn
                         li 
                             a(href="/user/edit") 프로필 설정
@@ -13,7 +14,8 @@ header
                             a(href=`/user/${loggedInUser._id}`)
                                 i(class="fas fa-user")
                         li
-                            h4 포인트: #{loggedInUser.point}
+                            h4 포인트: 
+                            span.point=loggedInUser.point
                         if subject
                             li 
                             a(href=`/subject/${subject.id}`) #{subject.name}로 이동

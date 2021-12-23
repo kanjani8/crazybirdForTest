@@ -46,12 +46,19 @@ export const see =  async (req, res) => {
   const { id } = req.params;
   try{
   const subject = await Subject.findById(id);
-  const scores = await Score.find({subject: subject._id, user: req.session.user._id})
+  const scores = await Score.find({subject: id, user: req.session.user._id})
+    .limit(10)
     .sort({ createdAt: "desc"});
   const postings = await Posting.find({subject: id}).limit(10).sort({ createdAt: "desc"});
 
-  if(!scores){
-    return res.render("seeSubject", { pageTitle: subject.name, subject,postings});
+  if(!scores && !postings){
+    return res.render("seeSubject", { pageTitle: subject.name, subject});
+  }
+  else if(!scores){
+    return res.render("seeSubject", { pageTitle: subject.name, subject, postings});
+  }
+  else if(!postings){
+    return res.render("seeSubject", { pageTitle: subject.name, subject, scores});
   }
   else{
     return res.render("seeSubject", { pageTitle: subject.name, subject, scores, postings});

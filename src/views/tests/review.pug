@@ -3,7 +3,7 @@ include ../mixins/result
 
 block content
     div 
-        h4 점수: #{score}
+        h4 점수: #{score.score}
     div
         each test in tests
             +test(test)
@@ -11,3 +11,4 @@ block content
             li Sorry nothing found.
     br
     a(href=`/subject/${id}`) 확인
+    h4.createdAt=score.createdAt

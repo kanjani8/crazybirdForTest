@@ -4,15 +4,13 @@ block content
         span=errorMessage
     if loggedInUser.emailCertificated
          form(method="POST", enctype="multipart/form-data")
-            label(for="image") Image
-            input(type="file", id="image", name="image", accept="image/*")
-            label(for="video") Video File
-            input(type="file", accept="video/*", id="video", name="video")
-            label(for="title") 제목:
             input(placeholder="제목", type="text",id="title", name="title", maxlength=80)
-            label(for="script") 내용:
-            input(placeholder="내용", type="text", value=id="script",name="script", minlength=3, 
-                style="width:500px; height:100px;")
+            input(placeholder="내용", type="text",name="script", minlength=3).script
+            div.media__box
+                label(for="image") Image
+                input(type="file", id="image", name="image", accept="image/*")
+                label(for="video") Video File
+                input(type="file", accept="video/*", id="video", name="video")
             input(type="submit", value="등록하기")
     else  
         h4 이메일을 인증해야 게시물을 등록할 수 있습니다.

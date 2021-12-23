@@ -227,7 +227,8 @@ export const solve = async(req, res) => {
           user.save();
           req.session.user = user;
         } else {
-          return res.redirect("/");
+          return res.send(`<script>alert("포인트가 부족합니다.");
+            location.href='/subject/${id}';</script>`);
         }
         
       }
@@ -266,11 +267,15 @@ export const solve = async(req, res) => {
 export const result = async (req, res) => {// form으로 받아와서 채점해서 보여주기.
   const {id:subjectId} = req.params
   const {id, answer} = req.body;
+  let isCorrect = [];
+  let myAnswer = [];
   let tests = [];
   let score = 0;
   for(let i = 0; i < id.length; i++){
     let test = await Test.findById(id[i]);
     const result = String(test.answer) === String(answer[i]);
+    isCorrect.push(result);
+    myAnswer.push(answer[i]);
     if(result){
       score ++;
     }
@@ -287,7 +292,29 @@ export const result = async (req, res) => {// form으로 받아와서 채점해�
     subject: subjectId,
     user: req.session.user._id,
     tests,
+    isCorrect,
+    myAnswer
   });
   return res.render("tests/result", {pageTitle: "결과 확인", tests, score, id:subjectId });
 };
+
+export const reviewScore = async (req, res) => {
+  const {scoreId} = req.params;
+  const score = await Score.findById(scoreId).populate("tests");
+  let tests = score.tests;
+  console.log(score);
+  let addedTests = [];
+  for(let i = 0; i < tests.length; i++){
+    const test = {
+      ... tests[i]._doc,
+      ... {result: score.isCorrect[i]},
+      ... {myAnswer: score.myAnswer[i]}
+    }
+    addedTests.push(test);
+  }
+  console.log(addedTests);
+  return res.render("tests/review", {pageTitle: "시험 결과 다시보기", id: score.subject , score, tests: addedTests})
+};
+
 export const report = (req, res) => res.send("subject reportPage!");
+

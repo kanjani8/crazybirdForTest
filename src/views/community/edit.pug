@@ -4,13 +4,14 @@ block content
         span=errorMessage
 
     form(method="POST", enctype="multipart/form-data")
-        label(for="image") 이미지
-        input(type="file", id="image", name="image", accept="image/*")
         label(for="title") 제목:
         input(placeholder="제목", type="text",id="title", name="title", maxlength=80, value=posting.title)
         label(for="script") 내용:
         input(placeholder="내용", type="text", id="script",name="script", minlength=3, value=posting.script,
             style="width:500px; height:100px;")
+        div.media__box
+            label(for="image") 이미지
+            input(type="file", id="image", name="image", accept="image/*")
         input(type="submit", value="수정하기")
         hr
         a(href=`/subject/${posting.subject.id}/community`, style="color: black;") 게시판으로 돌아가기

@@ -6,7 +6,7 @@
 .left__box {
   width: 55vw;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 }
 .right__box {
   width: 45vw;
@@ -21,7 +21,7 @@
   width: 40vw;
   height: 40vh;
 }
-p {
+p .main {
   padding: 50px;
   max-width: 300px;
   height: 120px;
@@ -31,8 +31,8 @@ p {
 }
 .mainLiked {
   margin: 5px 5px;
-  width: 50vw;
-  height: 40vh;
+  width: 25vw;
+  height: 80vh;
   padding: 10px;
   background-color: $thema;
   border: 1px solid $thema;
@@ -42,19 +42,44 @@ p {
   flex-direction: row;
   margin-top: 5px;
   margin-bottom: 15px;
-  font-size: 3vh;
+  font-size: 2vh;
   text-align: justify;
   color: white;
 }
 .professor {
-  margin-left: 10vh;
+  margin-left: 1vh;
   font-size: smaller;
   color: gray;
 }
-.big__img {
+.bird__box {
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  height: 50vh;
-  font-size: 4vh;
+  height: 80vh;
+  padding: 0 10px;
+  img {
+    width: 100%;
+    height: 50vh;
+  }
+}
+.quote__box {
+  width: 100%;
+  height: 30vh;
+  margin-top: 10px;
+  padding: 10px auto;
+  border-radius: 10px;
+  border: 1px solid rgba($color: $thema-red, $alpha: 1);
+  background-color: rgba($color: $thema-red, $alpha: 0.3);
+  display: flex;
+  align-items: center;
+  p {
+    border: none;
+    margin: 10px;
+    font-stretch: semi-expanded;
+  }
+}
+.main__search__button {
+  font-size: 2vh;
   margin-top: 10vh;
   background-color: $thema-2;
   color: black;

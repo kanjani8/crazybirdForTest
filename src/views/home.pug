@@ -4,13 +4,16 @@ include mixins/mainLiked
 block content
     div.whole__box
         div.left__box
-            img(src="/uploads/default/redBird.png")
             if loggedIn
                 div.mainLiked
                     div.likesubs
                         each subject in likedSubjects
                             +mainLiked(subject)
-                        a(href=`subject/search`).big__img 과목 선택하기
+                        a(href=`subject/search`).main__search__button 과목 선택하기
+            div.bird__box
+                img(src="/uploads/default/redBird.png")
+                div.quote__box
+                    p.main 오늘 꾸는 꿈보다 내일 이루는 꿈이 웅앵
         div.right__box
             if loggedIn
                 a(href="/map")
@@ -19,10 +22,10 @@ block content
                 h4(id = "events", style="display:none")=events
                 
             else
-                p 이 사이트는 대학생들의 시험공부를 위한 사이트 입니다.
+                p.main 이 사이트는 대학생들의 시험공부를 위한 사이트 입니다.
                  | 문제를 등록 후 테스트하거나 , 직접 만든 시험문제를 공유해서 서로 풀어볼 수 있고,
                  | 같은 과목을 선택한 학우들과 과목 게시판에서 수업에 대한 이야기를 나눌 수도 있습니다.
-                p 지원 학교:
+                p.main 지원 학교:
                  | 성신여대
                  | ㅁㅁ대
 

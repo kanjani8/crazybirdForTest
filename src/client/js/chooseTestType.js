@@ -6,6 +6,7 @@ const radio3 = document.getElementById("extra");
 const radio4 = document.getElementById("close");
 const radio5 = document.getElementById("open");
 const startbtn = document.getElementById("startbtn");
+const myPoint = document.getElementsByClassName("point")[0];
 
 let type = "middle";
 let opened = 0;
@@ -51,12 +52,23 @@ const countNum = (event) => {
    }
 };
 
-const handlePoint = (e) => {
+const handlePoint = (event) => {
     console.log(opened);
     const num = document.getElementById("select");
     console.log(num.value);
     if(opened){
-        alert(num.value*5+"포인트가 사용됩니다!");
+        const point = num.value*5;
+        if (!confirm(` ${point} 포인트가 사용됩니다`)) {
+            event.revert();
+        } 
+        else if(point > parseInt(myPoint.innerText)) {
+            alert("포인트가 부족합니다.")
+            event.revert();
+        }
+        else{
+            console.log("문제없음")
+            myPoint.innerText = parseInt(myPoint.innerText) - point;
+        }
     }
 }
 window.onload = countNum;
