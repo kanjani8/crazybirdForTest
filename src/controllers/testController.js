@@ -212,6 +212,7 @@ export const setting = async(req, res) => {
 export const solve = async(req, res) => {
   const {id} = req.params;
   const {forWhen, opened, length} = req.body;
+  console.log(forWhen, opened, length);
   let tests;
   let randomTests = [];
   try{
@@ -219,6 +220,16 @@ export const solve = async(req, res) => {
       tests = await Test.find({forWhen, subject:id,  $or: [{opened: true}, {user: req.session.user._id}]});
 
       //여기서 유저의 포인트 깎는 작업이 필요함.
+      //선택한 문제 개수, 유저데이터
+        let user = await User.findById(req.session.user._id);
+        if((user.point- (5*length)) > 0){
+          user.point= user.point - (5*length);
+          user.save();
+          req.session.user = user;
+        } else {
+          return res.redirect("/");
+        }
+        
       }
     else{
       tests = await Test.find({forWhen, subject:id, user: req.session.user._id});

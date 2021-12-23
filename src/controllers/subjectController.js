@@ -1,6 +1,7 @@
 import Subject from "../models/subject";
 import User from "../models/user";
 import Score from "../models/score";
+import Posting from "../models/posting";
 //import School from "../models/school";
 //import Location from "../models/location";
 
@@ -47,11 +48,13 @@ export const see =  async (req, res) => {
   const subject = await Subject.findById(id);
   const scores = await Score.find({subject: subject._id, user: req.session.user._id})
     .sort({ createdAt: "desc"});
+  const postings = await Posting.find({subject: id}).limit(10).sort({ createdAt: "desc"});
+
   if(!scores){
-    return res.render("seeSubject", { pageTitle: subject.name, subject});
+    return res.render("seeSubject", { pageTitle: subject.name, subject,postings});
   }
   else{
-    return res.render("seeSubject", { pageTitle: subject.name, subject, scores});
+    return res.render("seeSubject", { pageTitle: subject.name, subject, scores, postings});
   }
   }catch(error){
     console.log(error);

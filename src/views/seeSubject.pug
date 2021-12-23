@@ -1,11 +1,17 @@
 extends base
 include mixins/score
+include mixins/posting
+
 block content
     if loggedIn
         div.whole__box.see
             div.left__box.see
                 a(href=`${subject.id}/community`) 게시판
                 div.postingBox
+                    each posting in postings
+                        +posting(posting)
+                    else
+                        li Sorry nothing found.
                     h4(style= "color: pink;") 여기다가 최신 게시글 10개정도 출력시키기
             div.right__box.see
                 a(href=`${subject.id}/test/setting`) 문제 풀기

@@ -32,12 +32,12 @@ block content
                     label( for="close") 내 문제만 풀기
                 div.radioItem
                     input( type="radio", required, id="open", name="opened", value=1)
-                    label( for="open") 공개된 문제 포함(- 50 point)
+                    label( for="open") 공개된 문제 포함(1문제당 5point 소요)
             br
             select(id="select", name="length")
                 option(value="0") 0개
             br
-            input(type="submit", value="시작하기")
+            input(type="submit", value="시작하기", id='startbtn')
 
     else
         h4 이메일을 인증해야 문제를 풀 수 있습니다.

@@ -5,6 +5,7 @@ const radio2 = document.getElementById("final");
 const radio3 = document.getElementById("extra");
 const radio4 = document.getElementById("close");
 const radio5 = document.getElementById("open");
+const startbtn = document.getElementById("startbtn");
 
 let type = "middle";
 let opened = 0;
@@ -50,13 +51,21 @@ const countNum = (event) => {
    }
 };
 
+const handlePoint = (e) => {
+    console.log(opened);
+    const num = document.getElementById("select");
+    console.log(num.value);
+    if(opened){
+        alert(num.value*5+"포인트가 사용됩니다!");
+    }
+}
 window.onload = countNum;
 radio1.addEventListener("change", handleChoose);
 radio2.addEventListener("change", handleChoose); 
 radio3.addEventListener("change", handleChoose); 
 radio4.addEventListener("change", handleChoose); 
 radio5.addEventListener("change", handleChoose); 
-
+startbtn.addEventListener("click", handlePoint);
 
 const form = document.getElementById("testSettingForm");
 
