@@ -9,4 +9,6 @@ mixin test(test)
             h4 오답: #{test.wrongAnswer1}, #{test.wrongAnswer2}, #{test.wrongAnswer3}
         h4 내가 고른 답: #{test.myAnswer}
         h4 #{test.result ? '⭕' : '❌'}
+        a(href=`/subject/${id}/test/${test._id}/report`) 신고
+            i(class="fas fa-exclamation-triangle")
         br

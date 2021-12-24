@@ -26,7 +26,7 @@ export const community = async (req, res) => {
         console.log(error);
       }
     }
-    return res.render("community/list", { pageTitle: subject.name+"의 게시판", postings });
+    return res.render("community/list", { pageTitle: subject.name + "게시판", subject, postings });
 };
   
 export const watchPosting = async (req, res) => {
@@ -38,7 +38,7 @@ export const watchPosting = async (req, res) => {
         // await fetch(`http://localhost:4000/api/subject/${id}/community/${postingId}/view`, {
         //  method: "POST",
         // });
-        return res.render("community/watch", { pageTitle: `${subject.name}의 게시판`, posting, recommend});
+        return res.render("community/watch", { pageTitle: `${subject.name} 게시판`, subject, posting, recommend});
     }catch(error){
         console.log(error._message);
         return res.render("404", {pageTitle:`게시물 보기 에러`,errorMessage:error._message});
@@ -51,7 +51,7 @@ export const getUploadPosting = async(req, res) =>{
     if (!subject){
       return res.render("404", { pageTitle: "Subject not found." });
     }
-    return res.render("community/upload", { pageTitle: `${subject.name}의 게시판`});
+    return res.render("community/upload", { pageTitle: `${subject.name} 게시판`, subject});
 };
 export const postUploadPosting = async(req, res) =>{
     const {id} = req.params;
@@ -84,7 +84,7 @@ export const getEditPosting = async (req, res) => {
     if (String(posting.user._id) !== String(req.session.user._id)){
       return res.status(403).redirect(`/subject/${id}/community`);
     }
-    return res.render("community/edit", { pageTitle: posting.subject.name, posting});
+    return res.render("community/edit", { pageTitle: posting.subject.name, subject, posting});
 };
   
 export const postEditPosting = async (req, res) => {
@@ -111,7 +111,8 @@ export const postEditPosting = async (req, res) => {
           } catch(error){
             console.log(error);
             return res.status(400).render("community/edit", {
-              pageTitle:`${posting.subject.name}의 게시판`,
+              pageTitle:`${posting.subject.name} 게시판`,
+              subject:  posting.subject,
               posting,
               errorMessage: error._message,
             });
@@ -143,8 +144,9 @@ export const deletePosting = async(req, res) =>{
 };
 
 export const getReportPosting = (req, res) => {
-  return res.render("community/report", { pageTitle: "게시글 신고하기"});
+  return res.render("community/report", { pageTitle: "게시글 신고"});
 };
+
 export const postReportPosting = async (req, res) => {
   const {id, postingId} = req.params;
   const {report} = req.body;

@@ -1,15 +1,25 @@
 header {
-  width: 100%;
+  max-width: 100%;
   padding: 20px 50px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   background-color: $thema;
   color: white;
-  nav {
-    width: 100%;
+  .left__header {
+    margin-left: 10px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    a {
+      font-size: 20px;
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-left: 20px;
+    }
+  }
+  nav {
+    margin: 0px 20px;
   }
   ul {
     display: flex;
@@ -26,6 +36,7 @@ header {
     }
   }
 }
+
 .main__logo {
   max-width: 35px;
   height: auto;

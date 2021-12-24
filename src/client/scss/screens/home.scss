@@ -1,5 +1,6 @@
 .whole__box {
   width: 100vw;
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
 }
@@ -18,10 +19,11 @@
   height: 40vh;
 }
 #calendar {
+  margin-top: 10px;
   width: 40vw;
   height: 40vh;
 }
-p .main {
+.main__p {
   padding: 50px;
   max-width: 300px;
   height: 120px;

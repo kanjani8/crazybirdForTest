@@ -313,8 +313,66 @@ export const reviewScore = async (req, res) => {
     addedTests.push(test);
   }
   console.log(addedTests);
-  return res.render("tests/review", {pageTitle: "시험 결과 다시보기", id: score.subject , score, tests: addedTests})
+  return res.render("tests/review", {pageTitle: "결과 다시보기", id: score.subject , score, tests: addedTests})
 };
 
-export const report = (req, res) => res.send("subject reportPage!");
+export const getReport = (req, res) => {
+  return res.render("tests/report", {pageTitle: "문제 신고"});
+}
+export const postReport = async (req, res) => {
+  const {id, testId} = req.params;
+  const {report} = req.body;
+  const test = await Test.findById(testId);
+  if(!test){
+    return res.render("404", { pageTitle: "해당 문제는 신고 혹은 삭제되었습니다" });
+  }
+
+  try{
+    const reporter = req.session.user._id;
+    const writer = await User.findById(test.user);
+    if(String(reporter) === String(writer._id)){
+      return res.send(`<script>alert("본인이 작성한 문제는 신고할 수 없습니다.");
+            location.href='/subject/${id}';</script>`);
+    }
+
+    const already = await Reporting.find({
+        reporter,
+        reportedTest: test._id,
+    });
+    if (already){
+        return res.send(`<script>alert("이미 신고하셨습니다.");
+            location.href='/subject/${id}';</script>`);
+    };
+    test.reported += 1;
+    test.save();
+
+    const newReported = await Reporting.create({
+      title: `Test obj '${test.question}' is reported`,
+      script: report,
+      reporter,
+      reportedTest: test._id
+    });
+    console.log("신고된 문제:", newReported);
+  }catch(error){
+    console.log(error);
+  }
+  
+  if(test.reported >= 10)
+  {
+    try {
+      await Test.findByIdAndDelete(testId);
+      writer.point -=50;
+      writer.reported ++;
+      if(writer.reported > 50){
+        // writer의 이메일 차단 필요
+        await User.findByIdAndDelete(writer._id);
+      }else{
+        writer.save();
+      }
+    }catch(error){
+        return res.status(400).render("404", {pageTitle:"신고하기 에러", errorMessage:error._message});
+    }
+  }
+  return res.redirect(`/subject/${id}/`);
+}
 

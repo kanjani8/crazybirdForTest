@@ -11,6 +11,7 @@ const testSchema = new mongoose.Schema({
   forWhen: {type: String, default:"middle"},
   subject: { type: Schema.Types.ObjectId, required: true, ref: "Subject"},
   user: {type: Schema.Types.ObjectId, required: true, ref: "User"}, 
+  reported: { type: Number, default: 0, required: true },
 });
 
 // 중간고사문제인지 기말고사 문제인지 체크할 수 있게하기

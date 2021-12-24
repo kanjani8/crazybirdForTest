@@ -2,7 +2,7 @@ import express from "express";
 import { search, see, like, dislike} from "../controllers/subjectController";
 import {list, getUploadTest, postUploadTest,  
     getEditTest, postEditTest, deleteTest, 
-    setting, solve, result, report, reviewScore } from "../controllers/testController";
+    setting, solve, result, reviewScore, getReport, postReport } from "../controllers/testController";
 import {community, getUploadPosting, postUploadPosting,
     watchPosting, getEditPosting, postEditPosting, 
     deletePosting,getReportPosting, postReportPosting,getRecommend} from "../controllers/communityController";
@@ -27,7 +27,10 @@ subjectRouter.route("/:id([0-9a-f]{24})/test/setting")
     .all(protectorMiddleware)
     .get(setting).post(solve);
 subjectRouter.post("/:id([0-9a-f]{24})/test/result", protectorMiddleware, result);
-subjectRouter.get("/:id([0-9a-f]{24})/test/:testId([0-9a-f]{24})/report", protectorMiddleware, reportMiddleware, report);
+subjectRouter.route("/:id([0-9a-f]{24})/test/:testId([0-9a-f]{24})/report")
+.all(protectorMiddleware)
+.get(getReport)
+.post( reportMiddleware,postReport);
 subjectRouter.get("/:id([0-9a-f]{24})/score/:scoreId([0-9a-f]{24})", protectorMiddleware, reviewScore);
 
 

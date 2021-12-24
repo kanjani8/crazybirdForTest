@@ -1,0 +1,37 @@
+extends ../base.pug
+block content
+    if errorMessage
+        span=errorMessage
+    form(method="POST")
+        input(type="radio", id="spam",value="incorrectInfo", name="report") 
+        label(for='spam') 정확한 정보가 없는 문제입니다
+        br
+        input(type="radio", id="wrongAns",value="incorrectAns", name="report") 
+        label(for='wrongAns') 올바른 정답이 아닙니다 
+        br
+        input(type="radio", id="wrongSub",value="wrongSub", name="report") 
+        label(for='wrongSub') 해당 과목의 문제가 아닙니다 
+        br
+        input(type="radio", id="wrongTerm",value="wrongTerm", name="report") 
+        label(for='wrongTerm') 이 중간고사/ 기말고사 범위의 문제가 아닙니다 
+        br
+        input(type="radio", id="spam",value="incorrectWrongAns", name="report") 
+        label(for='spam') 오답 예시가 잘못되었습니다
+        br
+        input(type="radio", id="spam",value="typo", name="report") 
+        label(for='spam') 오타가 있습니다.
+        br
+        input(type="radio", id="spam",value="spam", name="report") 
+        label(for='spam') 도배 목적의 문제입니다.
+        br
+        input(type="radio", value="insult", name="report")
+        label(for='insult') 욕설/생명경시/혐오/차별적 표현을 사용했습니다.
+        br
+        input(type="radio", value="privacy", name="report")
+        label(for='privacy') 개인정보가 노출되었습니다.
+        br
+        input(type="radio", value="unpleasant", name="report")
+        label(for='unpleasant') 불쾌한 표현이 있습니다.
+        br
+
+        input(type="submit", value="신고하기")

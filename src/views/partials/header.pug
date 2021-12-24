@@ -1,9 +1,14 @@
 header 
-            a(href="/")
-                h1=pageTitle
-            nav
+            div.left__header
                 a(href="/")
                     img(src="/uploads/default/redBird.png").main__logo
+                if !subject
+                    a(href="/")
+                        h1=pageTitle
+                else 
+                    a(href=`/subject/${subject.id}`)
+                        h1=pageTitle  
+            nav
                 ul
                     if loggedIn
                         li 
@@ -16,9 +21,6 @@ header
                         li
                             h4 포인트: 
                             span.point=loggedInUser.point
-                        if subject
-                            li 
-                            a(href=`/subject/${subject.id}`) #{subject.name}로 이동
                     else
                         li
                             a(href="/enroll") 회원가입
