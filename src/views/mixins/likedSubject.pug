@@ -1,8 +1,8 @@
 mixin likedSubject(subject)
     div.likesub
         h4.likesub2
+            a(href=`/subject/${subject.id}/dislike`, style="color: black;").star ⭐
+            br
             a(href=`/subject/${subject.id}`).subjectname=subject.name
             br
-            small.prodessor=subject.professor
-        a(href=`/subject/${subject.id}/dislike`, style="color: black;").star ⭐
-        
+            small.searchprofessor=subject.professor

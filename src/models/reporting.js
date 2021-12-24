@@ -9,6 +9,7 @@ const reportSchema = new mongoose.Schema({
   reportedUser: {type:Schema.Types.ObjectId, ref: "User"},
   reportedTest: {type:Schema.Types.ObjectId, ref: "Test"},
   createdAt: { type: Date, required: true, default: Date.now },
+
 });
 
 //전체오류일 경우 제목, 내용 저장

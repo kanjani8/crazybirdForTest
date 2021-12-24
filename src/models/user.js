@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
     likedSubjects:[{type: Schema.Types.ObjectId, ref:"Subject"}], 
     postings:[{type: Schema.Types.ObjectId, ref:"Posting"}], // profile에서 띄우기
     tests:[{type: Schema.Types.ObjectId, ref:"Test"}], // 나중에 내것만 풀기 선택할경우 필요
+    block: {type: Boolean, default:false}
 })
 // 성적들도 모아야될수도있음
 

@@ -89,6 +89,10 @@ export const postLogin = async (req, res) => {
         errorMessage: "비밀번호가 잘못되었습니다",
       });
     }
+    if(user.block){
+        return res.send(`<script>alert("신고를 받아 차단된 계졍입니다.");
+                location.href='/login';</script>`);
+    }
     req.session.loggedIn = true;
     req.session.user = user;
     if(!user.emailCertificated){
@@ -235,6 +239,12 @@ export const finishKakaoLogin = async(req, res) =>{
             const profile = userData.kakao_account.profile;
             req.session.access_token = access_token;
             let existingUser = await User.findOne({email}).populate("school"); 
+
+            //차단된 계정 확인
+            if(existingUser.block){
+                return res.send(`<script>alert("신고를 받아 차단된 계졍입니다.");
+                        location.href='/login';</script>`);
+            }
             console.log("유저", existingUser);
             if(existingUser){
                 // 사이트계정에는 프사가 없고 카톡프사는 있을 경우
@@ -357,6 +367,11 @@ export const finishKakaoLogin = async(req, res) =>{
                     existingUser = await User.findByIdAndUpdate(
                         existingUser._id, {avatarUrl,  emailCertificated: true,}, {new: true}
                         ).populate("school");
+                }
+                //차단된 계정일 경우
+                if(existingUser.block){
+                    return res.send(`<script>alert("신고를 받아 차단된 계졍입니다.");
+                            location.href='/login';</script>`);
                 }
                 req.session.loggedIn = true;
                 req.session.user = existingUser;
@@ -717,6 +732,7 @@ export const postUserReport = async(req,res) => {
             reporter,
             reportedUser: user._id,
         });
+        console.log(user);
         if (already){
             //이미 신고하셨습니다 알림
             console.log("already reported");
@@ -739,7 +755,10 @@ export const postUserReport = async(req,res) => {
     {
         try{
             await Posting.deleteMany({"user":id});
-            await User.findByIdAndDelete(id);
+            //await User.findByIdAndDelete(id);
+            user.block = true;
+            user.save();
+            console.log(user);
             console.log(`username ${user.username} is 50times reported and deleted`);
         }catch(error){
             return res.status(400).render("404", {pageTitle:"신고하기 에러", errorMessage:error._message});

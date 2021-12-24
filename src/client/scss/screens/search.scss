@@ -28,32 +28,52 @@
   justify-content: space-between;
   padding: 15px 20px;
   margin-bottom: 10px;
-  flex-direction: column;
+  flex-direction: row;
 }
 
 .likesubs {
+  margin-left: 2vw;
+  margin-right: 2vw;
+  border: 1px solid rgba($color: $thema, $alpha: 1);
+  width: 50vw;
+  height: fit-content;
 }
 
 .likesub {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-top: 10px;
+  padding: 10px;
   flex-direction: column;
-  border: 1px solid rgba($color: $thema, $alpha: 1);
+  border-bottom: 1px solid rgba($color: $thema, $alpha: 1);
 }
 .likesub2 {
 }
 .subjectname {
-  padding: 15px 20px;
-  margin-bottom: 10px;
-  margin-top: 10px;
-  background-color: $thema;
-  color: white;
+
 }
 
-.professor {
+.searchprofessor {
+  font-size: smaller;
+  color: gray;
 }
 
 .star {
   width: fit-content;
+}
+
+.subs{
+  margin-left: 2vw;
+  margin-right: 2vw;
+  border: 1px solid rgba($color: $thema, $alpha: 1);
+  width: 50vw;
+  height: fit-content;
+}
+.sub{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding: 10px;
+  flex-direction: column;
+  border-bottom: 1px solid rgba($color: $thema, $alpha: 1);
 }

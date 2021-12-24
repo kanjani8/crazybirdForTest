@@ -1,8 +1,8 @@
 mixin subject(subject)
-    div
+    div.sub
         h4
-            a(href=`/subject/${subject.id}`)=subject.name
-            small=subject.professor
+            a(href=`/subject/${subject.id}`).subjectname=subject.name
+            small.searchprofessor=subject.professor
         if subject.school
             h5=subject.school.name
         else
