@@ -1,17 +1,23 @@
 const container = document.getElementById('map');
 const containerBig = document.getElementById('map__whole');
-const markers_text = document.getElementById('markers');
 const markerImg ="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
+//let school = {lat: 37.5915464, lng: 127.02127};
+let school;
 
 if(container){
-	const location = new kakao.maps.LatLng(37.5915464, 127.02127);
+	try{
+		school = JSON.parse(container.dataset.school);
+	}catch(error){
+		console.log(error);
+	}
+	const location = new kakao.maps.LatLng(school.lat, school.lng);
 	const options = {
 		center: location,
 		level: 5
     };
 	const map = new kakao.maps.Map(container, options);
-	const iwContent = "<div style='padding: 5px;'>공부할 장소 추천</div>", 
+	const iwContent = "<div class='map__sign'>공부할 장소 추천</div>", 
 	iwPosition = location,
 	iwRemoveable = false;
 
@@ -19,17 +25,23 @@ if(container){
 		map: map,
 		position : iwPosition, 
 		content : iwContent,
-		removable : iwRemoveable
+		removable : iwRemoveable,
 	});
 }
 else if(containerBig){
+	try{
+		school = JSON.parse(containerBig.dataset.school);
+	}catch(error){
+		console.log(error);
+	}
 	const options = {
-		center: new kakao.maps.LatLng(37.5915464, 127.02127),
+		center: new kakao.maps.LatLng(school.lat, school.lng),
 		level: 5
 	};
 	const map = new kakao.maps.Map(containerBig, options);
 	try{
-		const markers = JSON.parse(markers_text.textContent);
+		const markers_text = map__whole.dataset.locations;
+		const markers = JSON.parse(markers_text);
 		for(let i = 0; i < markers.length; i++){
 			const location = new kakao.maps.LatLng(markers[i].lat, markers[i].lng);
 			const imageSize = new kakao.maps.Size(24, 35);

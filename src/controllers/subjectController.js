@@ -2,12 +2,17 @@ import Subject from "../models/subject";
 import User from "../models/user";
 import Score from "../models/score";
 import Posting from "../models/posting";
-//import School from "../models/school";
+import School from "../models/school";
 //import Location from "../models/location";
 
 export const search = async (req, res) => {
   const user = await User.findById(req.session.user._id).populate("likedSubjects");
   const school = user.school;
+  // const result = await School.findByIdAndUpdate(school, {address: {
+  //           "lat": 37.5915464,
+  //           "lng":  127.02127,
+  //       }}, {new:true});
+  // console.log(result);
   const { keyword } = req.query;
   let subjects = [];
   const likedSubjects = user.likedSubjects;

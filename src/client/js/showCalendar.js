@@ -8,25 +8,18 @@ import 'bootstrap/dist/css/bootstrap.css';
 import '@fortawesome/fontawesome-free/css/all.css'; 
 import "../scss/main.scss";
 
-const calendarEl = document.getElementById('calendar');
-const calendarElBig = document.getElementById('calendar__whole');
-const events_text = document.getElementById('events');
+const calendarEl = document.getElementsByClassName('calendar__small')[0];
+const calendarElBig = document.getElementsByClassName('calendar__whole')[0];
 const today = new Date;
 const initialDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-// const events = [
-//   {
-//     title: '해냈다',
-//     start: '2021-12-15',
-//   },
-//   {
-//     title: '시험기간',
-//     start: '2021-12-17',
-//     end: '2021-12-24'
-//   },
-// ] ; 이런식으로 데베에서 넘어온다.
 
-const events = JSON.parse(events_text.textContent);
-console.log(events);
+let events;
+try{
+  const events_text = calendar.dataset.events;
+   events = JSON.parse(events_text);
+} catch(error){
+  console.log(error);
+}
 document.addEventListener('DOMContentLoaded', function() {
   if(calendarEl){
     let calendar = new Calendar(calendarEl, {
@@ -35,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       customButtons: {
         myCustomButton: {
-          text: 'add schedule!',
+          text: '+',
 
           click: function popup(){
             var url = "user/addSchedule";
@@ -46,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       },
       headerToolbar: {
-        left: 'prev,next today',
+        left: 'prev,next',
         center: 'title',
         right: 'myCustomButton',
         prev: 'fal fa-edit',

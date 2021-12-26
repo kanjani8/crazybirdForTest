@@ -9,14 +9,14 @@ export const main = async (req, res) => {
             const likedSubjects = user.likedSubjects;
             const event_obj = await Event.find({});
             const events =  JSON.stringify(event_obj);
-            return res.render("home", {pageTitle: "", events,likedSubjects});
+            return res.render("home", {pageTitle: "", events, likedSubjects});
         }catch(error){
             console.log(error)
             return res.status(404).render("404", {pageTitle: "오류", errorMessage: error._message});
         }
     }
     else{
-        return res.render("home", {pageTitle: "main"});
+        return res.render("home", {pageTitle: ""});
     }
 
 }

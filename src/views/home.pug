@@ -17,9 +17,8 @@ block content
         div.right__box
             if loggedIn
                 a(href="/map")
-                    div(id = "map")
-                div(id = "calendar")
-                h4(id = "events", style="display:none")=events
+                    div(id = "map", data-school=loggedInUser.school.address)
+                div(id = "calendar", data-events = events).calendar__small
 
                 
             else

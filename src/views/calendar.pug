@@ -1,7 +1,7 @@
 extends base.pug
 
 block content
-    div(id = "calendar__whole", style="width: 100%; height: 100vh;")
+    div(id = "calendar", style="width: 100%; height: 100vh;", data-events = events).calendar__whole
     h4(id = "events", style="display:none")=events
 
 block scripts 

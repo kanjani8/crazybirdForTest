@@ -1,0 +1,57 @@
+.calendar__whole {
+  height: 90vh;
+  margin-top: 10px;
+  .fc-myCustomButton-button {
+    display: flex;
+    justify-content: center;
+    span {
+      font-size: 20px;
+    }
+  }
+}
+.calendar__small {
+  margin-top: 10px;
+  width: 40vw;
+  height: 40vh;
+
+  .fc-prev-button {
+    display: flex;
+    justify-content: center;
+    width: 20px;
+    height: 21px;
+    span {
+      font-size: 10px;
+    }
+  }
+  .fc-next-button {
+    display: flex;
+    justify-content: center;
+    width: 20px;
+    height: 21px;
+    span {
+      font-size: 10px;
+    }
+  }
+  .fc-myCustomButton-button {
+    width: 35px;
+    height: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    span {
+      font-size: 15px;
+    }
+  }
+  .fc-toolbar-title {
+    font-size: 25px;
+  }
+}
+
+#calendar button {
+  background-color: $thema;
+}
+
+.fc-event-title-container {
+  background-color: $thema;
+}

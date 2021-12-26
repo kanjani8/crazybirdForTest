@@ -1,6 +1,6 @@
 extends base.pug
 block content 
-    div(id = "map__whole", style="width: 100%; height: 100vh;")
+    div(id = "map__whole", data-locations=locations, data-school= loggedInUser.school.address)
     h4(id = "markers", style="display:none")=locations
 
 block scripts 
