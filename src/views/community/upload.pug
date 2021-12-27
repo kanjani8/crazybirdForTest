@@ -1,17 +1,21 @@
 extends ../base.pug
+
 block content
     if errorMessage
         span=errorMessage
     if loggedInUser.emailCertificated
-         form(method="POST", enctype="multipart/form-data")
+         form(method="POST", id = fm1, enctype="multipart/form-data")
             input(placeholder="제목", type="text",id="title", name="title", maxlength=80)
             input(placeholder="내용", type="text",name="script", minlength=3).script
             div.media__box
                 label(for="image") Image
                 input(type="file", id="image", name="image", accept="image/*")
-                label(for="video") Video File
-                input(type="file", accept="video/*", id="video", name="video")
-            input(type="submit", value="등록하기")
+                label(for="video") File
+                input(type="file", accept="video/*,image/*", id="file", name="file")
+            input(type="submit",id = "writeBtn", value="등록하기")
     else  
         h4 이메일을 인증해야 게시물을 등록할 수 있습니다.
         a(href="/user/certificate-email") 인증하기 &rarr;
+
+block scripts
+    script(src="/static/js/fileUpload.js")

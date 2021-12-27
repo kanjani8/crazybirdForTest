@@ -9,7 +9,8 @@ module.exports = {
         chooseTestType: "./src/client/js/chooseTestType.js",
         checkPW: "./src/client/js/checkPW.js",
         showMap: "./src/client/js/showMap.js",
-        showCalendar: "./src/client/js/showCalendar.js"
+        showCalendar: "./src/client/js/showCalendar.js",
+        fileUpload:"./src/client/js/fileUpload.js"
       },
     mode: "development", // developnemt or production(개발완료/default)
     watch: true,
