@@ -40,11 +40,11 @@ subjectRouter.get("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})", prote
 subjectRouter.route("/:id([0-9a-f]{24})/community/upload")
     .all(protectorMiddleware)
     .get(getUploadPosting)
-    .post(communityUpload.fields([{name:"image", maxCount:1}, {name:"file", maxCount:1}]),postUploadPosting);
+    .post(communityUpload.fields([{name:"image", maxCount:5}, {name:"video", maxCount:1}]),postUploadPosting);
 subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/edit")
     .all(protectorMiddleware)
     .get(getEditPosting)
-    .post(communityUpload.fields([{name:"image", maxCount:1}, {name:"file", maxCount:1}]),postEditPosting);
+    .post(communityUpload.fields([{name:"image", maxCount:5}, {name:"video", maxCount:1}]),postEditPosting);
 subjectRouter.get("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/delete",protectorMiddleware,deletePosting);
 subjectRouter.route("/:id([0-9a-f]{24})/community/:postingId([0-9a-f]{24})/report")
     .all(protectorMiddleware)

@@ -91,7 +91,7 @@ export const getEditPosting = async (req, res) => {
     if (String(posting.user._id) !== String(req.session.user._id)){
       return res.status(403).redirect(`/subject/${id}/community`);
     }
-    return res.render("community/edit", { pageTitle: posting.subject.name, subject, posting});
+    return res.render("community/edit", { pageTitle: posting.subject.name, subject: posting.subject, posting});
 };
   
 export const postEditPosting = async (req, res) => {
