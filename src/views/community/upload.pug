@@ -7,7 +7,10 @@ block content
          form(method="POST", id="upload", enctype="multipart/form-data", onsubmit="return false")
             input(placeholder="제목", type="text",id="title", name="title", maxlength=80)
             input(placeholder="내용", type="text",name="script", minlength=3).script
-            input(type="file",multiple, accept="video/*,image/*", id="file", name="file").mediaButton 
+            div.file__infoBox
+                label(for="file").file__info *최대 5개 선택 가능
+            input(type="file",multiple, accept="video/*,image/*", id="file", name="file").mediaButton
+            div.file__objBox
             input(type="submit", value="등록하기")
     else  
         h4 이메일을 인증해야 게시물을 등록할 수 있습니다.

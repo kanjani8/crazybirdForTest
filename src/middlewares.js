@@ -59,6 +59,7 @@ export const communityUpload = multer({
   dest: "uploads/community/",
   limits: {
     fileSize: 20000000,
+    files: 5,
   },
 });
 

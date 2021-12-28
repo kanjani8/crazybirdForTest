@@ -3,8 +3,10 @@ import mongoose, { Schema } from "mongoose";
 const postingSchema = new mongoose.Schema({
   title:{type: String, required: true, trim: true, maxLength: 80}, 
   script: { type: String, required: true, trim: true, minLength: 3 },
-  imageUrl: String,
-  videoUrl: String,
+  files: [{
+    url: String,
+    mimetype: String,
+  }],
   createdAt: { type: Date, required: true, default: Date.now },
   meta: {
     views: { type: Number, default: 0, required: true },

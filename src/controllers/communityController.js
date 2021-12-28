@@ -34,6 +34,7 @@ export const watchPosting = async (req, res) => {
     try{
         const subject = await Subject.findById(id);
         const posting = await Posting.findById(postingId).populate("user");
+        console.log(posting);
         const recommend = req.session.user.recommendPost.includes(postingId);
         // await fetch(`http://localhost:4000/api/subject/${id}/community/${postingId}/view`, {
         //  method: "POST",
@@ -47,7 +48,7 @@ export const watchPosting = async (req, res) => {
   
 export const getUploadPosting = async(req, res) =>{
     const {id} = req.params;
-    const subject = Subject.findById(id);
+    const subject = await Subject.findById(id);
     if (!subject){
       return res.render("404", { pageTitle: "Subject not found." });
     }
@@ -55,22 +56,24 @@ export const getUploadPosting = async(req, res) =>{
 };
 export const postUploadPosting = async(req, res) =>{
     const {id} = req.params;
-    const {title, script,fileType} = req.body;
-    console.log(fileType);
+    const {title, script} = req.body;
+    let files = [];
     try{
-      const file = req.files['image'] ?req.files['image'][0]: null;
-      const file2 = req.files['file'] ? req.files['file'][0] : null;
-      //const imageUrl = file ? file.path : null;
-      let imageUrl = file2 ? file2.path : null;
-      let videoUrl = file2 ? file2.path : null;
-      if(fileType=="1"){
-        videoUrl=null;
-      } else if(fileType=="2"){
-        imageUrl=null;
+      for(let i = 0; i < req.files.length; i++){
+        const file = {
+          url: req.files[i].path,
+          mimetype: req.files[i].mimetype,
+        }
+        files.push(file);
       }
       const user = await User.findById(req.session.user._id).populate("school");
-      const newPosting = await Posting.create({title, imageUrl, videoUrl, script, 
-          subject:id, user:user._id});
+      const newPosting = await Posting.create({
+          title,
+          files,
+          script, 
+          subject:id,
+          user:user._id});
+      console.log(newPosting);
       user.postings.push(newPosting._id);
       user.point +=5;
       req.session.user = user;
