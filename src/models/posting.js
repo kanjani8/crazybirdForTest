@@ -7,6 +7,8 @@ const postingSchema = new mongoose.Schema({
     url: String,
     mimetype: String,
   }],
+  videos: [{type: String}],
+  images: [{type: String}],
   createdAt: { type: Date, required: true, default: Date.now },
   meta: {
     views: { type: Number, default: 0, required: true },

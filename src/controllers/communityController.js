@@ -58,7 +58,18 @@ export const postUploadPosting = async(req, res) =>{
     const {id} = req.params;
     const {title, script} = req.body;
     let files = [];
+    let images = [];
+    let videos = [];
     try{
+      for(let i = 0; i < req.files.length; i++){
+        if(req.files[i].mimetype.match(/image.*?$/gi)){
+          const image = req.files[i].path;
+          images.push(image);
+        } else {
+          const video = req.files[i].path;
+          videos.push(video);
+        }
+      }
       for(let i = 0; i < req.files.length; i++){
         const file = {
           url: req.files[i].path,
@@ -70,6 +81,8 @@ export const postUploadPosting = async(req, res) =>{
       const newPosting = await Posting.create({
           title,
           files,
+          videos,
+          images,
           script, 
           subject:id,
           user:user._id});

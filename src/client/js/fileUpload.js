@@ -5,31 +5,34 @@ const fileBox = document.getElementsByClassName("file__objBox")[0];
 // const para = link.split("/");
 // const url = "/subject/"+para[4]+"/community/upload";
 
-const checkFile = (event) => {
+const checkFile = (event,input) => {
     const files = event.target.files;
     console.log(event.target.result);
     console.log(files);
+    
     if(files.length > 5){
         alert("파일이 5개를 초과하였습니다.");
-        fileInput.value = null;        
+        fileInput.value = null;   
+        onsubmit="return false";     
     }
     else{// 이름이 뜨게해둠 앞으로 파일들 작은 미리보기 이미지나 삭제 버튼 추가구현 할 예정
         try{
             for(let i = 0; i < files.length; i++){
                 let file = document.createElement("div");
                 file.setAttribute("class", "fileObj");
-
                 let file_left = document.createElement("div");
                 file_left.setAttribute("class", "fileObj__left");
                 
                 const imgSample = document.createElement("img");
                 imgSample.setAttribute("class", "fileObj__sample");
-                imgSample.setAttribute("src", files[i].result); // 이걸맞는값을  찾아야함 그리고 동영상일 경우 생각해야함 캡쳐화면을 띄우는걸 찾던지..
-
+                const reader = new FileReader();
+                reader.onload = e => {
+                    imgSample.src = e.target.result;
+                }
+                reader.readAsDataURL(files[i]);
                 const fileName = document.createElement("h4");
                 fileName.setAttribute("class", "fileObj__name");
                 fileName.innerText = files[i].name;
-
                 const deleteButton = document.createElement("button");
                 deleteButton.setAttribute("class", "fileObj__delete");
                 deleteButton.innerText = "X"; // 이게 눌릴경우 addeventListner로 받아서 file value값을 바꿔줘야함
@@ -39,14 +42,111 @@ const checkFile = (event) => {
                 file.appendChild(file_left);
                 file.appendChild(deleteButton);
                 fileBox.appendChild(file);
+                // form.onsubmit = "return true";
                 console.log(fileBox);
             }
+
+
+            ////
+            // // for(let i = 0; i < files.length; i++){
+            //     let file = document.createElement("div");
+            //     file.setAttribute("class", "fileObj");
+                
+            //     const fileArr = Array.from(input.files);
+                
+            //     const colDiv = document.createElement("div");
+            //     fileArr.forEach((aaa, index) => {
+                    
+            //         const reader = new FileReader();
+            //         let file_left = document.createElement("div");
+            //         file_left.setAttribute("class", "fileObj__left");
+            //         let imgDiv = document.createElement("div");
+            //         let imgSample = document.createElement("img");
+            //         imgSample.setAttribute("class", "fileObj__sample");
+            //         let fileName = document.createElement("h4");
+            //         fileName.setAttribute("class", "fileObj__name");
+            //         fileName.innerText = files[index].name;
+            //         imgDiv.appendChild(imgSample);
+            //         // imgDiv.appendChild(fileName);
+            //         reader.onload = e => {
+            //             imgSample.src = e.target.result;
+            //             imgDiv.style.width = (imgSample.naturalWidth) * 0.2 + "px";
+            //             imgDiv.style.height = (imgSample.naturalHeight) * 0.2 + "px";
+            //         }
+            //         file_left.appendChild(imgDiv);
+            //         file_left.appendChild(fileName);
+            //         const deleteButton = document.createElement("button");
+            //         deleteButton.setAttribute("class", "fileObj__delete");
+            //         deleteButton.innerText = "X"; // 이게 눌릴경우 addeventListner로 받아서 file value값을 바꿔줘야함
+            //         colDiv.appendChild(file_left);
+            //         colDiv.appendChild(deleteButton);
+            //         reader.readAsDataURL(aaa);       
+            //     })
+
+                
+                
+            //     //imgSample.setAttribute("src", files[i].result ); // 이걸맞는값을  찾아야함 그리고 동영상일 경우 생각해야함 캡쳐화면을 띄우는걸 찾던지..
+            //     file.appendChild(colDiv);      
+            //     console.log(fileBox);
+            //     fileBox.appendChild(file);
+            // }
+
         }catch(error){
             console.log(error);
         }
     }
 }
-fileInput.addEventListener("input", checkFile);
+fileInput.addEventListener("change", e => {
+    checkFile(e,e.target) 
+})
+
+
+// function readMultipleImage(input) {
+//     const multipleContainer = document.getElementById("file__obj")
+    
+//     // 인풋 태그에 파일들이 있는 경우
+//     if(input.files) {
+//         // 이미지 파일 검사 (생략)
+//         console.log(input.files)
+//         // 유사배열을 배열로 변환 (forEach문으로 처리하기 위해)
+//         const fileArr = Array.from(input.files)
+//         const $colDiv1 = document.createElement("div")
+//         const $colDiv2 = document.createElement("div")
+//         $colDiv1.classList.add("column")
+//         $colDiv2.classList.add("column")
+//         fileArr.forEach((file, index) => {
+//             const reader = new FileReader()
+//             const $imgDiv = document.createElement("div")   
+//             const $img = document.createElement("img")
+//             $img.classList.add("image")
+//             const $label = document.createElement("label")
+//             $label.classList.add("image-label")
+//             $label.textContent = file.name
+//             $imgDiv.appendChild($img)
+//             $imgDiv.appendChild($label)
+//             reader.onload = e => {
+//                 $img.src = e.target.result
+                
+//                 $imgDiv.style.width = ($img.naturalWidth) * 0.2 + "px"
+//                 $imgDiv.style.height = ($img.naturalHeight) * 0.2 + "px"
+//             }
+            
+//             console.log(file.name)
+//             if(index % 2 == 0) {
+//                 $colDiv1.appendChild($imgDiv)
+//             } else {
+//                 $colDiv2.appendChild($imgDiv)
+//             }
+            
+//             reader.readAsDataURL(file)
+//         })
+//         multipleContainer.appendChild($colDiv1)
+//         multipleContainer.appendChild($colDiv2)
+//     }
+// }
+// fileInput.addEventListener("change", e => {
+//     readMultipleImage(e.target)
+// })
 
 
 // const checkFile = (event) => { // 아마 지울예정
@@ -106,3 +206,4 @@ fileInput.addEventListener("input", checkFile);
 //         }
 //     }) 
 // } 
+

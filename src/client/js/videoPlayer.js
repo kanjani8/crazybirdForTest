@@ -11,7 +11,7 @@ const fullScreenBtn = document.getElementById("fullScreen");
 const fullScreenIcon = fullScreenBtn.querySelector("i");
 const videoContainer = document.getElementById("videoContainer");
 const videoControls = document.getElementById("videoControls");
-// const writing = document.getElementById("clickwriting");
+
 
 let controlsTimeout = null;
 let controlsMovementTimeout = null;
@@ -123,12 +123,21 @@ const handleSpace = (event) => {
   }
 };
 
+const handlePlayer = (event) => {
+  const fileValue = document.getElementById("fileValue");
+  console.log(fileValue);
+}
+
+
+
 // const handleView = () => {
 //   console.log("hey");
 //   console.log(posting);
 // };
 
 //writing.addEventListener("click", handleView);
+
+document.addEventListener("load",handlePlayer);
 playBtn.addEventListener("click", handlePlayClick);
 muteBtn.addEventListener("click", handleMuteClick);
 video.addEventListener("click",handleClick);
