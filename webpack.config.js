@@ -10,7 +10,8 @@ module.exports = {
         checkPW: "./src/client/js/checkPW.js",
         showMap: "./src/client/js/showMap.js",
         showCalendar: "./src/client/js/showCalendar.js",
-        fileUpload:"./src/client/js/fileUpload.js"
+        fileUpload:"./src/client/js/fileUpload.js",
+        communityTimeEditer: "./src/client/js/communityTimeEditer.js"
       },
     mode: "development", // developnemt or production(개발완료/default)
     watch: true,

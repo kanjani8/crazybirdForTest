@@ -3,13 +3,19 @@ include ../mixins/posting
 
 block content
     if loggedIn
-        form(method="GET").search__form
-            input(placeholder="글 검색하기",name="keyword", type="text")
-            input(type="submit", value="검색")
-        each posting in postings
-            +posting(posting)
-        else
-            li Sorry nothing found.
-        a(href="community/upload") 글쓰기
+        form(id="postingSearch" method="GET").search__form
+            input.posting__search(placeholder="글 검색하기",name="keyword", type="text")
+            button(form="postingSearch", type="submit").posting__search__btn
+                i.fas.fa-search
+        div.postings__box
+            each posting in postings
+                +posting(posting)
+            else
+                li Sorry nothing found.
+        dib.postings__footer
+            a(href="community/upload").posting__btn 글쓰기
     else
         a(href="/login") 게시판을 보려면 먼저 로그인 하기 &rarr;
+
+block scripts 
+    script(src="/static/js/communityTimeEditer.js")

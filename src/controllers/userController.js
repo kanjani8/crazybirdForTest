@@ -587,7 +587,7 @@ export const postEdit = async(req, res) => {
                 username
             },
                 {new: true}
-        );
+        ).populate("school");
         req.session.user = updatedUser;
         res.locals.loggedInUser = req.session.user;
         return res.render("users/edit-profile");

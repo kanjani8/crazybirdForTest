@@ -34,12 +34,16 @@ export const watchPosting = async (req, res) => {
     try{
         const subject = await Subject.findById(id);
         const posting = await Posting.findById(postingId).populate("user");
-        console.log(posting);
+        const time = posting.createdAt;
+        const hours = (time.getHours() > 9) ? time.getHours(): `0${time.getHours()}`;
+        const minutes = (time.getMinutes() > 9) ? time.getMinutes(): `0${time.getMinutes()}`;
+        const createdAt = `${time.getMonth()+ 1}월${time.getDate()}일 ${hours}:${minutes}`;
+        console.log(createdAt);
         const recommend = req.session.user.recommendPost.includes(postingId);
         // await fetch(`http://localhost:4000/api/subject/${id}/community/${postingId}/view`, {
         //  method: "POST",
         // });
-        return res.render("community/watch", { pageTitle: `${subject.name} 게시판`, subject, posting, recommend});
+        return res.render("community/watch", { pageTitle: `${subject.name} 게시판`, subject, posting, createdAt, recommend});
     }catch(error){
         console.log(error._message);
         return res.render("404", {pageTitle:`게시물 보기 에러`,errorMessage:error._message});
@@ -57,7 +61,6 @@ export const getUploadPosting = async(req, res) =>{
 export const postUploadPosting = async(req, res) =>{
     const {id} = req.params;
     const {title, script} = req.body;
-    let files = [];
     let images = [];
     let videos = [];
     try{
@@ -70,17 +73,9 @@ export const postUploadPosting = async(req, res) =>{
           videos.push(video);
         }
       }
-      for(let i = 0; i < req.files.length; i++){
-        const file = {
-          url: req.files[i].path,
-          mimetype: req.files[i].mimetype,
-        }
-        files.push(file);
-      }
       const user = await User.findById(req.session.user._id).populate("school");
       const newPosting = await Posting.create({
           title,
-          files,
           videos,
           images,
           script, 

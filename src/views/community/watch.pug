@@ -2,54 +2,54 @@ extends ../base.pug
 
 block content
     if loggedIn
-        h2=posting.title 
-        h5
-            span 조회수: #{posting.meta.views}
-            span 추천: #{posting.meta.rating}
-        if posting.videos
-            each video in posting.videos
-                div#videoContainer
-                    video(src="/" + video )
-                    div#videoControls.videoControls
-                        div.videoControls__play
-                            span#play.videoControls__playBtn
-                                i.fas.fa-play
-                            div.videoControls__time
-                                span#currenTime 00:00
-                                span  / 
-                                span#totalTime 00:00
-                        input(type="range",step="1", value="0", min="0")#timeline.videoControls__timeline
-                        div.videoControls__volume
-                            input(type="range",step="0.1", value=0.5, min="0", max="1")#volume
-                            span#mute
-                                i.fas.fa-volume-up
-                        div
-                            span#fullScreen
-                                i.fas.fa-expand  
-        if posting.images
-            each image in posting.images
-                img(src="/" + image, width="400", height="400")
-                br
-
-        h4=posting.script 
-        h5 작성자:
-            a(href=`/user/${posting.user._id}`)=posting.user.name
-        h5=posting.createdAt
-        if loggedInUser._id == posting.user._id
+        div.posting__header
+            h2.posting__title=posting.title
+            a(href=`/user/${posting.user._id}`).posting__info.info__left=posting.user.name
+            h5.posting__info=createdAt
+            span.posting__info 조회수: #{posting.meta.views}
+            span.posting__info 추천: #{posting.meta.rating}
+        div.posting__body
+            if posting.videos
+                each video in posting.videos
+                    div#videoContainer
+                        video(src="/" + video )
+                        div#videoControls.videoControls
+                            div.videoControls__play
+                                span#play.videoControls__playBtn
+                                    i.fas.fa-play
+                                div.videoControls__time
+                                    span#currenTime 00:00
+                                    span  / 
+                                    span#totalTime 00:00
+                            input(type="range",step="1", value="0", min="0")#timeline.videoControls__timeline
+                            div.videoControls__volume
+                                input(type="range",step="0.1", value=0.5, min="0", max="1")#volume
+                                span#mute
+                                    i.fas.fa-volume-up
+                            div
+                                span#fullScreen
+                                    i.fas.fa-expand  
+            if posting.images
+                each image in posting.images
+                    img.posting__image(src="/" + image)
+                    br
+            h4.posting__script=posting.script
+        div.posting__footer
+            if loggedInUser._id == posting.user._id
+                h4
+                    a(href=`${posting.id}/edit`).posting__btn 수정하기
+                h4
+                    a(href=`${posting.id}/delete`).posting__btn 삭제하기
+            else
+                h4
+                    if(recommend)
+                        a(href=`${posting.id}/recommend`) 추천하기 ❤
+                    else
+                        a(href=`${posting.id}/recommend`) 추천하기 ♡
+                h4
+                    a(href=`${posting.id}/report`) 신고하기⛔
             h4
-                a(href=`${posting.id}/edit`) 수정하기
-            h4
-                a(href=`${posting.id}/delete`) 삭제하기
-        else
-            h4
-                if(recommend)
-                    a(href=`${posting.id}/recommend`) 추천하기 ❤
-                else
-                    a(href=`${posting.id}/recommend`) 추천하기 ♡
-            h4
-                a(href=`${posting.id}/report`) 신고하기⛔
-        h4
-            a(href="upload") 글쓰기
+                a(href="upload").posting__btn 글쓰기
     else
         a(href="/login") 게시판을 보려면 먼저 로그인 하기 &rarr;
 
