@@ -6,28 +6,107 @@ import Reporting from "../models/reporting";
 export const community = async (req, res) => {
     const {id} = req.params; // 과목id
     const { keyword } = req.query;
+    const { page } = req.query; // (1)
     const subject = await Subject.findById(id);
-    
+    let totalPost;
     let postings = [];
     if (keyword) {
-      postings = await Posting.find({
-         $or : 
-         [ 
-           {title: {
-        $regex: new RegExp(keyword, "i"),
-      }}, {script: {
-        $regex: new RegExp(keyword, "i"),
-      }}], subject: id,
-    }).sort({ createdAt: "desc"});
+      try {
+        totalPost = await Posting.find({
+          $or : 
+          [ 
+            {title: {
+         $regex: new RegExp(keyword, "i"),
+       }}, {script: {
+         $regex: new RegExp(keyword, "i"),
+       }}], subject: id,
+     }).sort({ createdAt: "desc"}).countDocuments({});
+     let {
+       startPage,
+       endPage,
+       hidePost,
+       maxPost,
+       totalPage,
+       currentPage
+     } = paging(page, totalPost);
+     console.log(totalPost, startPage,
+       endPage,
+       hidePost,
+       maxPost,
+       totalPage,
+       currentPage);
+     postings = await Posting.find({
+       $or : 
+       [ 
+         {title: {
+      $regex: new RegExp(keyword, "i"),
+    }}, {script: {
+      $regex: new RegExp(keyword, "i"),
+    }}], subject: id,
+  }).sort({ createdAt: "desc"})
+     .skip(hidePost)
+     .limit(maxPost);
+     return res.render("community/list", { pageTitle: subject.name + "게시판", subject, postings,
+       currentPage,
+       startPage,
+       endPage,
+       maxPost,
+       totalPage });
+      } catch (error){
+        console.log(error);
+        return res.render("404", {pageTitle:`게시판 에러`,errorMessage:error._message});
+      }
+      
     } else {
-      try{
-        postings = await Posting.find({subject: id}).sort({ createdAt: "desc"});
+      try{      
+        totalPost = await Posting.countDocuments({subject: id});     
+        let {
+          startPage,
+          endPage,
+          hidePost,
+          maxPost,
+          totalPage,
+          currentPage
+        } = paging(page, totalPost);
+        postings = await Posting.find({subject: id})
+        .sort({ createdAt: "desc"})
+        .skip(hidePost)
+        .limit(maxPost);
+        return res.render("community/list", { pageTitle: subject.name + "게시판", subject, postings,
+          currentPage,
+          startPage,
+          endPage,
+          maxPost,
+          totalPage });
       }catch(error){
         console.log(error);
+        return res.render("404", {pageTitle:`게시판 에러`,errorMessage:error._message});
       }
     }
-    return res.render("community/list", { pageTitle: subject.name + "게시판", subject, postings });
+    
 };
+
+const paging = (page, totalPost) => {
+  const maxPost = 10; 
+  const maxPage = 10; 
+  let currentPage = page ? parseInt(page) : 1;
+  let hidePost = currentPage === 1 ? 0 : (page - 1) * maxPost;
+  let totalPage = totalPost==0 ? 1:Math.ceil(totalPost / maxPost);
+  
+  if (currentPage > totalPage) { 
+    currentPage = totalPage;
+  }
+
+  let startPage = Math.floor(((currentPage - 1) / maxPage)) * maxPage + 1;
+  let endPage = startPage + maxPage - 1;
+
+  if (endPage > totalPage) { 
+    endPage = totalPage;
+  }
+  return { startPage, endPage, hidePost, maxPost, totalPage, currentPage };
+};
+
+export default paging;
   
 export const watchPosting = async (req, res) => {
     const {id, postingId} = req.params;

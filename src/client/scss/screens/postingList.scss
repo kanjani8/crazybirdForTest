@@ -29,3 +29,30 @@
   display: flex;
   justify-content: flex-end;
 }
+.paging_box{
+  align-items: center;
+  text-align: center;
+}
+.prev1{
+  color: #000;
+  margin-right: 5px;
+}
+.prev2{
+  color: gray;
+  margin-right: 5px;
+}
+
+.currentPageNum{
+  color: #000;
+  margin-right: 5px;
+}
+.otherPageNum{
+  color: gray;
+  margin-right: 5px;
+}
+.next1{
+  color: #000;
+}
+.next2{
+  color: gray;
+}
