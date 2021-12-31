@@ -11,13 +11,16 @@ const userSchema = new mongoose.Schema({
     social: String,
     password: { type: String, required: true},
     point: {type: Number, default: 0},
-    reported: {type: Number, default: 0}, // 신고당한 횟수 나중에 (50넘으면 계정없애기, 포인트랑 원리같음)
+    reported: {type: Number, default: 0}, 
     recommendPost: [{type:Schema.Types.ObjectId, ref:"Posting"}],
     school:{type: Schema.Types.ObjectId, ref:"School"},
+    schoolCertificated: {type: Boolean, default: false}, // 마저 구현해야함
+    schoolNumber: {type: Number}, // 아직구현안함
     likedSubjects:[{type: Schema.Types.ObjectId, ref:"Subject"}], 
-    postings:[{type: Schema.Types.ObjectId, ref:"Posting"}], // profile에서 띄우기
-    tests:[{type: Schema.Types.ObjectId, ref:"Test"}], // 나중에 내것만 풀기 선택할경우 필요
-    block: {type: Boolean, default:false}
+    postings:[{type: Schema.Types.ObjectId, ref:"Posting"}], 
+    tests:[{type: Schema.Types.ObjectId, ref:"Test"}],
+    block: {type: Boolean, default:false},
+    mode: {type: String, default: "sarcasm"},
 })
 // 성적들도 모아야될수도있음
 

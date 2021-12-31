@@ -4,24 +4,29 @@ include mixins/posting
 
 block content
     if loggedIn
-        div.whole__box.see
-            div.left__box.see
-                a(href=`${subject.id}/community`) 게시판
-                div.postingBox
-                    each posting in postings
-                        +posting(posting)
-                    else
-                        li Sorry nothing found.
-                    h4(style= "color: pink;") + 글이 10개 미만입니다. +
-            div.right__box.see
-                a(href=`${subject.id}/test/setting`) 문제 풀기
-                a(href=`${subject.id}/test/list`) 문제 리스트
-                hr
+        div.subject__whole__box
+            div.subject__box
+                h4 최신 게시글
+                hr.subject__buttonLine
+                each posting in postings
+                    +posting(posting)
+                else
+                    li Sorry nothing found.
+                a(href=`${subject.id}/community`).subject__link 게시판으로 바로가기 &rarr;
+            div.subject__box
+                h4 #{loggedInUser.name}님의 최근 테스트 점수
+                hr.subject__buttonLine
                 div.scoreBox
                 if scores
                     each score in scores 
                         +score(score)
+                div.subject__buttons
+                    a(href=`${subject.id}/test/setting`).subject__button 문제 풀기
+                    a(href=`${subject.id}/test/list`).subject__button 문제 리스트
 
 
     else
         a(href="/login") 문제와 게시판을 보려면 먼저 로그인 하기 &rarr;
+
+block scripts
+    script(src="/static/js/communityTimeEditer.js")

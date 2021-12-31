@@ -1,0 +1,22 @@
+.posting__mixin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.posting__mixin__left {
+  a {
+    font-size: 17px;
+  }
+  .createdAt {
+    font-size: 10px;
+    color: rgba($color: #000000, $alpha: 0.7);
+    margin-top: 10px;
+  }
+}
+
+.posting__mixin__right {
+  color: $thema-red;
+  padding: 10px 20px;
+}

@@ -1,7 +1,8 @@
 mixin posting(posting)
-    div
-        h4
+    div.posting__mixin
+        div.posting__mixin__left
             a(href=`/subject/${posting.subject}/community/${posting.id}`)#clickwriting=posting.title
-            small.posting__createdAt=posting.createdAt
-            h4 추천수: #{posting.meta.rating}
-        hr
+            h5.createdAt=posting.createdAt
+        div.posting__mixin__right
+            h4 + #{posting.meta.rating}
+    hr

@@ -1,7 +1,7 @@
 mixin score(score)
     div
         a(href=`/subject/${subject.id}/score/${score.id}`)
-            h4 점수: #{score.score}
-            h4 #{score.createdAt}
-            h4 문제 수: #{score.tests.length}
+            h4.createdAt.score__createdAt #{score.createdAt}
+            h4.score #{score.score} 점
+            h4.score__length #{score.tests.length} 문제
         hr

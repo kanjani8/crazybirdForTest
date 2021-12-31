@@ -1,18 +1,31 @@
-.whole__box .see {
+.subject__whole__box {
+  display: flex;
+  justify-content: center;
   width: 100%;
+  margin: 15px 0px;
+  hr {
+    border: 0.1px solid rgba($color: #000000, $alpha: 0.1);
+  }
 }
-.left__box .see {
-  width: 50vw;
-  padding: 10px;
+.subject__box {
+  margin: 0px 15px;
+  width: 480px;
 }
-.right__box .see {
-  width: 50vw;
-  padding: 10px;
+.subject__link {
+  color: $thema-thick;
 }
 
-.postingBox {
-  width: 80%;
-  height: 70vh;
-  margin: 20px auto;
-  border: 1px solid rgba($color: $thema, $alpha: 1);
+.subject__buttonLine {
+  margin-top: 10px;
+}
+.subject__button {
+  background-color: $thema;
+  color: $bg;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.subject__buttons {
+  margin-top: 15px;
 }

@@ -11,8 +11,9 @@ import "../scss/main.scss";
 const calendarEl = document.getElementsByClassName('calendar__small')[0];
 const calendarElBig = document.getElementsByClassName('calendar__whole')[0];
 const today = new Date;
-const initialDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
-
+const month = (today.getMonth() > 8) ? today.getMonth() + 1 : `0${today.getMonth() + 1}`;
+const date = (today.getDate() > 9) ? today.getDate()  : `0${today.getDate()}`;;
+const initialDate = `${today.getFullYear()}-${month}-${date}`;
 let events;
 try{
   const events_text = calendar.dataset.events;
@@ -96,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
       dayMaxEvents: true, // allow "more" link when too many events
       events,
       viewSkeletonRender: function(info) {
-        calendarEl.querySelectorAll('.fc-button').forEach((button) => {
+        calendarElBig.querySelectorAll('.fc-button').forEach((button) => {
           if (button.innerText === 'add schedule!') {
             button.classList.add('yellow-button')
           }

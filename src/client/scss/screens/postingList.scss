@@ -20,7 +20,7 @@
     border: 0.1px solid rgba($color: $thema, $alpha: 0.3);
   }
 }
-.posting__createdAt {
+.createdAt {
   display: block;
 }
 
@@ -29,30 +29,30 @@
   display: flex;
   justify-content: flex-end;
 }
-.paging_box{
+.paging_box {
   align-items: center;
   text-align: center;
 }
-.prev1{
+.prev1 {
   color: #000;
   margin-right: 5px;
 }
-.prev2{
+.prev2 {
   color: gray;
   margin-right: 5px;
 }
 
-.currentPageNum{
+.currentPageNum {
   color: #000;
   margin-right: 5px;
 }
-.otherPageNum{
+.otherPageNum {
   color: gray;
   margin-right: 5px;
 }
-.next1{
+.next1 {
   color: #000;
 }
-.next2{
+.next2 {
   color: gray;
 }

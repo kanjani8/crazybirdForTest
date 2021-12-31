@@ -10,6 +10,7 @@ module.exports = {
         checkPW: "./src/client/js/checkPW.js",
         showMap: "./src/client/js/showMap.js",
         showCalendar: "./src/client/js/showCalendar.js",
+        showQuote: "./src/client/js/showQuote.js",
         fileUpload:"./src/client/js/fileUpload.js",
         communityTimeEditer: "./src/client/js/communityTimeEditer.js"
       },

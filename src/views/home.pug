@@ -6,14 +6,18 @@ block content
         div.left__box
             div.mainLiked
                 if loggedIn
-                    div.likesubs
+                    div.likesubs__main
                         each subject in likedSubjects
                             +mainLiked(subject)
                         a(href=`subject/search`).main__search__button 과목 선택하기
             div.bird__box
                 img(src="/uploads/default/redBird.png")
                 div.quote__box
-                    p.main__p 오늘 꾸는 꿈보다 내일 이루는 꿈이 웅앵
+                    p.main__p.quote 오늘 꾸는 꿈보다 내일 이루는 꿈이 웅앵
+                    button(src="/").quote__button
+                        i.fas.fa-plus
+                    button(src="/").quote__button.refresh
+                        i.fas.fa-sync-alt
         div.right__box
             if loggedIn
                 a(href="/map")
@@ -32,6 +36,7 @@ block content
 
 block scripts 
     if(loggedIn)
+        script(src="/static/js/showQuote.js")
         link(rel="stylesheet", href="/static/css/showCalendar.css") 
         script(src="/static/js/showCalendar.js")
         script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoJS}`)

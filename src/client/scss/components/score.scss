@@ -1,0 +1,14 @@
+.score {
+  font-size: 30px;
+  color: $thema-red;
+  display: inline;
+  font-weight: 500;
+}
+.score__length {
+  display: inline;
+  margin-left: 20px;
+}
+
+.score__createdAt {
+  margin-bottom: 10px;
+}
