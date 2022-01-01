@@ -12,12 +12,15 @@ block content
                         a(href=`subject/search`).main__search__button 과목 선택하기
             div.bird__box
                 img(src="/uploads/default/redBird.png")
-                div.quote__box
-                    p.main__p.quote 오늘 꾸는 꿈보다 내일 이루는 꿈이 웅앵
-                    button(src="/").quote__button
-                        i.fas.fa-plus
-                    button(src="/").quote__button.refresh
-                        i.fas.fa-sync-alt
+                div(data-quotes=quotes).quote__box
+                    div.quote__left__box
+                        h5.author
+                        div.quote
+                    div.quote__right__box
+                        button(src="/").quote__button
+                            i.fas.fa-plus
+                        button.quote__button.refresh
+                            i.fas.fa-sync-alt
         div.right__box
             if loggedIn
                 a(href="/map")

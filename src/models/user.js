@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     postings:[{type: Schema.Types.ObjectId, ref:"Posting"}], 
     tests:[{type: Schema.Types.ObjectId, ref:"Test"}],
     block: {type: Boolean, default:false},
-    mode: {type: String, default: "sarcasm"},
+    mode: {type: String, default: "sarcasm"}, // wise랑 두가지 버전이 있음 혹은 blame까지 3개. 
 })
 // 성적들도 모아야될수도있음
 

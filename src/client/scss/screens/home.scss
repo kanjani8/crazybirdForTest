@@ -68,19 +68,43 @@
   border: 1px solid rgba($color: $thema-red, $alpha: 1);
   background-color: rgba($color: $thema-red, $alpha: 0.3);
   display: flex;
-  align-items: center;
-  p {
-    border: none;
-    margin: 10px;
-    font-stretch: semi-expanded;
-  }
+  flex-direction: column;
+  justify-content: space-between;
 }
+
+.quote__left__box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 15px 10px 0px 10px;
+}
+.author {
+  margin-left: 5px;
+  margin-bottom: 15px;
+  color: rgba($color: black, $alpha: 0.7);
+  font-size: 16px;
+}
+.quote {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba($color: black, $alpha: 1);
+  font-size: 14px;
+}
+
+.quote__right__box {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .quote__button {
   background-color: rgba($color: $thema-red, $alpha: 0);
   color: rgba($color: $thema-red, $alpha: 1);
   border: 0px;
   padding: 10px 8px;
-  margin: 10px 5px;
 }
 .main__search__button {
   font-size: 2vh;

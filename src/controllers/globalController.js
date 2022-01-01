@@ -2,21 +2,25 @@ import Reporting from "../models/reporting";
 import Location from "../models/location";
 import Event from "../models/event";
 import User from "../models/user";
+import Quote from "../models/quote";
+
 export const main = async (req, res) => {
     if(req.session.user){
         try{
             const user = await User.findById(req.session.user._id).populate("likedSubjects");
+            const quotes = await Quote.find({mode: user.mode});
             const likedSubjects = user.likedSubjects;
             const event_obj = await Event.find({});
             const events =  JSON.stringify(event_obj);
-            return res.render("home", {pageTitle: "", events, likedSubjects});
+            return res.render("home", {pageTitle: "", events, likedSubjects, quotes});
         }catch(error){
-            console.log(error)
+            console.log(error);
             return res.status(404).render("404", {pageTitle: "오류", errorMessage: error._message});
         }
     }
     else{
-        return res.render("home", {pageTitle: ""});
+        const quotes = await Quote.find({mode: "wise"});
+        return res.render("home", {pageTitle: "", quotes});
     }
 
 }
