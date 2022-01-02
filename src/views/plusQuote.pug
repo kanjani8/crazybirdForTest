@@ -1,0 +1,22 @@
+doctype html
+html(lang="ko")
+    head
+        title #{pageTitle} | #{siteName}
+        link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css")
+        link(rel="stylesheet" href="/static/css/main.css")
+        link(rel="shortcut icon" href="#")
+        block script
+    body
+        if errorMessage
+            span=errorMessage
+        form(method="POST")
+            label(for='content') 명언 내용
+            input(type="text", id="content", name="content",required)
+            br
+            h3 모드 선택
+            div.radioBox
+                input(type="radio",value="sarcasm", name="mode").radioItem
+                label(for='sarcasm').radioItem  sarcasm
+                input(type="radio", value="wise", name="mode").radioItem 
+                label(for='wise').radioItem  wise
+            input(type="submit", value="등록")

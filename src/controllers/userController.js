@@ -831,3 +831,4 @@ export const postChangeschedule = async (req,res) => {
         return res.status(400).render("404", {pageTitle:"변경하기 에러", errorMessage:error._message});
     }
 }
+

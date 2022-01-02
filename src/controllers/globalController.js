@@ -65,3 +65,29 @@ export const getCalendar = async(req, res) =>{
     const events =  JSON.stringify(event_obj);
     return res.render("calendar", {pageTitle: "일정표", events});
 }
+
+export const getPlusQuote = (req,res) => {
+    return res.render("plusQuote");
+}
+
+export const postPlusQuote = async  (req,res) => {
+    const {
+        body: {content,mode},
+    } = req;
+    
+    try {
+        const quote = await Quote.create({
+            author:req.session.user.name,
+            content,
+            mode
+        });
+        console.log(quote);
+    } catch (error) {
+        return res.status(400).render("404", {
+            pageTitle: "명언 등록 에러",
+            errorMessage: error._message,
+          });
+    }
+    
+    return res.send(`<script>alert("명언 등록 완료");  location.href='/'; </script>`);
+}
