@@ -91,3 +91,12 @@ export const postPlusQuote = async  (req,res) => {
     
     return res.send(`<script>alert("명언 등록 완료");  location.href='/'; </script>`);
 }
+
+export const changeQuote = async (req, res) => {
+    const mode = req.body.mode;
+    const user = await User.findByIdAndUpdate(req.session.user._id, {
+        mode
+    });
+    req.session.user = user;
+    return res.redirect("/");
+}

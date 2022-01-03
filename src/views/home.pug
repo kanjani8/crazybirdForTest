@@ -17,6 +17,10 @@ block content
                         h5.author
                         div.quote
                     div.quote__right__box
+                        select.modeSelect
+                            option(value="" selected disabled hidden) 명언 모드 선택
+                            option(value="sarcasm") sarcasm
+                            option(value="wise") wise 
                         button(src="/").quote__button
                             i.fas.fa-plus
                         button.quote__button.refresh

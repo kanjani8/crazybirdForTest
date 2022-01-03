@@ -113,3 +113,13 @@
   color: black;
   padding: 5px 10px;
 }
+.modeSelect{
+  width: 150px;
+  appearance: none;
+  color:$thema-red ;
+  background-color:rgba($color: $thema-red, $alpha: 0);
+  border: 1px solid rgba($color: $thema-red, $alpha: 1);
+  justify-content: center;
+  text-align: center;
+  border-radius: 10px;
+}
