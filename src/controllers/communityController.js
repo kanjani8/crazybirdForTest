@@ -119,9 +119,6 @@ export const watchPosting = async (req, res) => {
         const createdAt = `${time.getMonth()+ 1}월${time.getDate()}일 ${hours}:${minutes}`;
         console.log(createdAt);
         const recommend = req.session.user.recommendPost.includes(postingId);
-        // await fetch(`http://localhost:4000/api/subject/${id}/community/${postingId}/view`, {
-        //  method: "POST",
-        // });
         return res.render("community/watch", { pageTitle: `${subject.name} 게시판`, subject, posting, createdAt, recommend});
     }catch(error){
         console.log(error._message);

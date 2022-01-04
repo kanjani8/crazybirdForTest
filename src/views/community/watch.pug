@@ -8,7 +8,7 @@ block content
             h5.posting__info=createdAt
             span.posting__info 조회수: #{posting.meta.views}
             span.posting__info 추천: #{posting.meta.rating}
-        div.posting__body
+        div.posting__body(data-id=posting.id)
             if posting.videos
                 each video in posting.videos
                     div#videoContainer
@@ -55,3 +55,4 @@ block content
 
 block scripts
     script(src="/static/js/videoPlayer.js")
+    script(src="/static/js/view.js")

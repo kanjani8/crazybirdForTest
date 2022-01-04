@@ -12,7 +12,8 @@ module.exports = {
         showCalendar: "./src/client/js/showCalendar.js",
         showQuote: "./src/client/js/showQuote.js",
         fileUpload:"./src/client/js/fileUpload.js",
-        communityTimeEditer: "./src/client/js/communityTimeEditer.js"
+        communityTimeEditer: "./src/client/js/communityTimeEditer.js",
+        view: "./src/client/js/view.js"
       },
     mode: "development", // developnemt or production(개발완료/default)
     watch: true,
