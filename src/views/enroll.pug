@@ -1,10 +1,8 @@
 extends base.pug
 
 block content
-    h1 회원가입
     if errorMessage
       span=errorMessage
-
 
     form(method="POST", id="chkPW", onsubmit="return false")
         input(placeholder="닉네임", name="name", type="text", required)
@@ -14,8 +12,8 @@ block content
          minlength=8, maxlength=20, required)
         input(placeholder="비밀번호 확인", name="password2", type="password", 
          minlength=8, maxlength=20, required)
-        select(name="schoolName")
-          option(value="") 미지정
+        select(name="schoolName").enroll__select
+          option(value="") 학교 무소속 선택
           option(value="성신여자대학교") 성신여자대학교 
         input(type="submit", value="가입하기")
         include partials/social-login

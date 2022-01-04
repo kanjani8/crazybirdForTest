@@ -29,7 +29,7 @@ input[type="submit"] {
   border-radius: 5px;
   cursor: pointer;
   display: block;
-  &:not(.posting__search__btn) {
+  &:not(.posting__search__btn, .edit__submitBtn) {
     width: 95%;
     padding: 12px 20px;
     margin-top: 30px;
@@ -131,4 +131,11 @@ input[type="submit"] {
 
 select {
   width: 50%;
+}
+
+.enroll__select {
+  margin-top: 30px;
+  width: 65%;
+  height: 50px;
+  background-color: #fafafa;
 }

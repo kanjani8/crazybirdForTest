@@ -7,7 +7,7 @@ import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import fetch from "node-fetch";
 
-export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"enroll"});
+export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"회원가입 페이지"});
 
 export const postEnroll = async (req, res) => {
     const { name, email, username, password, password2, schoolName} = req.body;
