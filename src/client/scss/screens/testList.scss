@@ -1,0 +1,63 @@
+.tests__box{
+  width: 90%;
+  margin: 25px auto;
+  hr {
+      border: 0.1px solid rgba($color: grey, $alpha: 0.3);
+  }
+}
+.test_mixin{
+
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.test_left {
+  a {
+    font-size: 17px;
+  }
+  .createdAt {
+    font-size: 10px;
+    color: rgba($color: #000000, $alpha: 0.7);
+    margin-top: 10px;
+  }
+  display: inline-block;
+}
+.test_right{
+  float: right;
+  
+  color: $thema-red;
+  padding: 12px 20px;
+
+}
+.quetionBox {
+    text-align: left;
+    display: inline-block;
+}
+
+.Q{
+    display: inline-block;
+    margin-right: 5px;
+    color: $thema;
+}
+.question{
+    display: inline-block;
+}
+
+.answerBox{
+    text-align: left;
+    display: inline-block;
+}
+
+.A{
+    display: inline-block;
+    margin-right: 5px;
+    color: $thema;
+}
+.answer{
+    display: inline-block;
+}
+
+.deleteTest{
+  
+  font-size: 25px;
+}

@@ -1,7 +1,16 @@
 mixin test(test)
-    div
+    div.test_mixin
         h4
-            a(href=`/subject/${test.subject.id}/test/${test.id}/edit`)=test.question
-            small=test.answer
-            a(href=`/subject/${test.subject.id}/test/${test.id}/delete`) ❌
+            div.test_left
+                div.quetionBox
+                    h4.Q Q
+                    a(href=`/subject/${test.subject.id}/test/${test.id}/edit`).question=test.question
+                br
+                div.answerBox
+                    h4.A A
+                    small.answer=test.answer
+                h5.createdAt=test.createdAt
+            div.test_right
+                a(href=`/subject/${test.subject.id}/test/${test.id}/delete`).deleteTest
+                    i.fas.fa-trash-alt
         hr

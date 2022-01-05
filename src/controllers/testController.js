@@ -5,15 +5,54 @@ import Score from "../models/score";
 
 export const list = async (req, res) => {
     const { id } = req.params;
+    const { page } = req.query; 
     try{
       const subject = await Subject.findById(id);
-      const tests = await Test.find({subject: id, user: req.session.user._id}).populate("subject");
-      return res.render("tests/testList", { pageTitle: subject.name, tests });
+      const totalTest = await Test.countDocuments({subject: id, user: req.session.user._id});
+      let {
+        startPage,
+        endPage,
+        hidePost,
+        maxPost,
+        totalPage,
+        currentPage
+      } = paging(page, totalTest);
+      const tests = await Test.find({subject: id, user: req.session.user._id})
+      .populate("subject")
+      .sort({ createAt: "desc" })
+      .skip(hidePost)
+      .limit(maxPost);
+      return res.render("tests/testList", { pageTitle: subject.name+" 문제 리스트", subject,tests,
+        currentPage,
+        startPage,
+        endPage,
+        maxPost,
+        totalPage, });
     }catch(error){
       return res.render("404", { pageTitle: "Tests not found.", errorMessage:error._message });
     }
   };
+  const paging = (page, totalPost) => {
+    const maxPost = 10; 
+    const maxPage = 10; 
+    let currentPage = page ? parseInt(page) : 1;
+    let hidePost = currentPage === 1 ? 0 : (page - 1) * maxPost;
+    let totalPage = totalPost==0 ? 1:Math.ceil(totalPost / maxPost);
+    
+    if (currentPage > totalPage) { 
+      currentPage = totalPage;
+    }
   
+    let startPage = Math.floor(((currentPage - 1) / maxPage)) * maxPage + 1;
+    let endPage = startPage + maxPage - 1;
+  
+    if (endPage > totalPage) { 
+      endPage = totalPage;
+    }
+    return { startPage, endPage, hidePost, maxPost, totalPage, currentPage };
+  };
+  
+  export default paging;
 
 export const getUploadTest = async (req, res) => {
     const { id } = req.params;

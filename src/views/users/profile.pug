@@ -10,6 +10,8 @@ block content
         h2.profile__name=user.name
     hr
     div.list
+        h4.list__name #{user.name}의 문제 목록
+        br
         h4.list__name #{user.name}의 작성글 목록
         div.write
             each posting in user.postings
@@ -18,3 +20,5 @@ block content
                 li 작성글이 없습니다.
     if String(loggedInUser._id) !== String(user._id)
         a(href=`${user._id}/report`) 유저신고🔔
+    scripts
+        script(src="/static/js/communityTimeEditer.js")

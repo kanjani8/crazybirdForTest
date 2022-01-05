@@ -2,10 +2,34 @@ extends ../base.pug
 include ../mixins/test
 
 block content
-    each test in tests
-        +test(test)
-    else
-        li Sorry nothing found.
-    br
-    a(href=`upload`) 문제 추가하기
-    a(href="setting") 문제 풀러 가기
+    div.tests__box
+        each test in tests
+            +test(test)
+        else
+            li Sorry nothing found.
+    div.paging_box
+            if startPage > maxPost
+                a.prev_btn.pageBtn(href=`http://localhost:4000/subject/${subject.id}/test/list?page=${startPage-1}`)
+                    i.fas.fa-angle-double-left.prev1
+            else
+                a.prev_btn.pageBtn.disabled(href="javascript:void(0);")
+                    i.fas.fa-angle-double-left.prev2
+
+            -for (let i = startPage; i <= endPage ; i++)
+                if i === currentPage 
+                    a.pageBtn.current(href=`http://localhost:4000/subject/${subject.id}/test/list?page=${i}`)
+                        span.currentPageNum=i
+                else
+                    a.pageBtn(href=`http://localhost:4000/subject/${subject.id}/test/list?page=${i}`)
+                        span.otherPageNum=i       
+            if endPage < totalPage 
+                a.next_btn.pageBtn(href=`http://localhost:4000/subject/${subject.id}/test/list?page=${endPage+1}`)
+                    i.fas.fa-angle-double-right.next1
+            else 
+                a.next_btn.pageBtn.disabled(href="javascript:void(0);")
+                    i.fas.fa-angle-double-right.next2
+    div.postings__footer
+        a(href=`upload`).posting__btn 문제 추가하기
+        a(href="setting").posting__btn 문제 풀러 가기
+    scripts
+        script(src="/static/js/communityTimeEditer.js")
