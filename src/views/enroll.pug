@@ -1,9 +1,6 @@
 extends base.pug
 
 block content
-    if errorMessage
-      span=errorMessage
-
     form(method="POST", id="chkPW", onsubmit="return false")
         input(placeholder="닉네임", name="name", type="text", required)
         input(placeholder="email", name="email", type="email", required)

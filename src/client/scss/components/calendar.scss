@@ -12,8 +12,9 @@
 .calendar__small {
   margin-top: 10px;
   width: 40vw;
-  height: 40vh;
-
+  &:not(.calendar__mideum) {
+    height: 40vh;
+  }
   .fc-prev-button {
     display: flex;
     justify-content: center;
@@ -46,6 +47,9 @@
   .fc-toolbar-title {
     font-size: 25px;
   }
+}
+.calendar__mideum {
+  height: 80vh;
 }
 
 #calendar button {

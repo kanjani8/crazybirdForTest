@@ -4,9 +4,10 @@ include mixins/likedSubject
 
 block content
     if loggedIn
-        form(method="GET").search__form
-            input(placeholder="Search by lecture or professor",name="keyword", type="text").search
-            input(type="submit", value="Search").push
+        form(method="GET", id="subjectSearch").search__form
+            input(placeholder="과목명/교수 이름으로 검색",name="keyword", type="text").search
+            button(form="subjectSearch", type="submit").search__btn
+                i.fas.fa-search
         div.allsubs
             div.likesubs
                 each subject in likedSubjects

@@ -7,8 +7,6 @@ html(lang="ko")
         link(rel="shortcut icon" href="#")
         block script
     body
-        if errorMessage
-            span=errorMessage
         form(method="POST")
             label(for='content') 명언 내용
             input(type="text", id="content", name="content",required)

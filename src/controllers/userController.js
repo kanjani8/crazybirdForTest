@@ -239,14 +239,12 @@ export const finishKakaoLogin = async(req, res) =>{
             const profile = userData.kakao_account.profile;
             req.session.access_token = access_token;
             let existingUser = await User.findOne({email}).populate("school"); 
-
-            //차단된 계정 확인
-            if(existingUser.block){
-                return res.send(`<script>alert("신고를 받아 차단된 계졍입니다.");
-                        location.href='/login';</script>`);
-            }
-            console.log("유저", existingUser);
             if(existingUser){
+                //차단된 계정 확인
+                if(existingUser.block){
+                    return res.send(`<script>alert("신고를 받아 차단된 계정입니다.");
+                            location.href='/login';</script>`);
+                }
                 // 사이트계정에는 프사가 없고 카톡프사는 있을 경우
                 if(!existingUser.avatarUrl && !profile.is_default_image){
                     const avatarUrl = profile.profile_image_url; 
@@ -701,7 +699,7 @@ export const user = async(req, res) => {  // 작성글 목록을 나타내는 �
         return res.status(404).render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
     }
     console.log(user);
-    return res.render("users/profile", {pageTitle:`${user.name}`, user});
+    return res.render("users/profile", {pageTitle:`${user.name}님의 로그`, user});
 };
 
 export const getUserReport = (req,res) => {

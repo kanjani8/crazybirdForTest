@@ -1,13 +1,12 @@
 extends ../base.pug
 
 block content
-    h1 소셜 회원가입
-    if errorMessage
-      span=errorMessage
-
-    form(method="POST")
+    form(method="POST").socialEnrollForm
+        select(name="schoolName").enroll__select
+          option(value="") 학교 무소속 선택
+          option(value="성신여자대학교") 성신여자대학교
         input(placeholder="닉네임", name="name", type="text", value=loggedInUser.name, required)
-        select(name="schoolName")
-          option(value="") 미지정
-          option(value="성신여자대학교") 성신여자대학교 
         input(type="submit", value="마저 가입하기")
+    div.socialEnrollWarning
+      span.warning *이후 소속 변경 불가
+      h4.warning *가입 후 프로필 사진을 확인해주세요.

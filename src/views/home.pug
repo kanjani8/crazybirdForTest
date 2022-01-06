@@ -4,12 +4,11 @@ include mixins/mainLiked
 block content
     div.whole__box
         div.left__box
-            if loggedIn
-                div.mainLiked
-                    div.likesubs__main
-                        each subject in likedSubjects
-                            +mainLiked(subject)
-                        a(href=`subject/search`).main__search__button 과목 선택하기
+            div.mainLiked
+                div.likesubs__main
+                    each subject in likedSubjects
+                        +mainLiked(subject)
+                    a(href=`subject/search`).main__search__button 과목 선택하기
             div.bird__box
                 img(src="/uploads/default/redBird.png")
                 div(data-quotes=quotes).quote__box
@@ -26,26 +25,18 @@ block content
                         button.quote__button.refresh
                             i.fas.fa-sync-alt
         div.right__box
-            if loggedIn
+            if loggedInUser.school
                 a(href="/map")
                     div(id = "map", data-school=loggedInUser.school.address)
                 div(id = "calendar", data-events = events).calendar__small
-
-                
             else
-                p.main__p 이 사이트는 대학생들의 시험공부를 위한 사이트 입니다.
-                 | 문제를 등록 후 테스트하거나 , 직접 만든 시험문제를 공유해서 서로 풀어볼 수 있고,
-                 | 같은 과목을 선택한 학우들과 과목 게시판에서 수업에 대한 이야기를 나눌 수도 있습니다.
-                p.main__p 현재 지원 학교: 
-                 |  성신여대
-
+                div(id = "calendar", data-events = events).calendar__small.calendar__mideum
 
 
 block scripts 
     script(src="/static/js/showQuote.js")
-    if(loggedIn)
-        link(rel="stylesheet", href="/static/css/showCalendar.css") 
-        script(src="/static/js/showCalendar.js")
-        script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoJS}`)
-        script(src="/static/js/showMap.js")
+    link(rel="stylesheet", href="/static/css/showCalendar.css") 
+    script(src="/static/js/showCalendar.js")
+    script(type="text/javascript", src=`//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoJS}`)
+    script(src="/static/js/showMap.js")
         

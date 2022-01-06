@@ -20,7 +20,7 @@ export const main = async (req, res) => {
     }
     else{
         const quotes = await Quote.find({mode: "wise"});
-        return res.render("home", {pageTitle: "", quotes});
+        return res.render("home0", {pageTitle: "", quotes});
     }
 
 }

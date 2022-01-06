@@ -2,8 +2,6 @@ extends base.pug
 
 block content
     h1 비밀번호 찾기
-    if errorMessage
-        span=errorMessage
     form(method="POST")
         input(placeholder="이메일", name="email", type="text", required)
         input(placeholder="아이디", name="id", type="text", required)
