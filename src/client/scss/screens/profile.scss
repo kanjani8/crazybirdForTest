@@ -17,17 +17,38 @@
   justify-content: space-between;
   padding: 15px 20px;
   margin-bottom: 5px;
+  align-items: center;
   flex-direction: column;
 }
-.list__name {
+.list__name1 {
   padding: 15px 20px;
-  background-color: $thema;
   color: white;
+  background-color: $thema;
   max-width: fit-content;
   font-size: 20px;
+  width: 90%;
 }
-.write {
+.list__name2 {
   margin-top: 30px;
   padding: 15px 20px;
+  color: white;
+  border-radius: 10px;
+  background-color: $thema-red;
+  max-width: fit-content;
+  width: 90%;
+  font-size: 17px;
+}
+
+.write {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 15px 20px;
   border: 1px solid rgba($color: $thema, $alpha: 1);
+  width: 90%;
+}
+.profiles__footer {
+  width: 90%;
+  display: flex;
+  justify-content: flex-end;
+  margin-left: 50px;
 }

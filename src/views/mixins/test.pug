@@ -9,6 +9,7 @@ mixin test(test)
                 div.answerBox
                     h4.A A
                     small.answer=test.answer
+                br
                 h5.createdAt=test.createdAt
             div.test_right
                 a(href=`/subject/${test.subject.id}/test/${test.id}/delete`).deleteTest
