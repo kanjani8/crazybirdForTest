@@ -137,6 +137,7 @@ export const getUploadPosting = async(req, res) =>{
 export const postUploadPosting = async(req, res) =>{
     const {id} = req.params;
     const {title, script} = req.body;
+    console.log(req.files);
     let images = [];
     let videos = [];
     try{

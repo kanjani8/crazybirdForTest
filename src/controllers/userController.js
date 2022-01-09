@@ -10,6 +10,8 @@ import fetch from "node-fetch";
 export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"회원가입 페이지"});
 
 export const postEnroll = async (req, res) => {
+    const us = await User.find({});
+    console.log(us);
     const { name, email, username, password, password2, schoolName} = req.body;
     const pageTitle = "회원가입";
     if(password !== password2){
@@ -24,10 +26,19 @@ export const postEnroll = async (req, res) => {
     const idExists = await User.exists({username});
     const emailExists = await User.exists({email});
     if(idExists && emailExists){
-        return res.status(400).render("enroll", {
-            pageTitle,
-            errorMessage:"아이디 " + username + "와(과) 이메일 " + email + "이 모두 사용중입니다.",
-        });
+        const user = await User.find({email});
+        if(user.block){
+            return res.status(400).render("enroll", {
+                pageTitle,
+                errorMessage:"이메일 " + email + "이 신고로 차단되었습니다.",
+            });
+        }
+        else{
+            return res.status(400).render("enroll", {
+                pageTitle,
+                errorMessage:"아이디 " + username + "와(과) 이메일 " + email + "이 모두 사용중입니다.",
+            });
+        }
     }
     else if(idExists){
         return res.status(400).render("enroll", {
@@ -36,10 +47,19 @@ export const postEnroll = async (req, res) => {
         });
     }
     else if(emailExists){
-        return res.status(400).render("enroll", {
-            pageTitle,
-            errorMessage:"이메일 " + email + "이 사용중입니다.",
-        });
+        const user = await User.find({email});
+        if(user.block){
+            return res.status(400).render("enroll", {
+                pageTitle,
+                errorMessage:"이메일 " + email + "이 신고로 차단되었습니다.",
+            });
+        }
+        else{
+            return res.status(400).render("enroll", {
+                pageTitle,
+                errorMessage:"이메일 " + email + "이 사용중입니다.",
+            });
+        }
     }
 
      

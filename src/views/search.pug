@@ -9,11 +9,14 @@ block content
             button(form="subjectSearch", type="submit").search__btn
                 i.fas.fa-search
         div.allsubs
-            div.likesubs
+            div.subs__title
+                h4 <즐겨찾기>
+            div.likesubs.subs
                 each subject in likedSubjects
                     +likedSubject(subject)
+            div.subs__title
+                h4 <모든 과목>
             div.subs
-                h4 ----모든 과목-----
                 each subject in subjects
                     +subject(subject)
                 else

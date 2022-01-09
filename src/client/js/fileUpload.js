@@ -5,9 +5,9 @@ const fileBox = document.getElementsByClassName("file__objBox")[0];
 // const para = link.split("/");
 // const url = "/subject/"+para[4]+"/community/upload";
 
+let files;
 const checkFile = (event,input) => {
-    const files = event.target.files;
-    console.log(event.target.result);
+    files = event.target.files;
     console.log(files);
     
     if(files.length > 5){
@@ -22,28 +22,41 @@ const checkFile = (event,input) => {
                 file.setAttribute("class", "fileObj");
                 let file_left = document.createElement("div");
                 file_left.setAttribute("class", "fileObj__left");
-                
-                const imgSample = document.createElement("img");
-                imgSample.setAttribute("class", "fileObj__sample");
+
+                let mediaSample;
                 const reader = new FileReader();
-                reader.onload = e => {
-                    imgSample.src = e.target.result;
+                if(files[i].type.indexOf("video") === 0){ //video
+                    mediaSample = document.createElement("video");
+                    mediaSample.setAttribute("preload", "metadata");
+                    reader.onload = e => {
+                        mediaSample.src = e.target.result + "#t=0.5";
+                    }
                 }
+                else{ // img
+                    mediaSample = document.createElement("img");
+                    reader.onload = e => {
+                        mediaSample.src = e.target.result;
+                    }
+                }
+                mediaSample.setAttribute("class", "fileObj__sample");
                 reader.readAsDataURL(files[i]);
+
                 const fileName = document.createElement("h4");
                 fileName.setAttribute("class", "fileObj__name");
                 fileName.innerText = files[i].name;
                 const deleteButton = document.createElement("button");
                 deleteButton.setAttribute("class", "fileObj__delete");
-                deleteButton.innerText = "X"; // 이게 눌릴경우 addeventListner로 받아서 file value값을 바꿔줘야함
+                deleteButton.setAttribute("type", "button");
+                deleteButton.innerText = "X";
+                deleteButton.addEventListener("click", e => {deleteFile(i)}); 
+                // 이게 눌릴경우 addeventListner로 받아서 file value값을 바꿔줘야함
                 
-                file_left.appendChild(imgSample);
+                file_left.appendChild(mediaSample);
                 file_left.appendChild(fileName);
                 file.appendChild(file_left);
                 file.appendChild(deleteButton);
                 fileBox.appendChild(file);
                 // form.onsubmit = "return true";
-                console.log(fileBox);
             }
 
 
@@ -96,9 +109,29 @@ const checkFile = (event,input) => {
         }
     }
 }
+
 fileInput.addEventListener("change", e => {
     checkFile(e,e.target) 
 })
+
+const deleteFile = (i) =>{
+    const dataTransfer = new DataTransfer();
+    const sampleFiles = fileInput.files;
+    try{
+        for(let j = 0; j < sampleFiles.length; j++){
+            if(j === i){
+                continue;
+            }
+            dataTransfer.items.add(sampleFiles[i]);
+        }
+    }catch(error){
+        console.log(error);
+    }
+
+    fileInput.files = dataTransfer.files;
+    fileBox.children[i].remove();
+    console.log(fileInput.files);
+}
 
 
 // function readMultipleImage(input) {
