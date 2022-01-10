@@ -1,11 +1,14 @@
 const form = document.getElementById("upload");
 const fileInput = document.getElementById("file");
 const fileBox = document.getElementsByClassName("file__objBox")[0];
+let g_count =1;
 // const link = document.location.href;
 // const para = link.split("/");
 // const url = "/subject/"+para[4]+"/community/upload";
 
 let files;
+let data = new DataTransfer();
+
 const checkFile = (event,input) => {
     files = event.target.files;
     console.log(files);
@@ -17,6 +20,11 @@ const checkFile = (event,input) => {
     }
     else{// 이름이 뜨게해둠 앞으로 파일들 작은 미리보기 이미지나 삭제 버튼 추가구현 할 예정
         try{
+            let sampleFiles = fileInput.files;
+            for(let i = 0; i < sampleFiles.length; i++){
+                data.items.add(sampleFiles[i]);
+            }
+            fileInput.files = data.files;
             for(let i = 0; i < files.length; i++){
                 let file = document.createElement("div");
                 file.setAttribute("class", "fileObj");
@@ -43,12 +51,13 @@ const checkFile = (event,input) => {
 
                 const fileName = document.createElement("h4");
                 fileName.setAttribute("class", "fileObj__name");
+                fileName.setAttribute("id", "fileObj__name");
                 fileName.innerText = files[i].name;
                 const deleteButton = document.createElement("button");
                 deleteButton.setAttribute("class", "fileObj__delete");
                 deleteButton.setAttribute("type", "button");
                 deleteButton.innerText = "X";
-                deleteButton.addEventListener("click", e => {deleteFile(i)}); 
+                deleteButton.addEventListener("click", e => {deleteFile(fileName.innerText)}); 
                 // 이게 눌릴경우 addeventListner로 받아서 file value값을 바꿔줘야함
                 
                 file_left.appendChild(mediaSample);
@@ -60,50 +69,6 @@ const checkFile = (event,input) => {
             }
 
 
-            ////
-            // // for(let i = 0; i < files.length; i++){
-            //     let file = document.createElement("div");
-            //     file.setAttribute("class", "fileObj");
-                
-            //     const fileArr = Array.from(input.files);
-                
-            //     const colDiv = document.createElement("div");
-            //     fileArr.forEach((aaa, index) => {
-                    
-            //         const reader = new FileReader();
-            //         let file_left = document.createElement("div");
-            //         file_left.setAttribute("class", "fileObj__left");
-            //         let imgDiv = document.createElement("div");
-            //         let imgSample = document.createElement("img");
-            //         imgSample.setAttribute("class", "fileObj__sample");
-            //         let fileName = document.createElement("h4");
-            //         fileName.setAttribute("class", "fileObj__name");
-            //         fileName.innerText = files[index].name;
-            //         imgDiv.appendChild(imgSample);
-            //         // imgDiv.appendChild(fileName);
-            //         reader.onload = e => {
-            //             imgSample.src = e.target.result;
-            //             imgDiv.style.width = (imgSample.naturalWidth) * 0.2 + "px";
-            //             imgDiv.style.height = (imgSample.naturalHeight) * 0.2 + "px";
-            //         }
-            //         file_left.appendChild(imgDiv);
-            //         file_left.appendChild(fileName);
-            //         const deleteButton = document.createElement("button");
-            //         deleteButton.setAttribute("class", "fileObj__delete");
-            //         deleteButton.innerText = "X"; // 이게 눌릴경우 addeventListner로 받아서 file value값을 바꿔줘야함
-            //         colDiv.appendChild(file_left);
-            //         colDiv.appendChild(deleteButton);
-            //         reader.readAsDataURL(aaa);       
-            //     })
-
-                
-                
-            //     //imgSample.setAttribute("src", files[i].result ); // 이걸맞는값을  찾아야함 그리고 동영상일 경우 생각해야함 캡쳐화면을 띄우는걸 찾던지..
-            //     file.appendChild(colDiv);      
-            //     console.log(fileBox);
-            //     fileBox.appendChild(file);
-            // }
-
         }catch(error){
             console.log(error);
         }
@@ -114,23 +79,32 @@ fileInput.addEventListener("change", e => {
     checkFile(e,e.target) 
 })
 
-const deleteFile = (i) =>{
+const deleteFile = (text) =>{
     const dataTransfer = new DataTransfer();
     const sampleFiles = fileInput.files;
+    for(let i = 0; i < sampleFiles.length; i++){
+        console.log("이름:", fileBox.children[i].querySelector('h4').innerText);
+        if(fileBox.children[i].querySelector('h4').innerText === text){
+            fileBox.children[i].remove();
+            break;
+        }      
+    }
+    // console.log(sampleFiles);
     try{
         for(let j = 0; j < sampleFiles.length; j++){
-            if(j === i){
+            if(sampleFiles[j].name === text){
                 continue;
             }
-            dataTransfer.items.add(sampleFiles[i]);
+            dataTransfer.items.add(sampleFiles[j]);
         }
+        fileInput.files = dataTransfer.files;
+        
     }catch(error){
         console.log(error);
     }
 
-    fileInput.files = dataTransfer.files;
-    fileBox.children[i].remove();
-    console.log(fileInput.files);
+    
+    // console.log(fileInput.files);
 }
 
 
