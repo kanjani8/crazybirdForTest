@@ -1,0 +1,32 @@
+extends ../base.pug
+include ../mixins/userTest.pug
+
+block content
+    div.tests__box
+        each test in tests
+            +test(test)
+        else
+            li Sorry nothing found.
+    div.paging_box
+            if startPage > maxPost
+                a.prev_btn.pageBtn(href=`http://localhost:4000/user/${user._id}/testList?page=${startPage-1}`)
+                    i.fas.fa-angle-double-left.prev1
+            else
+                a.prev_btn.pageBtn.disabled(href="javascript:void(0);")
+                    i.fas.fa-angle-double-left.prev2
+
+            -for (let i = startPage; i <= endPage ; i++)
+                if i === currentPage 
+                    a.pageBtn.current(href=`http://localhost:4000/user/${user._id}/testList?page=${i}`)
+                        span.currentPageNum=i
+                else
+                    a.pageBtn(href=`http://localhost:4000/user/${user._id}/testList?page=${i}`)
+                        span.otherPageNum=i       
+            if endPage < totalPage 
+                a.next_btn.pageBtn(href=`http://localhost:4000/user/${user._id}/testList?page=${endPage+1}`)
+                    i.fas.fa-angle-double-right.next1
+            else 
+                a.next_btn.pageBtn.disabled(href="javascript:void(0);")
+                    i.fas.fa-angle-double-right.next2
+    scripts
+        script(src="/static/js/communityTimeEditer.js")

@@ -29,12 +29,12 @@ export const community = async (req, res) => {
        totalPage,
        currentPage
      } = paging(page, totalPost);
-     console.log(totalPost, startPage,
-       endPage,
-       hidePost,
-       maxPost,
-       totalPage,
-       currentPage);
+    //  console.log(totalPost, startPage,
+    //    endPage,
+    //    hidePost,
+    //    maxPost,
+    //    totalPage,
+    //    currentPage);
      postings = await Posting.find({
        $or : 
        [ 

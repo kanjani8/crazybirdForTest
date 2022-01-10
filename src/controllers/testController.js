@@ -19,7 +19,7 @@ export const list = async (req, res) => {
       } = paging(page, totalTest);
       const tests = await Test.find({subject: id, user: req.session.user._id})
       .populate("subject")
-      .sort({ createAt: "desc" })
+      .sort({ createdAt: "desc" })
       .skip(hidePost)
       .limit(maxPost);
       return res.render("tests/testList", { pageTitle: subject.name+" 문제 리스트", subject,tests,

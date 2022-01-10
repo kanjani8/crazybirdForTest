@@ -19,12 +19,23 @@
     font-size: 10px;
     color: rgba($color: #000000, $alpha: 0.7);
     margin-top: 10px;
+    display: inline-block;
+  }
+  .userTestSubject{
+    font-size: 10px;
+    color: rgba($color: #000000, $alpha: 0.7);
+    margin-top: 10px;
+    display: inline-block;
   }
   display: inline-block;
 }
+.otherSubjectBox{
+  .createdAt {
+    margin-left: 5px;
+  }
+}
 .test_right{
   float: right;
-  
   color: $thema-red;
   padding: 12px 20px;
 

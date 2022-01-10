@@ -1,6 +1,7 @@
 import User from "../models/user";
 import Event from "../models/event";
 import Posting from "../models/posting";
+import Test from "../models/test";
 import School from "../models/school";
 import Reporting from "../models/reporting";
 import bcrypt from "bcrypt";
@@ -711,16 +712,62 @@ export const leave = async(req, res) => {
         return res.status(400).render("404", {pageTitle:"회원탈퇴 에러", errorMessage:error._message});
     }
 };
-
 export const user = async(req, res) => {  // 작성글 목록을 나타내는 프로필
     const {userId:id} = req.params;
-    const user = await User.findById(id).populate("postings");
-    if(!user){
-        return res.status(404).render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
-    }
-    console.log(user);
-    return res.render("users/profile", {pageTitle:`${user.name}님의 로그`, user});
+    const { page } = req.query;
+    try{ 
+        const user = await User.findById(id).populate("postings");
+        if(!user){
+            return res.status(404).render("404", {pageTitle:"해당 사용자를 찾을 수 없음"});
+        }
+        // console.log(user);
+        const totalPost = await Posting.countDocuments({user:id});
+        // console.log(totalPost);
+        let {
+            startPage,
+            endPage,
+            hidePost,
+            maxPost,
+            totalPage,
+            currentPage
+          } = paging(page, totalPost);
+        // console.log(startPage,
+        //     endPage,
+        //     hidePost,
+        //     maxPost,
+        //     totalPage,
+        //     currentPage);
+        const postings = await Posting.find({user:id})
+        .sort({ createdAt: "desc" })
+        .skip(hidePost)
+        .limit(maxPost);
+        // console.log(postings);
+        return res.render("users/profile", {pageTitle:`${user.name}님의 로그`, user,
+        postings, currentPage, startPage, endPage, maxPost, totalPage});
+
+    } catch (error) {
+        return res.status(404).render("404", {pageTitle:"프로필 페이지 에러", errorMessage:error._message});
+    }  
 };
+
+const paging = (page, totalPost) => {
+    const maxPost = 5;
+    const maxPage = 5; 
+    let currentPage = page ? parseInt(page) : 1;
+    let hidePost = currentPage === 1 ? 0 : (page - 1) * maxPost;
+    let totalPage = totalPost==0 ? 1:Math.ceil(totalPost / maxPost);
+    if (currentPage > totalPage) { 
+      currentPage = totalPage;
+    }
+  
+    let startPage = Math.floor(((currentPage - 1) / maxPage)) * maxPage + 1;
+    let endPage = startPage + maxPage - 1;
+  
+    if (endPage > totalPage) { 
+      endPage = totalPage;
+    }
+    return { startPage, endPage, hidePost, maxPost, totalPage, currentPage };
+  };
 
 export const getUserReport = (req,res) => {
     const {userId} = req.params;
@@ -850,3 +897,77 @@ export const postChangeschedule = async (req,res) => {
     }
 }
 
+export const getTestlist = async (req,res) => {
+    const {userId:id} = req.params;
+    const { page } = req.query; 
+    try{
+        const totalTest = await Test.countDocuments({user:id});
+        const user = await User.findById(id);
+        let {
+            startPage,
+            endPage,
+            hidePost,
+            maxPost,
+            totalPage,
+            currentPage
+          } = paging2(page, totalTest);
+        const tests = await Test.find({ user:id})
+        .populate("subject")
+        .sort({ createdAt: "desc" })
+        .skip(hidePost)
+        .limit(maxPost);
+        return res.render("users/userTestList", { pageTitle: user.name+"님의 문제 리스트",user,tests,
+        currentPage,
+        startPage,
+        endPage,
+        maxPost,
+        totalPage,});
+    } catch (error) {
+
+    }
+}
+
+const paging2 = (page, totalPost) => {
+    const maxPost = 10; 
+    const maxPage = 10; 
+    let currentPage = page ? parseInt(page) : 1;
+    let hidePost = currentPage === 1 ? 0 : (page - 1) * maxPost;
+    let totalPage = totalPost==0 ? 1:Math.ceil(totalPost / maxPost);
+    
+    if (currentPage > totalPage) { 
+      currentPage = totalPage;
+    }
+  
+    let startPage = Math.floor(((currentPage - 1) / maxPage)) * maxPage + 1;
+    let endPage = startPage + maxPage - 1;
+  
+    if (endPage > totalPage) { 
+      endPage = totalPage;
+    }
+    return { startPage, endPage, hidePost, maxPost, totalPage, currentPage };
+  };
+  
+export default paging2;
+
+export const delteTest = async (req,res) => { 
+    const { userId, testId } = req.params;
+    try{
+      const user = await User.findById(userId).populate("school");
+      const test = await Test.findById(testId);
+      const opened = test.opened;
+      if(String(test.user._id) !== String(req.session.user._id)){
+        return res.send(`<script>alert("타인의 시험문제는 삭제할 수 없습니다.");
+            location.href='/user/${userId}/testList';</script>`);
+      }
+      await Test.findByIdAndDelete(testId);
+      user.tests.pull(testId);
+      if(opened){
+        user.point -=50;
+        req.session.user = user;
+      }
+      user.save();
+      return res.redirect(`/user/${userId}/testList`);
+    }catch(error){
+      return res.status(400).render("404", {pageTitle:"시험문제 삭제 에러", errorMessage: error._message});
+    }
+}

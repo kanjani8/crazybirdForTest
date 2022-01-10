@@ -10,15 +10,37 @@ block content
         h2.profile__name=user.name
     hr
     div.list
-        h4.list__name #{user.name}의 문제 목록
         br
-        h4.list__name #{user.name}의 작성글 목록
+        h4.list__name1 #{user.name}님의 작성글 목록
         div.write
-            each posting in user.postings
+            each posting in postings
                     +posting(posting)
             else
                 li 작성글이 없습니다.
-    if String(loggedInUser._id) !== String(user._id)
-        a(href=`${user._id}/report`) 유저신고🔔
+        div.paging_box
+            if startPage > maxPost
+                a.prev_btn.pageBtn(href=`http://localhost:4000/user/${user._id}?page=${startPage-1}`)
+                    i.fas.fa-angle-double-left.prev1
+            else
+                a.prev_btn.pageBtn.disabled(href="javascript:void(0);")
+                    i.fas.fa-angle-double-left.prev2
+
+            -for (let i = startPage; i <= endPage ; i++)
+                if i === currentPage 
+                    a.pageBtn.current(href=`http://localhost:4000/user/${user._id}?page=${i}`)
+                        span.currentPageNum=i
+                else
+                    a.pageBtn(href=`http://localhost:4000/user/${user._id}?page=${i}`)
+                        span.otherPageNum=i       
+            if endPage < totalPage 
+                a.next_btn.pageBtn(href=`http://localhost:4000/user/${user._id}?page=${endPage+1}`)
+                    i.fas.fa-angle-double-right.next1
+            else 
+                a.next_btn.pageBtn.disabled(href="javascript:void(0);")
+                    i.fas.fa-angle-double-right.next2
+    div.profiles__footer
+        a(href=`${user._id}/testList`).list__name2 #{user.name}님의 문제 리스트 보러 가기
+        if String(loggedInUser._id) !== String(user._id)
+            a(href=`${user._id}/report`) 유저신고🔔
     scripts
         script(src="/static/js/communityTimeEditer.js")
