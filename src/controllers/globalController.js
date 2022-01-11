@@ -6,6 +6,7 @@ import Quote from "../models/quote";
 
 export const main = async (req, res) => {
     if(req.session.user){
+        console.log(req.session.user);
         try{
             const user = await User.findById(req.session.user._id).populate("likedSubjects");
             const quotes = await Quote.find({mode: user.mode});

@@ -8,6 +8,7 @@ let school;
 if(container){
 	try{
 		school = JSON.parse(container.dataset.school);
+		console.log(school);
 	}catch(error){
 		console.log(error);
 	}

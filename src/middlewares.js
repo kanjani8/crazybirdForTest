@@ -13,14 +13,16 @@ export const protectorMiddleware = (req, res, next) => {
     if(req.session.loggedIn){
         next();
     } else{
+        req.flash("error", "로그인이 필요합니다.");
         return res.redirect("/login");
+      }
     }
-}
-
-export const publicOnlyMiddleware = (req, res, next) => {
-    if(!req.session.loggedIn){
+    
+    export const publicOnlyMiddleware = (req, res, next) => {
+      if(!req.session.loggedIn){
         next();
-    } else{
+      } else{
+        req.flash("error", "이미 로그인되었습니다.");
         return res.redirect("/");
     }
 }

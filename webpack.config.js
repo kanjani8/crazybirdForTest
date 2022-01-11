@@ -12,6 +12,7 @@ module.exports = {
         showCalendar: "./src/client/js/showCalendar.js",
         showQuote: "./src/client/js/showQuote.js",
         fileUpload:"./src/client/js/fileUpload.js",
+        fileEdit:"./src/client/js/fileEdit.js",
         communityTimeEditer: "./src/client/js/communityTimeEditer.js",
         view: "./src/client/js/view.js"
       },

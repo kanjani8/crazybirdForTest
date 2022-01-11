@@ -3,12 +3,29 @@ block content
     if errorMessage
         span=errorMessage
 
-    form(method="POST", enctype="multipart/form-data")
+    form(method="POST", id="upload", enctype="multipart/form-data")
         input(placeholder="제목", type="text",id="title", name="title", maxlength=80, value=posting.title)
         input(placeholder="내용", type="text", id="script",name="script", minlength=3, value=posting.script).script
-        input(type="file", multiple, id="file", name="file", accept="video/*,image/*").mediaButton 
-        input(type="submit", value="수정하기")
+        div.file__infoBox
+            label(for="file").file__info *최대 5개 선택 가능
+        input(type="file",multiple, accept="video/*,image/*", id="file", name="file").mediaButton
+        div.file__objBox
+            each video in posting.videos
+                div.fileObj(data-name= video)
+                    div.fileObj__left
+                        video.fileObj__sample(src="/" + video)
+                        h4.fileObj__name=video 
+                    button(type = "button").fileObj__delete2 X
+            each image in posting.images
+                div.fileObj(data-name= image)
+                    div.fileObj__left
+                        img.fileObj__sample(src="/" + image)
+                        h4.fileObj__name=image 
+                    button(type = "button").fileObj__delete2 X
+        input(type="submit", value="수정하기")        
         hr
         a(href=`/subject/${posting.subject.id}/community`, style="color: black;") 게시판으로 돌아가기
 
-        
+block scripts
+    script(src="/static/js/fileUpload.js")
+    script(src="/static/js/fileEdit.js")

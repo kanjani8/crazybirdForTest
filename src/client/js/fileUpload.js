@@ -18,7 +18,7 @@ const checkFile = (event,input) => {
         fileInput.value = null;   
         onsubmit="return false";     
     }
-    else{// 이름이 뜨게해둠 앞으로 파일들 작은 미리보기 이미지나 삭제 버튼 추가구현 할 예정
+    else{
         try{
             let sampleFiles = fileInput.files;
             for(let i = 0; i < sampleFiles.length; i++){

@@ -184,22 +184,50 @@ export const getEditPosting = async (req, res) => {
   
 export const postEditPosting = async (req, res) => {
     const {id, postingId} = req.params;
-    const {title, script} = req.body;
+    const {title, script, editedFile} = req.body;
+
     const posting = await Posting.findById(postingId).populate("subject");
-    const file = req.files['image']?req.files['image'][0]:null;
-    const imageUrl = posting.imageUrl ? posting.imageUrl : null;
     
-   if(!posting){
+    if(!posting){
       return res.render("404", { pageTitle: "해당 게시물을 찾을 수 없습니다" });
     }
-   if (String(posting.user._id) !== String(req.session.user._id)){
+    if (String(posting.user._id) !== String(req.session.user._id)){
       return res.status(403).redirect(`/subject/${id}/community`);
     }
+
+    let images = posting.images || [];
+    let videos = posting.videos || [];
+    try{
+        if(typeof editedFile === "string"){
+          images.pull(editedFile);
+          videos.pull(editedFile);
+        }
+        else{
+          for(let i = 0; i < editedFile.length; i++){
+          images.pull(editedFile[i]);
+          videos.pull(editedFile[i]);
+          }
+        }
+
+    }catch(error){
+        console.log(error);
+      }
       try {
-          await Posting.findByIdAndUpdate(postingId, 
+        for(let i = 0; i < req.files.length; i++){
+          if(req.files[i].mimetype.match(/image.*?$/gi)){
+            const image = req.files[i].path;
+            images.push(image);
+          } else {
+            const video = req.files[i].path;
+            videos.push(video);
+          }
+        }
+        console.log("마지막", images, videos);
+        await Posting.findByIdAndUpdate(postingId, 
             {
               title,
-              imageUrl: file ? file.path : imageUrl,
+              videos,
+              images,
               script
             });
           return res.redirect(`/subject/${id}/community/${postingId}`);
