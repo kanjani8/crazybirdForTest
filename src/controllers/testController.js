@@ -226,6 +226,7 @@ export const deleteTest = async (req, res) => {
         req.session.user = user;
       }
       user.save();
+      req.flash("success", "문제가 삭제되었습니다.");
       return res.redirect(`/subject/${id}/test/list`);
     }catch(error){
       return res.status(400).render("404", {pageTitle:"시험문제 삭제 에러", errorMessage: error._message});
@@ -412,6 +413,7 @@ export const postReport = async (req, res) => {
         return res.status(400).render("404", {pageTitle:"신고하기 에러", errorMessage:error._message});
     }
   }
+  req.flash("success", "신고됐습니다.");
   return res.redirect(`/subject/${id}/`);
 }
 

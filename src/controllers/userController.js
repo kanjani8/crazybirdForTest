@@ -3,11 +3,11 @@ import Event from "../models/event";
 import Posting from "../models/posting";
 import Test from "../models/test";
 import School from "../models/school";
-import Reporting from "../models/reporting";
+import Report from "../models/reporting";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
 import fetch from "node-fetch";
-
+import flash from "express-flash";
 export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"회원가입 페이지"});
 
 export const postEnroll = async (req, res) => {
@@ -82,6 +82,7 @@ export const postEnroll = async (req, res) => {
                 password,
             });
         }
+        req.flash("success", "회원가입되었습니다.");
          return res.redirect("/login");
     } catch(error) {
         console.log(error);
@@ -117,6 +118,7 @@ export const postLogin = async (req, res) => {
     req.session.loggedIn = true;
     req.session.user = user;
     if(!user.emailCertificated){
+        req.flash("info", "이메일 인증이 필요합니다.");
         return res.redirect("/user/certificate-email");
     }else{
         return res.redirect("/");
@@ -167,6 +169,7 @@ export const postEmailCertificate = async(req, res) =>{
             console.log("유저 이메일 확인 완료: ", updatedUser)
             req.session.user = updatedUser;
             res.locals.loggedInUser = req.session.user;
+            req.flash("success", "이메일 인증이 완료되었습니다.");
             return res.redirect("/");
         }catch(error){
             console.log("이메일 인증 에러", error)
@@ -616,6 +619,10 @@ export const postEdit = async(req, res) => {
 };
 
 export const getChangePassword = (req, res) => {
+    if (req.session.user.socialOnly === true) {
+        req.flash("error", "비밀번호를 바꿀 수 없습니다.");
+        return res.redirect("/");
+      }
     return res.render("users/change-password", {pageTitle: "비밀번호 변경"});
 }
 export const postChangePassword = async(req, res) => {
@@ -644,6 +651,7 @@ export const postChangePassword = async(req, res) => {
     try{
         user.password = newPassword;
         await user.save();
+        req.flash("success", "비밀번호가 변경되었습니다.");
         return res.redirect("/"); 
     }catch(error){
         console.log(error);
@@ -668,8 +676,11 @@ export const logout = async(req, res) => {
             console.log(error);
         }
     }
-    
-    req.session.destroy();
+    // req.session.destroy();
+    req.session.user = null;
+    res.locals.loggedInUser = req.session.user;
+    req.session.loggedIn = false;
+    req.flash("info", "로그아웃되었습니다.");
     return res.redirect("/");
 };
 
@@ -705,7 +716,11 @@ export const leave = async(req, res) => {
             console.log("소셜 탈퇴:", leaveRequest);
         }
         await User.findByIdAndDelete(req.session.user._id);
-        req.session.destroy();
+        // req.session.destroy();
+        req.session.user = null;
+        res.locals.loggedInUser = req.session.user;
+        req.session.loggedIn = false;
+        req.flash("success", "회원탈퇴되었습니다.");
         return res.redirect("/");
     }catch(error){
         console.log(error);
@@ -793,19 +808,19 @@ export const postUserReport = async(req,res) => {
     }
    
     try{
-        const already = await Reporting.find({
+        const already = await Report.find({
             reporter,
             reportedUser: user._id,
         });
         console.log(user);
-        if (already){
+        if (already.length != 0){
             //이미 신고하셨습니다 알림
-            console.log("already reported");
-            return res.redirect(`/`);
+            return res.send(`<script>alert("이미 신고하셨습니다.");
+            location.href='/';</script>`);
         }
         user.reported+=1;
         user.save();
-        const newReported = await Reporting.create({
+        const newReported = await Report.create({
           title: `User '${user.username}'is reported`,
           script: report,
           reporter,
@@ -829,6 +844,7 @@ export const postUserReport = async(req,res) => {
             return res.status(400).render("404", {pageTitle:"신고하기 에러", errorMessage:error._message});
         } 
     }
+    req.flash("success", "신고됐습니다.");
     return res.redirect(`/`);
 }
 

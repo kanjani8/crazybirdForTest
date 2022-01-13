@@ -1,7 +1,7 @@
 import Subject from "../models/subject";
 import User from "../models/user";
 import Posting from "../models/posting";
-import Reporting from "../models/reporting";
+import Report from "../models/reporting";
 
 export const community = async (req, res) => {
     const {id} = req.params; // 과목id
@@ -252,6 +252,7 @@ export const deletePosting = async(req, res) =>{
         return res.render("404", { pageTitle: "해당 게시물을 찾을 수 없습니다" });
       }
       if (String(posting.user._id) !== String(user._id)){
+        req.flash("error", "본인이 아니면 삭제 할 수 없습니다.");
         return res.status(403).redirect(`/subject/${id}/community`);
       }
       await Posting.findByIdAndDelete(postingId);
@@ -259,6 +260,7 @@ export const deletePosting = async(req, res) =>{
       user.point -=5;
       req.session.user = user;
       user.save();
+      req.flash("success", "삭제되었습니다.");
       return res.redirect(`/subject/${id}/community`);
     }catch(error){
       console.log(error);
@@ -282,21 +284,25 @@ export const postReportPosting = async (req, res) => {
     const reporter = req.session.user._id;
     const user = await User.findById(posting.user);
     if(String(reporter) === String(user._id)){
-      return res.send(`<script>alert("본인의 글은 신고할 수 없습니다.");
+      return await res.send(`<script>alert("본인의 글은 신고할 수 없습니다.");
             location.href='/subject/${id}/community';</script>`);
     }
 
-    const already = await Reporting.find({
+    const already = await Report.find({
         reporter,
-        reportedPosting: posting._id,
+        reportedPosting: posting,
     });
-    if (already){
+    console.log(reporter,posting);
+    console.log("으으으음: ",already);
+    if (already.length != 0){
         return res.send(`<script>alert("이미 신고하셨습니다.");
             location.href='/subject/${id}/community';</script>`);
-    };
+    } else {
+      
+    }
     posting.meta.reported += 1;
     posting.save();
-    const newReported = await Reporting.create({
+    const newReported = await Report.create({
       title: `Posting '${posting.title}'is reported`,
       script: report,
       reporter,
@@ -318,6 +324,7 @@ export const postReportPosting = async (req, res) => {
         return res.status(400).render("404", {pageTitle:"신고하기 에러", errorMessage:error._message});
     }
   }
+  req.flash("success", "신고됐습니다.");
   return res.redirect(`/subject/${id}/community`);
 };
 

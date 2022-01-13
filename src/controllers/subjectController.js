@@ -83,6 +83,7 @@ export const like = async(req, res) => {
     user.save();
   }catch(error){
     // 즐겨찾기 실패했다고 알림띄우기
+    req.flash("error", "즐겨찾기 등록에 실패했습니다.");
     console.log(error);
   }
   return res.redirect(`/subject/search`);
@@ -97,6 +98,7 @@ export const dislike = async(req, res) => {
     user.save();
   }catch(error){
     // 즐겨찾기 해제 실패했다고 알림띄우기
+    req.flash("error", "즐겨찾기 해제에 실패했습니다.");
     console.log(error);
   }
   return res.redirect(`/subject/search`);

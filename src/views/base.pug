@@ -1,3 +1,4 @@
+include mixins/flashMessage
 doctype html
 html(lang="ko")
     head
@@ -7,6 +8,12 @@ html(lang="ko")
         link(rel="shortcut icon" href="#")
         block script
     body
+        if messages.error
+            +flashMessage("error", messages.error)
+        if messages.info
+            +flashMessage("info", messages.info)
+        if messages.success
+            +flashMessage("success", messages.success)
         include partials/header
         br
         h4.warning=errorMessage

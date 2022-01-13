@@ -14,13 +14,13 @@ block content
                 div.fileObj(data-name= video)
                     div.fileObj__left
                         video.fileObj__sample(src="/" + video)
-                        h4.fileObj__name=video 
+                        h4.fileObj__name video 
                     button(type = "button").fileObj__delete2 X
             each image in posting.images
                 div.fileObj(data-name= image)
                     div.fileObj__left
                         img.fileObj__sample(src="/" + image)
-                        h4.fileObj__name=image 
+                        h4.fileObj__name image
                     button(type = "button").fileObj__delete2 X
         input(type="submit", value="수정하기")        
         hr

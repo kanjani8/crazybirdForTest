@@ -99,5 +99,6 @@ export const changeQuote = async (req, res) => {
         mode
     });
     req.session.user = user;
+    req.flash("info", "명언 모드가 변경되었습니다.");
     return res.redirect("/");
 }

@@ -42,3 +42,39 @@ header {
   height: auto;
   border-radius: 50%;
 }
+@keyframes goAway {
+  from {
+    transform: none;
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+}
+
+.message {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  max-width: 200px;
+  padding: 10px 20px;
+  border-radius: 10000px;
+  text-align: center;
+  animation: goAway 0.5s ease-in-out forwards;
+  animation-delay: 3s;
+  &.error {
+    background-color: $thema-red;
+    color: white;
+  }
+  &.success {
+    background-color: $thema-green;
+    color: gray;
+  }
+  &.info {
+    background-color: $thema-yellow;
+    color: gray;
+  }
+}

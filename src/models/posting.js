@@ -4,6 +4,10 @@ const postingSchema = new mongoose.Schema({
   title:{type: String, required: true, trim: true, maxLength: 80}, 
   script: { type: String, required: true, trim: true, minLength: 3 },
   videos: [{type: String}],
+  // image_meta: [{
+  //   image_name: {type: String},
+  //   image: {type: String},
+  // }],
   images: [{type: String}],
   createdAt: { type: Date, required: true, default: Date.now },
   meta: {
