@@ -14,7 +14,8 @@ module.exports = {
         fileUpload:"./src/client/js/fileUpload.js",
         fileEdit:"./src/client/js/fileEdit.js",
         communityTimeEditer: "./src/client/js/communityTimeEditer.js",
-        view: "./src/client/js/view.js"
+        view: "./src/client/js/view.js",
+        commentSection: "./src/client/js/commentSection.js",
       },
     mode: "development", // developnemt or production(개발완료/default)
     watch: true,

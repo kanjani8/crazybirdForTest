@@ -353,7 +353,6 @@ export const getRecommend = async (req, res) => {
   return res.redirect(`/subject/${id}/community/${postingId}`);
 }
 export const registerView = async (req,res) => {
-  console.log("들어옴");
   const { postingId } = req.params;
   const posting = await Posting.findById(postingId);
   if (!posting) {
@@ -362,4 +361,11 @@ export const registerView = async (req,res) => {
   posting.meta.views = posting.meta.views + 1;
   await posting.save();
   return res.status(200);
+}
+
+export const uploadComment = (req, res) => {
+  const {postingId} = req.params;
+  const {text} = req.body;
+  console.log(req.body);
+  res.end();
 }

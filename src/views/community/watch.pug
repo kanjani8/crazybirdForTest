@@ -33,7 +33,7 @@ block content
                 each image in posting.images
                     img.posting__image(src="/" + image)
                     br
-            h4.posting__script=posting.script
+            div( style="overflow-x:hidden;overflow-y:auto;").posting__script=posting.script
         div.posting__footer
             if loggedInUser._id == posting.user._id
                 h4
@@ -50,9 +50,14 @@ block content
                     a(href=`${posting.id}/report`) 신고하기⛔
             h4
                 a(href="upload").posting__btn 글쓰기
+        div.posting__comments
+            form.posting__comment-form#commentForm
+                textarea(cols="30", rows="10") 
+                button 댓글 달기
     else
         a(href="/login") 게시판을 보려면 먼저 로그인 하기 &rarr;
 
 block scripts
     script(src="/static/js/videoPlayer.js")
     script(src="/static/js/view.js")
+    script(src="/static/js/commentSection.js")

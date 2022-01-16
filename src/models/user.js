@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
     likedSubjects:[{type: Schema.Types.ObjectId, ref:"Subject"}], 
     postings:[{type: Schema.Types.ObjectId, ref:"Posting"}], 
     tests:[{type: Schema.Types.ObjectId, ref:"Test"}],
+    comments: [{ type: Schema.Types.ObjectId, ref: "Comment"}],
     block: {type: Boolean, default:false},
     mode: {type: String, default: "sarcasm"}, // wise랑 두가지 버전이 있음 혹은 blame까지 3개. 
 })

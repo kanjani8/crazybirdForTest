@@ -5,6 +5,7 @@ import "./models/test";
 import "./models/user";
 import "./models/school";
 import "./models/posting";
+import "./models/comment";
 import "./models/reporting";
 import "./models/location";
 import "./models/event";
