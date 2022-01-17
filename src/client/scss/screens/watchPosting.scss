@@ -1,6 +1,7 @@
 .posting__header {
-  width: 100%;
+  width: 90%;
   padding: 10px 0px;
+  margin: 0px auto;
   background-color: aliceblue;
 }
 
@@ -22,7 +23,8 @@
 }
 
 .posting__body {
-  width: 100%;
+  width: 90%;
+  margin: 0px auto;
 }
 .posting__script {
   width: 90%;
@@ -46,10 +48,11 @@
 }
 
 .posting__footer {
-  width: 100%;
+  width: 90%;
   display: flex;
-  height: 100px;
+  height: 60px;
   padding-top: 10px;
+  margin: 0px auto;
 }
 .posting__btn {
   background-color: $thema;
@@ -61,15 +64,50 @@
 .posting__comments {
   display: flex;
   flex-direction: column;
-  max-width: 320px;
-  width: 100%;
+  width: 90%;
   margin: 0 auto;
   margin-top: 20px;
   .posting__comment {
-    padding: 10px;
-    border-radius: 9999px;
-    background-color: white;
+    display: flex;
+    padding: 25px;
+    background-color: #fafafa;
     color: black;
     margin-bottom: 10px;
+    border-bottom: 1px solid rgba($color: $thema, $alpha: 0.5);
+    h4 {
+      margin-right: 25px;
+      color: grey;
+    }
+    span {
+    }
+  }
+}
+
+.posting__add-comments {
+  display: flex;
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+.posting__comment-form {
+  display: flex;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  textarea {
+    width: 90%;
+    height: 90px;
+    display: inline;
+    border: 0;
+    border: 1px solid rgba($color: $thema, $alpha: 0.5);
+  }
+  button {
+    width: 70%;
+    height: 55px;
+    display: inline;
+    margin-top: 15px;
+    background: rgba($color: $thema, $alpha: 0.8);
+    color: white;
+    border: 0;
   }
 }

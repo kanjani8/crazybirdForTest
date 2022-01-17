@@ -26,13 +26,13 @@ const addComment = (text) => {
     const postingComments = document.querySelector(".posting__comments ul");
     const newComment = document.createElement("li");
     newComment.className = "posting__comment";
-    const icon = document.createElement("i");
-    icon.className = "fas fa-comment";
+    const username = document.createElement("h4");
+    username.innerText = ` 익명의 학생`;
     const span = document.createElement("span");
     span.innerText = ` ${text}`;
-    newComment.appendChild(icon);
+    newComment.appendChild(username);
     newComment.appendChild(span);
-    postingComments.prepend(newComment);
+    postingComments.appendChild(newComment);
   };
 
 

@@ -3,7 +3,7 @@ form {
   flex-direction: column;
   margin: 10px auto;
   align-items: center;
-  &:not(.search__form) {
+  &:not(.search__form, .posting__comment-form) {
     padding: 30px;
     background-color: $obj-bg;
     border: 1px solid rgba($color: #fff, $alpha: 0.1);
