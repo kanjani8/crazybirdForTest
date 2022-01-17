@@ -2,6 +2,7 @@ import Subject from "../models/subject";
 import User from "../models/user";
 import Posting from "../models/posting";
 import Report from "../models/reporting";
+import Comment from "../models/comment";
 
 export const community = async (req, res) => {
     const {id} = req.params; // 과목id
@@ -112,7 +113,7 @@ export const watchPosting = async (req, res) => {
     const {id, postingId} = req.params;
     try{
         const subject = await Subject.findById(id);
-        const posting = await Posting.findById(postingId).populate("user");
+        const posting = await Posting.findById(postingId).populate("user").populate("comments");
         const time = posting.createdAt;
         const hours = (time.getHours() > 9) ? time.getHours(): `0${time.getHours()}`;
         const minutes = (time.getMinutes() > 9) ? time.getMinutes(): `0${time.getMinutes()}`;
@@ -363,9 +364,25 @@ export const registerView = async (req,res) => {
   return res.status(200);
 }
 
-export const uploadComment = (req, res) => {
-  const {postingId} = req.params;
-  const {text} = req.body;
-  console.log(req.body);
-  res.end();
+export const uploadComment = async (req, res) => {
+  const {
+    session: { user },
+    body: { text },
+    params: { postingId },
+  } = req;
+  console.log(postingId);
+  const posting = await Posting.findById(postingId);
+  if(!posting){
+    //404 찾지못함
+    return res.sendStatus(404);
+  }
+  const comment = await Comment.create({
+    text,
+    owner: user._id,
+    posting: postingId,
+  });
+  posting.comments.push(comment._id);
+  posting.save();
+  //201 생성됨
+  return res.sendStatus(201);
 }

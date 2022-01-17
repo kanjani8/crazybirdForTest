@@ -50,10 +50,17 @@ block content
                     a(href=`${posting.id}/report`) 신고하기⛔
             h4
                 a(href="upload").posting__btn 글쓰기
-        div.posting__comments
+        div.posting__add-comments
             form.posting__comment-form#commentForm
                 textarea(cols="30", rows="10") 
                 button 댓글 달기
+        div.posting__comments
+        ul
+            each comment in posting.comments.reverse()
+                li.posting__comment
+                    i.fas.fa-comment
+                    span  #{comment.text}
+
     else
         a(href="/login") 게시판을 보려면 먼저 로그인 하기 &rarr;
 

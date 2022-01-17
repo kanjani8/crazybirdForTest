@@ -3,6 +3,7 @@ const path = require("path");
 
 module.exports = {
     entry: {
+        app: ['babel-polyfill', './src/init.js'],
         main: "./src/client/js/main.js",
         videoPlayer: "./src/client/js/videoPlayer.js",
         chooseQuestionType: "./src/client/js/chooseQuestionType.js",

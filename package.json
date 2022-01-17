@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/kanjani8/crazybirdForTest#readme",
   "dependencies": {
+    "@babel/runtime": "^7.16.7",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@fullcalendar/bootstrap": "^5.10.1",
     "@fullcalendar/core": "^5.10.1",
@@ -27,6 +28,7 @@
     "@fullcalendar/interaction": "^5.10.1",
     "@fullcalendar/list": "^5.10.1",
     "@fullcalendar/timegrid": "^5.10.1",
+    "babel-polyfill": "^6.26.0",
     "bcrypt": "^5.0.1",
     "bootstrap": "^5.1.3",
     "connect-mongo": "^4.5.0",
@@ -45,6 +47,7 @@
   "devDependencies": {
     "@babel/core": "^7.15.0",
     "@babel/node": "^7.14.9",
+    "@babel/plugin-transform-runtime": "^7.16.8",
     "@babel/preset-env": "^7.15.0",
     "babel-loader": "^8.2.3",
     "css-loader": "^6.5.1",
