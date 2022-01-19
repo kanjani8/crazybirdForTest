@@ -1,12 +1,17 @@
 let createdAt = document.getElementsByClassName("createdAt");
 
+export const timeIdentify = (createdAt) =>{
+            const date = createdAt.innerHTML.substr(11, 4) + "/" 
+                + createdAt.innerHTML.substr(4, 3)+ "/"
+                + createdAt.innerHTML.substr(8, 2)+ "/"
+                + createdAt.innerHTML.substr(16, 5);
+         return date;
+}
+
 window.onload = function(){ 
     try{
         for(let i = 0; i < createdAt.length; i++){
-            const date = createdAt[i].innerHTML.substr(11, 4) + "/" 
-                + createdAt[i].innerHTML.substr(4, 3)+ "/"
-                + createdAt[i].innerHTML.substr(8, 2)+ "/"
-                + createdAt[i].innerHTML.substr(16, 5);
+            const date = timeIdentify(createdAt[i]);
             createdAt[i].innerText = date;
         }
     }catch(error){

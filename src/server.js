@@ -39,7 +39,6 @@ app.use(
 app.use(flash());
 app.use(localsMiddleware);
 //user can access to this file
-app.use("/frontJS", express.static("frontJS"));
 app.use("/static", express.static("assets"));
 app.use("/", rootRouter);
 app.use("/uploads", express.static("uploads"));

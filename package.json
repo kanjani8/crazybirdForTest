@@ -4,8 +4,11 @@
   "description": "Crazy bird for test",
   "main": "server.js",
   "scripts": {
+    "start": "node build/init.js",
+    "build:server": "babel src -d build",
+    "build:assets": "webpack --mode=production --",
     "dev": "nodemon -L",
-    "assets": "webpack",
+    "assets": "webpack --mode=development -w",
     "db": "sudo service mongodb start",
     "dbStop": "sudo service mongodb stop"
   },
@@ -44,7 +47,8 @@
     "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.0",
+    "@babel/cli": "^7.16.8",
+    "@babel/core": "^7.16.10",
     "@babel/node": "^7.14.9",
     "@babel/preset-env": "^7.15.0",
     "babel-loader": "^8.2.3",

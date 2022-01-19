@@ -54,12 +54,14 @@ block content
             ul
                 each comment in posting.comments
                     li.posting__comment(data-id = comment.id)
-                        h4
-                            i.fas.fa-crow
-                        span  #{comment.text}
-                        h5.posting__info.createdAt=comment.createdAt
-                        if String(loggedInUser._id) === String(comment.owner) || String(loggedInUser._id) === String(posting.user._id)
-                            button.comment__deleteButton x
+                        div.comment__left
+                            h4
+                                i.fas.fa-crow
+                            span  #{comment.text}
+                        div.comment__right
+                            h5.posting__info.createdAt=comment.createdAt
+                            if String(loggedInUser._id) === String(comment.owner) || String(loggedInUser._id) === String(posting.user._id)
+                                button.comment__deleteButton x
         div.posting__add-comments
             form.posting__comment-form#commentForm
                 textarea

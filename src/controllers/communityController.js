@@ -382,7 +382,7 @@ export const uploadComment = async (req, res) => {
   //201 생성됨
 
   console.log(comment._id);
-  return res.status(201).json({ newCommentId: comment._id });
+  return res.status(201).json({ newCommentId: comment._id});
 }
 
 export const deleteComment = async (req, res) => {
@@ -396,7 +396,9 @@ export const deleteComment = async (req, res) => {
     //404 찾지못함
     return res.sendStatus(404);
   }
+  console.log(id);
   const comment = await Comment.findById(id);
+  console.log(comment);
   if(!comment){
     req.flash("error", "해당 댓글을 찾을 수 없습니다.");
     return res.sendStatus(403);

@@ -1,3 +1,4 @@
+import regeneratorRuntime from "regenerator-runtime";
 import "dotenv/config";//.env처리
 import "./db";
 import "./models/subject";

@@ -18,8 +18,8 @@ module.exports = {
         view: "./src/client/js/view.js",
         commentSection: "./src/client/js/commentSection.js",
       },
-    mode: "development", // developnemt or production(개발완료/default)
-    watch: true,
+       // mode: developnemt or production(개발완료/default)
+    //watch: true,
     plugins: [new MiniCssExtractPlugin({
             filename: "css/[name].css",
         }),
