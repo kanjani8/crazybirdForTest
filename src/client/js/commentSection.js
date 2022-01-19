@@ -16,16 +16,18 @@ const handleSubmit = async (event) =>{
           },
           body: JSON.stringify({ text }),
     });
-    console.log(response);
+    // console.log(response);
     textArea.value = "";
     if (response.status === 201) {
       textArea.value = "";
       const { newCommentId } = await response.json();
-      console.log(newCommentId);
+      // console.log(newCommentId);
       addComment(text, newCommentId);
     }
 };
-const handleDelete = async(id) =>{
+const handleDelete = async(event) =>{
+  const commentList = event.target.parentNode;
+  const id = commentList.dataset.id;
   const response = await fetch(`/api/posting/${postingId}/comment`, {
     method: "DELETE",
     headers: {
@@ -33,11 +35,26 @@ const handleDelete = async(id) =>{
     },
     body: JSON.stringify({ id }),
   });
-  console.log(response);
+  // console.log(response);
   if (response.status === 202) {
-    const { deletedId } = await response.json();
-    deleteComment(deletedId);
+    // const { deletedId } = await response.json();
+    deleteComment(event);
   }
+}
+const deleteComment = (event) =>{
+  const commentContainer = document.querySelector(".posting__comments ul");
+  const commentList = event.target.parentNode;
+  commentContainer.removeChild(commentList); 
+  // console.log("??", id);
+  // const comments = document.getElementsByClassName("posting__comment");
+
+  // for (let i = 0; i < comments.length; i++) {
+  //   let commentId = comments[i].getAttribute('data-id');
+
+  //   if (String(commentId) === String(id)) {
+  //     comments[i].remove();
+  //   }
+  // }
 }
 
 const addComment = (text, id) => {
@@ -59,20 +76,9 @@ const addComment = (text, id) => {
     newComment.appendChild(span);
     newComment.appendChild(deleteButton);
     postingComments.appendChild(newComment);
+    deleteButton.addEventListener("click", handleDelete);
   };
 
-const deleteComment = (id) =>{
-  console.log("??", id);
-  const comments = document.getElementsByClassName("posting__comment");
-
-  for (let i = 0; i < comments.length; i++) {
-    let commentId = comments[i].getAttribute('data-id');
-
-    if (String(commentId) === String(id)) {
-      comments[i].remove();
-    }
-  }
-}
 
 
 if(form){
@@ -80,6 +86,6 @@ if(form){
 }
 if(deleteButtons){
  for(let i = 0; i < deleteButtons.length; i++){
-  deleteButtons[i].addEventListener("click", e => handleDelete(deleteButtons[i].parentElement.dataset.id));
+  deleteButtons[i].addEventListener("click", handleDelete);
  }
 }
