@@ -118,7 +118,6 @@ export const watchPosting = async (req, res) => {
         const hours = (time.getHours() > 9) ? time.getHours(): `0${time.getHours()}`;
         const minutes = (time.getMinutes() > 9) ? time.getMinutes(): `0${time.getMinutes()}`;
         const createdAt = `${time.getMonth()+ 1}월${time.getDate()}일 ${hours}:${minutes}`;
-        console.log(createdAt);
         const recommend = req.session.user.recommendPost.includes(postingId);
         return res.render("community/watch", { pageTitle: `${subject.name} 게시판`, subject, posting, createdAt, recommend});
     }catch(error){
@@ -293,8 +292,6 @@ export const postReportPosting = async (req, res) => {
         reporter,
         reportedPosting: posting,
     });
-    console.log(reporter,posting);
-    console.log("으으으음: ",already);
     if (already.length != 0){
         return res.send(`<script>alert("이미 신고하셨습니다.");
             location.href='/subject/${id}/community';</script>`);
@@ -370,7 +367,6 @@ export const uploadComment = async (req, res) => {
     body: { text },
     params: { postingId },
   } = req;
-  console.log(postingId);
   const posting = await Posting.findById(postingId);
   if(!posting){
     //404 찾지못함
@@ -384,5 +380,41 @@ export const uploadComment = async (req, res) => {
   posting.comments.push(comment._id);
   posting.save();
   //201 생성됨
-  return res.sendStatus(201);
+
+  console.log(comment._id);
+  return res.status(201).json({ newCommentId: comment._id });
+}
+
+export const deleteComment = async (req, res) => {
+  const {
+    session: { user },
+    body: { id },
+    params: { postingId },
+  } = req;
+  const posting = await Posting.findById(postingId).populate("comments");
+  if(!posting){
+    //404 찾지못함
+    return res.sendStatus(404);
+  }
+  const comment = await Comment.findById(id);
+  if(!comment){
+    req.flash("error", "해당 댓글을 찾을 수 없습니다.");
+    return res.sendStatus(403);
+  }
+
+  if(String(user._id) === String(comment.owner) || String(user._id) === String(posting.user)){
+    try{
+      await Comment.findByIdAndDelete(id);
+      console.log("성공적 댓 삭제");
+      return res.status(202).json({ deletedId: id });
+    }
+    catch(error){
+      req.flash("error", error);
+      return res.sendStatus(401);
+    }
+  }
+  else{ // 자기 댓글이 아니거나 내 글에 달린 댓글도 아닐 경우
+    req.flash("error", "해당 댓글을 지울 권한이 없습니다.");
+    return res.sendStatus(401);
+  }
 }

@@ -53,9 +53,13 @@ block content
         div.posting__comments
             ul
                 each comment in posting.comments
-                    li.posting__comment
-                        h4 익명의 학생:
+                    li.posting__comment(data-id = comment.id)
+                        h4
+                            i.fas.fa-crow
                         span  #{comment.text}
+                        h5.posting__info.createdAt=comment.createdAt
+                        if String(loggedInUser._id) === String(comment.owner) || String(loggedInUser._id) === String(posting.user._id)
+                            button.comment__deleteButton x
         div.posting__add-comments
             form.posting__comment-form#commentForm
                 textarea
@@ -68,3 +72,4 @@ block scripts
     script(src="/static/js/videoPlayer.js")
     script(src="/static/js/view.js")
     script(src="/static/js/commentSection.js")
+    script(src="/static/js/communityTimeEditer.js")

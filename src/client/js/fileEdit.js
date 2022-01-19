@@ -9,9 +9,9 @@ const deleteFile2 = (i, text) =>{
     editedFilesInput.setAttribute("value", text);
     form.appendChild(editedFilesInput);
     delBtn[i].parentElement.remove();
-    if(delBtn.length < 1){
+    // if(delBtn.length < 1){
         
-    }
+    // }
 
 }
 
