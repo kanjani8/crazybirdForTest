@@ -1,5 +1,3 @@
-import timeIdentify from "./communityTimeEditer";
-
 const postingBody = document.getElementsByClassName("posting__body")[0];
 const form = document.getElementById("commentForm");
 const deleteButtons = document.getElementsByClassName("comment__deleteButton");

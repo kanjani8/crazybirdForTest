@@ -5,8 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node build/init.js",
+    "build" : "npm run build:server && npm run build:assets",
     "build:server": "babel src -d build",
-    "build:assets": "webpack --mode=production --",
+    "build:assets": "webpack --mode=production",
     "dev": "nodemon -L",
     "assets": "webpack --mode=development -w",
     "db": "sudo service mongodb start",
