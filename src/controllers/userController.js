@@ -9,7 +9,7 @@ import nodemailer from "nodemailer";
 import fetch from "node-fetch";
 import flash from "express-flash";
 export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"회원가입 페이지"});
-
+import Comment from "../models/comment";
 export const postEnroll = async (req, res) => {
     const us = await User.find({});
     console.log(us);
@@ -834,6 +834,7 @@ export const postUserReport = async(req,res) => {
     if(user.reported >= 50)
     {
         try{
+            await Comment.deleteMany({"owner":id});
             await Posting.deleteMany({"user":id});
             //await User.findByIdAndDelete(id);
             user.block = true;
