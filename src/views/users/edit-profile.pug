@@ -6,9 +6,15 @@ block content
     form(method="POST", enctype="multipart/form-data")
         div.edit__profileBox
             if(loggedInUser.social)
-                img(src=loggedInUser.avatarUrl)
+                if isHeroku
+                    img(src=loggedInUser.avatarUrl)
+                else
+                    img(src="/"+loggedInUser.avatarUrl)
             else
-                img(src=loggedInUser.avatarUrl)
+                if isHeroku
+                    img(src=loggedInUser.avatarUrl)
+                else
+                    img(src="/"+loggedInUser.avatarUrl)
             input(type="file", id="avatar", name="avatar", accept="image/*")
         div.edit__inputBox
             label() 소속
