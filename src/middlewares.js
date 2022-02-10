@@ -8,16 +8,23 @@ const s3= new aws.S3({
     secretAccessKey: process.env.AWS_SECRET,
   }
 })
-const multerUploader = multerS3({
+const isHeroku = process.env.NODE_ENV === "production";
+const s3AvartarUploader = multerS3({
   s3: s3,
-  bucket: 'cbird2022',
+  bucket: 'cbird2022/avartar',
   acl: "public-read",
 });
 
+const s3CommunityUploader = multerS3({
+  s3: s3,
+  bucket: 'cbird2022/community',
+  acl: "public-read",
+});
 export const localsMiddleware = (req, res, next) => {
     res.locals.loggedIn = Boolean(req.session.loggedIn);
     res.locals.siteName = "Crazy Bird 🐦";
     res.locals.loggedInUser = req.session.user || {};
+    res.locals.isHeroku = isHeroku;
     next();
 }
 
@@ -67,7 +74,7 @@ export const avatarUpload = multer({
     limits: {
       fileSize: 3000000,
     },
-    storage: multerUploader,
+    storage: isHeroku ? s3AvartarUploader : undefined,
   });
   //커뮤니티 용량 제한
 export const communityUpload = multer({
@@ -76,7 +83,7 @@ export const communityUpload = multer({
     fileSize: 20000000,
     files: 5,
   },
-  storage: multerUploader,
+  storage: isHeroku ? s3CommunityUploader : undefined,
 });
 
 //export const uploadFiles = multer({ dest: "uploads/" });
