@@ -4,7 +4,7 @@ include ../mixins/posting
 block content
     div.profile
         if user.avatarUrl
-            img(src="/" + user.avatarUrl).profile__img
+            img(src=user.avatarUrl).profile__img
         else
             img(src="https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png").profile__img
         h2.profile__name=user.name

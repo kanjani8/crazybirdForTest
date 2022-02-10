@@ -8,7 +8,7 @@ block content
             if(loggedInUser.social)
                 img(src=loggedInUser.avatarUrl)
             else
-                img(src="/" + loggedInUser.avatarUrl)
+                img(src=loggedInUser.avatarUrl)
             input(type="file", id="avatar", name="avatar", accept="image/*")
         div.edit__inputBox
             label() 소속
