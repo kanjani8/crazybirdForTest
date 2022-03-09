@@ -16,11 +16,11 @@ export const search = async (req, res) => {
   const { keyword } = req.query;
   let subjects = [];
   const likedSubjects = user.likedSubjects;
-  // subjects = await Subject.find({});
+   subjects = await Subject.find({});
  //   console.log(subjects);
- //   for(let i = 0; i < subjects.length; i++){
-  //    await Subject.findByIdAndUpdate(subjects[i]._id, {school} );
-  //   } //이런 식으로 과목들에 학교를 일괄로 집어넣음.
+   for(let i = 0; i < subjects.length; i++){
+     await Subject.findByIdAndUpdate(subjects[i]._id, {school} );
+    } //이런 식으로 과목들에 학교를 일괄로 집어넣음.
   //  let locations = await Location.find({});
   //  for(let i = 0; i< locations.length; i++){
   //    await Location.findByIdAndUpdate(locations[i]._id, {school});
