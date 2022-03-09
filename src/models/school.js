@@ -17,7 +17,7 @@ const schoolSchema = new mongoose.Schema({
 schoolSchema.set('collection', 'School');
 const School = mongoose.model("School", schoolSchema);
 
-School.collection.insertMany(schoolData);
+//School.collection.insertMany(schoolData);
 
 //School.collection.deleteMany({});
 //School.collection.deleteOne({name:"미소속"});
