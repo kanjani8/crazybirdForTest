@@ -12,7 +12,10 @@ block content
             if posting.videos
                 each video in posting.videos
                     div#videoContainer
-                        video(src="/" + video )
+                        if isHeroku 
+                            video(src=video)
+                        else 
+                            video(src="/"+video)
                         div#videoControls.videoControls
                             div.videoControls__play
                                 span#play.videoControls__playBtn
@@ -31,7 +34,10 @@ block content
                                     i.fas.fa-expand  
             if posting.images
                 each image in posting.images
-                    img.posting__image(src="/" + image)
+                    if isHeroku 
+                        img.posting__image(src=image)
+                    else
+                        img.posting__image(src="/"+image)
                     br
             div( style="overflow-x:hidden;overflow-y:auto;").posting__script=posting.script
         div.posting__footer

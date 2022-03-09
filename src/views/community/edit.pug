@@ -13,13 +13,19 @@ block content
             each video in posting.videos
                 div.fileObj(data-name= video)
                     div.fileObj__left
-                        video.fileObj__sample(src="/" + video)
+                        if isHeroku 
+                            video.fileObj__sample(src=video)
+                        else
+                            video.fileObj__sample(src="/" + video)
                         h4.fileObj__name video 
                     button(type = "button").fileObj__delete2 X
             each image in posting.images
                 div.fileObj(data-name= image)
                     div.fileObj__left
-                        img.fileObj__sample(src="/" + image)
+                        if isHeroku 
+                            img.fileObj__sample(src=image)
+                        else
+                            img.fileObj__sample(src="/" + image)
                         h4.fileObj__name image
                     button(type = "button").fileObj__delete2 X
         input(type="submit", value="수정하기")        

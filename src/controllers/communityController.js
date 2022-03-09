@@ -137,16 +137,16 @@ export const getUploadPosting = async(req, res) =>{
 export const postUploadPosting = async(req, res) =>{
     const {id} = req.params;
     const {title, script} = req.body;
-    console.log(req.files);
+    const isHeroku = process.env.NODE_ENV === "production";
     let images = [];
     let videos = [];
     try{
       for(let i = 0; i < req.files.length; i++){
         if(req.files[i].mimetype.match(/image.*?$/gi)){
-          const image = req.files[i].path;
+          const image = isHeroku ? req.files[i].location : req.files[i].path;
           images.push(image);
         } else {
-          const video = req.files[i].path;
+          const video = isHeroku ? req.files[i].location: req.files[i].path;
           videos.push(video);
         }
       }
@@ -158,11 +158,12 @@ export const postUploadPosting = async(req, res) =>{
           script, 
           subject:id,
           user:user._id});
-      console.log(newPosting);
+      // console.log(newPosting);
       user.postings.push(newPosting._id);
       user.point +=5;
       req.session.user = user;
       user.save();
+      // console.log(images);
       return res.redirect(`/subject/${id}/community`);
     }catch(error){
       console.log(error);
@@ -213,12 +214,13 @@ export const postEditPosting = async (req, res) => {
         console.log(error);
       }
       try {
+        const isHeroku = process.env.NODE_ENV === "production";
         for(let i = 0; i < req.files.length; i++){
           if(req.files[i].mimetype.match(/image.*?$/gi)){
-            const image = req.files[i].path;
+            const image = isHeroku ?req.files[i].location: req.files[i].path;
             images.push(image);
           } else {
-            const video = req.files[i].path;
+            const video = isHeroku ?req.files[i].location: req.files[i].path;
             videos.push(video);
           }
         }
