@@ -10,10 +10,7 @@ block content
                         +mainLiked(subject)
                     a(href=`subject/search`).main__search__button 과목 선택하기
             div.bird__box
-                if isHeroku
-                    img(src="https://cbird2022.s3.ap-northeast-2.amazonaws.com/base/crazybirdLogo.jpeg")
-                else
-                    img(src="/uploads/default/redBird.png")
+                img(src="/uploads/default/redBird.png")
                 div(data-quotes=quotes).quote__box
                     div.quote__left__box
                         h5.author
