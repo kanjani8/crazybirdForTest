@@ -252,7 +252,7 @@ export const setting = async(req, res) => {
 export const solve = async(req, res) => {
   const {id} = req.params;
   const {forWhen, opened, length} = req.body;
-  console.log(forWhen, opened, length);
+  // console.log(forWhen, opened, length);
   let tests;
   let randomTests = [];
   try{
@@ -342,7 +342,6 @@ export const reviewScore = async (req, res) => {
   const {scoreId} = req.params;
   const score = await Score.findById(scoreId).populate("tests");
   let tests = score.tests;
-  console.log(score);
   let addedTests = [];
   for(let i = 0; i < tests.length; i++){
     const test = {
@@ -352,7 +351,6 @@ export const reviewScore = async (req, res) => {
     }
     addedTests.push(test);
   }
-  console.log(addedTests);
   return res.render("tests/review", {pageTitle: "결과 다시보기", id: score.subject , score, tests: addedTests})
 };
 
@@ -392,7 +390,7 @@ export const postReport = async (req, res) => {
       reporter,
       reportedTest: test._id
     });
-    console.log("신고된 문제:", newReported);
+    // console.log("신고된 문제:", newReported);
   }catch(error){
     console.log(error);
   }

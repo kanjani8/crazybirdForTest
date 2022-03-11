@@ -12,7 +12,7 @@ export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"회원�
 import Comment from "../models/comment";
 export const postEnroll = async (req, res) => {
     const us = await User.find({});
-    console.log(us);
+    // console.log(us);
     const { name, email, username, password, password2, schoolName} = req.body;
     const pageTitle = "회원가입";
     if(password !== password2){
@@ -149,7 +149,7 @@ export const getEmailCertificate = async(req, res) =>{
             text: `이메일 인증 코드는 ${code}입니다.`,
           }
         const info = await transporter.sendMail(mailOption);
-        console.log(info);
+        // console.log(info);
         return res.render("users/certificate-email", {pageTitle: "이메일 인증 페이지"}); 
     }catch(error){
         console.log("메일인증 코드 전송 에러")
@@ -166,7 +166,7 @@ export const postEmailCertificate = async(req, res) =>{
                 {emailCertificated: true}, 
                 {new: true}
                 ).populate("school");
-            console.log("유저 이메일 확인 완료: ", updatedUser)
+            // console.log("유저 이메일 확인 완료: ", updatedUser)
             req.session.user = updatedUser;
             res.locals.loggedInUser = req.session.user;
             req.flash("success", "이메일 인증이 완료되었습니다.");
@@ -243,7 +243,7 @@ export const finishKakaoLogin = async(req, res) =>{
                     }
                 })
             ).json();
-            console.log("유저 정보:", userData);
+            // console.log("유저 정보:", userData);
             if(userData.kakao_account.email_needs_agreement){
                 const configForEmail = {
                     client_id: process.env.KAKAO_KEY,
@@ -459,7 +459,7 @@ export const postSocialEnroll = async(req, res) =>{
                 );
             req.session.user = updatedUser;
         }
-        console.log(req.session.user);
+        // console.log(req.session.user);
         return res.redirect("/");
     }catch(error){
         console.log(error);
@@ -502,7 +502,7 @@ export const postFindId = async(req, res) => {
             text: `당신의 아이디는 ${user.username}입니다.`,
           }
         const info = await transporter.sendMail(mailOption);
-        console.log(info);
+        // console.log(info);
         return res.send(`<script>alert("아이디 정보가 해당 주소로 전송되었습니다.");
             location.href='/login';</script>`);
     }catch(error){
@@ -540,7 +540,7 @@ export const postFindPass = async (req, res) => {
                     text: `당신의 임시비밀번호는 ${newPW} 입니다.`,
                   }
                 const info = await transporter.sendMail(mailOption);
-                console.log(info);
+                // console.log(info);
                 return res.send(`<script>alert("임시 비밀번호가 해당 주소로 전송되었습니다.");
                 location.href='/login';</script>`);
             } catch (error) {
@@ -705,7 +705,7 @@ export const leave = async(req, res) => {
                   method: "POST"
                 })
               ).json();
-            console.log(tokenReq);
+            // console.log(tokenReq);
         }else if(user.social === "Kakao"){
             const leaveRequest = await (
                 await fetch( "https://kapi.kakao.com/v1/user/unlink",{
@@ -813,7 +813,7 @@ export const postUserReport = async(req,res) => {
             reporter,
             reportedUser: user._id,
         });
-        console.log(user);
+        // console.log(user);
         if (already.length != 0){
             //이미 신고하셨습니다 알림
             return res.send(`<script>alert("이미 신고하셨습니다.");
@@ -840,7 +840,7 @@ export const postUserReport = async(req,res) => {
             //await User.findByIdAndDelete(id);
             user.block = true;
             user.save();
-            console.log(user);
+            // console.log(user);
             console.log(`username ${user.username} is 50times reported and deleted`);
         }catch(error){
             return res.status(400).render("404", {pageTitle:"신고하기 에러", errorMessage:error._message});
@@ -888,7 +888,7 @@ export const postDeleteSchedule = async (req,res) => {
         const event = await Event.findOneAndDelete({
             title,
         });
-        console.log(event);
+        // console.log(event);
         return res.send(`<script>alert("일정 삭제 완료");  location.href='/calendar'; </script>`);
     }catch(error){
         console.log(error);
@@ -900,13 +900,13 @@ export const postChangeschedule = async (req,res) => {
     const {
         body: {title,start},
     } = req;
-    console.log(title,start);
+    // console.log(title,start);
     try{
         const user = await User.findById(req.session.user._id);
         const event = await Event.findOne({title:req.body.title});
         event.start = start;
         event.save();
-        console.log(event);
+        // console.log(event);
         
         return res.send(`<script>alert("일정 변경 완료");  location.href='/calendar'; </script>`);
     }catch(error){
