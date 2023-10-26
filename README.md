@@ -1,5 +1,17 @@
-Crazy bird for test in University
-Using NodeJS, express, MongoDB, AWS
+Crazy bird page -
+It is a community site where students from the same school can exchange classes and prepare for exams.
+and Crazybird is a temporary name for the mascot new character.
+
+Using NodeJS, express, MongoDB, AWS, fly.io
+
+This is made in 2021, by Minji Park and Chaeyoung Hong.
+
+---
+
+Memo for team
+(heroku is not free anymore, 2023)
+we used babel-node to use ES6
+run code at local - npm build, npm run db, npm start
 
 global router:
 / - main page

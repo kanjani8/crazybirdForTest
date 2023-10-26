@@ -18,7 +18,7 @@ module.exports = {
         commentSection: "./src/client/js/commentSection.js",
       },
        // mode: developnemt or production(개발완료/default)
-    //watch: true,
+    //watch: true,(development일때만 true여야함)
     plugins: [new MiniCssExtractPlugin({
             filename: "css/[name].css",
         }),
