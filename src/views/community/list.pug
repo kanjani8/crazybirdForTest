@@ -15,7 +15,7 @@ block content
         
         div.paging_box
             if startPage > maxPost
-                a.prev_btn.pageBtn(href=`http://localhost:4000/subject/${subject.id}/community?page=${startPage-1}`)
+                a.prev_btn.pageBtn(href=`/subject/${subject.id}/community?page=${startPage-1}`)
                     i.fas.fa-angle-double-left.prev1
             else
                 a.prev_btn.pageBtn.disabled(href="javascript:void(0);")
@@ -23,13 +23,13 @@ block content
 
             -for (let i = startPage; i <= endPage ; i++)
                 if i === currentPage 
-                    a.pageBtn.current(href=`http://localhost:4000/subject/${subject.id}/community?page=${i}`)
+                    a.pageBtn.current(href=`/subject/${subject.id}/community?page=${i}`)
                         span.currentPageNum=i
                 else
-                    a.pageBtn(href=`http://localhost:4000/subject/${subject.id}/community?page=${i}`)
+                    a.pageBtn(href=`/subject/${subject.id}/community?page=${i}`)
                         span.otherPageNum=i       
             if endPage < totalPage 
-                a.next_btn.pageBtn(href=`http://localhost:4000/subject/${subject.id}/community?page=${endPage+1}`)
+                a.next_btn.pageBtn(href=`/subject/${subject.id}/community?page=${endPage+1}`)
                     i.fas.fa-angle-double-right.next1
             else 
                 a.next_btn.pageBtn.disabled(href="javascript:void(0);")

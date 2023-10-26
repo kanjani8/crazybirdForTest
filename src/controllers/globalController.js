@@ -6,7 +6,7 @@ import Quote from "../models/quote";
 
 export const main = async (req, res) => {
     if(req.session.user){
-        console.log(req.session.user);
+        // console.log(req.session.user);
         try{
             const user = await User.findById(req.session.user._id).populate("likedSubjects");
             const quotes = await Quote.find({mode: user.mode});
@@ -44,7 +44,6 @@ export const postReportError = async(req, res) => {
                 title,
                 script,
             });
-            console.log(newReport2);
         }
         // 사용자에게 오류가 보고되었다는 알람 추가 필요
         return res.send(`<script>alert("문제가 성공적으로 보고되었습니다.");
@@ -82,7 +81,6 @@ export const postPlusQuote = async  (req,res) => {
             content,
             mode
         });
-        console.log(quote);
     } catch (error) {
         return res.status(400).render("404", {
             pageTitle: "명언 등록 에러",

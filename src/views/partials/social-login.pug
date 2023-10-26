@@ -1,5 +1,11 @@
 div.social__login
     a(href="/user/kakao/start").social__btn
-        img(src="/uploads/default/kakaoLogin.png")
+        if isHeroku
+            img(src="https://cbird2022.s3.ap-northeast-2.amazonaws.com/base/kakaoLogin")
+        else
+            img(src="/uploads/default/kakaoLogin.png")
     a(href="/user/naverlogin").social__btn
-        img(src="/uploads/default/naverLogin.png")
+        if isHeroku
+            img(src="https://cbird2022.s3.ap-northeast-2.amazonaws.com/base/naverLogin")
+        else
+            img(src="/uploads/default/naverLogin.png")

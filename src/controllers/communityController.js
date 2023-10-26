@@ -224,7 +224,7 @@ export const postEditPosting = async (req, res) => {
             videos.push(video);
           }
         }
-        console.log("마지막", images, videos);
+        // console.log("마지막", images, videos);
         await Posting.findByIdAndUpdate(postingId, 
             {
               title,
@@ -308,7 +308,6 @@ export const postReportPosting = async (req, res) => {
       reporter,
       reportedPosting: posting._id
     });
-    console.log("신고된 포스팅:", newReported);
   }catch(error){
     console.log(error);
   }
@@ -347,7 +346,6 @@ export const getRecommend = async (req, res) => {
   posting.save();
   user.recommendPost.push(postingId);
   user.save();
-  console.log("테스트: ",user.recommendPost);
   req.session.user = user;
   res.locals.loggedInUser = req.session.user;
   return res.redirect(`/subject/${id}/community/${postingId}`);
@@ -383,7 +381,6 @@ export const uploadComment = async (req, res) => {
   posting.save();
   //201 생성됨
 
-  console.log(comment._id);
   return res.status(201).json({ newCommentId: comment._id});
 }
 
@@ -398,9 +395,8 @@ export const deleteComment = async (req, res) => {
     //404 찾지못함
     return res.sendStatus(404);
   }
-  console.log(id);
+ 
   const comment = await Comment.findById(id);
-  console.log(comment);
   if(!comment){
     req.flash("error", "해당 댓글을 찾을 수 없습니다.");
     return res.sendStatus(403);
@@ -409,7 +405,6 @@ export const deleteComment = async (req, res) => {
   if(String(user._id) === String(comment.owner) || String(user._id) === String(posting.user)){
     try{
       await Comment.findByIdAndDelete(id);
-      console.log("성공적 댓 삭제");
       return res.status(202).json({ deletedId: id });
     }
     catch(error){
