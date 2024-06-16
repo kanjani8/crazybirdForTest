@@ -6,7 +6,6 @@ import School from "../models/school";
 import Report from "../models/reporting";
 import bcrypt from "bcrypt";
 import nodemailer from "nodemailer";
-import fetch from "node-fetch";
 import flash from "express-flash";
 export const getEnroll = (req, res) => res.render("enroll", {pageTitle:"회원가입 페이지"});
 import Comment from "../models/comment";
